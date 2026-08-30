@@ -1,0 +1,291 @@
+<div class="job-details-page">
+
+  <!-- ====================================== -->
+  <!-- HEADER -->
+  <!-- ====================================== -->
+
+  <header class="job-details-header">
+
+    <div class="brand">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <nav class="nav-menu">
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Jobs
+      </a>
+
+      <a routerLink="/applications">
+        My Applications
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- ====================================== -->
+  <!-- MAIN -->
+  <!-- ====================================== -->
+
+  <main class="job-details-container">
+
+
+    <!-- BACK -->
+
+    <a
+      routerLink="/dashboard"
+      class="back-link"
+    >
+      ← Back to Jobs
+    </a>
+
+
+    <!-- ==================================== -->
+    <!-- LOADING -->
+    <!-- ==================================== -->
+
+    @if (loading) {
+
+      <div class="loading">
+        Loading job details...
+      </div>
+
+    }
+
+
+    <!-- ==================================== -->
+    <!-- ERROR -->
+    <!-- ==================================== -->
+
+    @if (
+      !loading &&
+      !job
+    ) {
+
+      <div class="error-message">
+
+        {{ message }}
+
+      </div>
+
+    }
+
+
+    <!-- ==================================== -->
+    <!-- JOB -->
+    <!-- ==================================== -->
+
+    @if (
+      !loading &&
+      job
+    ) {
+
+      <article class="job-card">
+
+
+        <!-- Job Header -->
+
+        <div class="job-header">
+
+          <div class="company-icon">
+
+            {{ job.title?.charAt(0) }}
+
+          </div>
+
+
+          <div>
+
+            <p class="job-label">
+              JOB OPPORTUNITY
+            </p>
+
+            <h2>
+              {{ job.title }}
+            </h2>
+
+            <p class="company">
+              Company ID:
+              {{ job.companyId }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- Job Information -->
+
+        <div class="job-info-grid">
+
+
+          <div class="info-box">
+
+            <span class="info-icon">
+              📍
+            </span>
+
+            <div>
+
+              <strong>
+                Location
+              </strong>
+
+              <p>
+                {{ job.location }}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="info-box">
+
+            <span class="info-icon">
+              💼
+            </span>
+
+            <div>
+
+              <strong>
+                Job Type
+              </strong>
+
+              <p>
+                {{ job.jobType }}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="info-box">
+
+            <span class="info-icon">
+              💰
+            </span>
+
+            <div>
+
+              <strong>
+                Salary
+              </strong>
+
+              <p>
+                ₹{{ job.salary }}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Skills -->
+
+        <section class="job-section">
+
+          <h3>
+            Required Skills
+          </h3>
+
+          <p>
+            {{ job.skills }}
+          </p>
+
+        </section>
+
+
+        <!-- Description -->
+
+        <section class="job-section">
+
+          <h3>
+            Job Description
+          </h3>
+
+          <p>
+            {{ job.description }}
+          </p>
+
+        </section>
+
+
+        <hr>
+
+
+        <!-- Apply -->
+
+        <div class="apply-section">
+
+          <button
+            type="button"
+            class="apply-button"
+            [disabled]="applying"
+            (click)="applyNow()"
+          >
+
+            @if (applying) {
+
+              Applying...
+
+            } @else {
+
+              Apply Now
+
+            }
+
+          </button>
+
+
+          <!-- Message -->
+
+          @if (message) {
+
+            <div
+              class="application-message"
+              [class.success]="
+                messageType === 'success'
+              "
+              [class.error]="
+                messageType === 'error'
+              "
+            >
+
+              {{ message }}
+
+            </div>
+
+          }
+
+        </div>
+
+
+      </article>
+
+    }
+
+  </main>
+
+</div>

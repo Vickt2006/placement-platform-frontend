@@ -1,0 +1,475 @@
+<div class="applications-page">
+
+  <header class="applications-header">
+
+    <div class="brand">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+    <nav class="nav-menu">
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Jobs
+      </a>
+
+      <a
+        routerLink="/applications"
+        class="active"
+      >
+        My Applications
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <main class="applications-container">
+
+    <section class="page-heading">
+
+      <p class="page-label">
+        STUDENT DASHBOARD
+      </p>
+
+      <h2>
+        My Applications
+      </h2>
+
+      <p>
+        Track your job applications and application status.
+      </p>
+
+    </section>
+
+
+    @if (loading) {
+
+      <div class="loading">
+
+        <div class="loader"></div>
+
+        <p>
+          Loading your applications...
+        </p>
+
+      </div>
+
+    }
+
+
+    @if (!loading && message) {
+
+      <div class="error-message">
+        {{ message }}
+      </div>
+
+    }
+
+
+    @if (!loading && applications.length > 0) {
+
+      <div class="applications-list">
+
+        @for (application of applications; track application.id) {
+
+          <article class="application-card">
+
+
+            <div class="application-header">
+
+              <div class="job-title-section">
+
+                <div class="application-icon">
+
+                  @if (application.job) {
+                    {{ application.job.title?.charAt(0) }}
+                  }
+
+                  @if (!application.job) {
+                    A
+                  }
+
+                </div>
+
+
+                <div>
+
+                  @if (application.job) {
+
+                    <h3>
+                      {{ application.job.title }}
+                    </h3>
+
+                    <p class="company-name">
+                      Company ID:
+                      {{ application.job.companyId }}
+                    </p>
+
+                  }
+
+                  @if (!application.job) {
+
+                    <h3>
+                      Job ID:
+                      {{ application.jobId }}
+                    </h3>
+
+                  }
+
+                </div>
+
+              </div>
+
+
+              <span
+                class="status-badge"
+                [class.applied]="application.status === 'APPLIED'"
+                [class.under-review]="application.status === 'UNDER_REVIEW'"
+                [class.shortlisted]="application.status === 'SHORTLISTED'"
+                [class.selected]="application.status === 'SELECTED'"
+                [class.rejected]="application.status === 'REJECTED'"
+              >
+
+                {{ getStatusLabel(application.status) }}
+
+              </span>
+
+            </div>
+
+
+            @if (application.job) {
+
+              <div class="job-information">
+
+
+                <div class="information-item">
+
+                  <span>
+                    📍
+                  </span>
+
+                  <div>
+
+                    <small>
+                      Location
+                    </small>
+
+                    <p>
+                      {{ application.job.location }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <div class="information-item">
+
+                  <span>
+                    💼
+                  </span>
+
+                  <div>
+
+                    <small>
+                      Job Type
+                    </small>
+
+                    <p>
+                      {{ application.job.jobType }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <div class="information-item">
+
+                  <span>
+                    💰
+                  </span>
+
+                  <div>
+
+                    <small>
+                      Salary
+                    </small>
+
+                    <p>
+                      ₹{{ application.job.salary }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div class="skills-section">
+
+                <strong>
+                  Required Skills
+                </strong>
+
+                <p>
+                  {{ application.job.skills }}
+                </p>
+
+              </div>
+
+            }
+
+
+            <div class="application-details">
+
+              <div>
+
+                <small>
+                  Application ID
+                </small>
+
+                <strong>
+                  #{{ application.id }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <small>
+                  Applied At
+                </small>
+
+                <strong>
+                  {{ application.appliedAt }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="timeline-section">
+
+              <h4>
+                Application Progress
+              </h4>
+
+
+              <div class="timeline">
+
+
+                <div
+                  class="timeline-step"
+                  [class.active]="isStepActive(application.status, 'APPLIED')"
+                >
+
+                  <div class="timeline-dot">
+                    ✓
+                  </div>
+
+                  <div class="timeline-content">
+
+                    <strong>
+                      Applied
+                    </strong>
+
+                    <span>
+                      Application submitted
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="timeline-line"></div>
+
+
+                <div
+                  class="timeline-step"
+                  [class.active]="isStepActive(application.status, 'UNDER_REVIEW')"
+                >
+
+                  <div class="timeline-dot">
+                    2
+                  </div>
+
+                  <div class="timeline-content">
+
+                    <strong>
+                      Under Review
+                    </strong>
+
+                    <span>
+                      Application being reviewed
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="timeline-line"></div>
+
+
+                <div
+                  class="timeline-step"
+                  [class.active]="isStepActive(application.status, 'SHORTLISTED')"
+                >
+
+                  <div class="timeline-dot">
+                    3
+                  </div>
+
+                  <div class="timeline-content">
+
+                    <strong>
+                      Shortlisted
+                    </strong>
+
+                    <span>
+                      Selected for next stage
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="timeline-line"></div>
+
+
+                <div
+                  class="timeline-step"
+                  [class.active]="isStepActive(application.status, 'SELECTED')"
+                >
+
+                  <div class="timeline-dot">
+                    4
+                  </div>
+
+                  <div class="timeline-content">
+
+                    <strong>
+                      Selected
+                    </strong>
+
+                    <span>
+                      Congratulations!
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              @if (application.status === 'REJECTED') {
+
+                <div class="rejected-message">
+
+                  <span>
+                    ✕
+                  </span>
+
+                  <div>
+
+                    <strong>
+                      Application Rejected
+                    </strong>
+
+                    <p>
+                      Unfortunately, this application was not selected.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              }
+
+
+              @if (application.status === 'SELECTED') {
+
+                <div class="selected-message">
+
+                  <span>
+                    🎉
+                  </span>
+
+                  <div>
+
+                    <strong>
+                      Congratulations!
+                    </strong>
+
+                    <p>
+                      You have been selected for this opportunity.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+
+    @if (!loading && applications.length === 0 && !message) {
+
+      <div class="no-applications">
+
+        <div class="empty-icon">
+          📄
+        </div>
+
+        <h3>
+          No Applications Yet
+        </h3>
+
+        <p>
+          You haven't applied for any jobs yet.
+        </p>
+
+        <a
+          routerLink="/dashboard"
+          class="browse-button"
+        >
+          Browse Jobs
+        </a>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

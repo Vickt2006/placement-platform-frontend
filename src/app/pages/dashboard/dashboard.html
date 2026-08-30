@@ -1,0 +1,327 @@
+<div class="dashboard-page">
+
+  <!-- ====================================== -->
+  <!-- HEADER -->
+  <!-- ====================================== -->
+
+  <header class="dashboard-header">
+
+    <div class="brand">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <nav class="nav-menu">
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Jobs
+      </a>
+
+      <a routerLink="/applications">
+        My Applications
+      </a>
+
+      <a
+        href="#"
+        (click)="$event.preventDefault()"
+      >
+        Profile
+      </a>
+
+      <button
+        type="button"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+
+    </nav>
+
+  </header>
+
+
+  <!-- ====================================== -->
+  <!-- MAIN CONTENT -->
+  <!-- ====================================== -->
+
+  <main class="dashboard-content">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome-section">
+
+      <div>
+
+        <p class="welcome-label">
+          STUDENT DASHBOARD
+        </p>
+
+        <h2>
+          Welcome Back 👋
+        </h2>
+
+        <p>
+          Find your next career opportunity.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================== -->
+    <!-- SEARCH -->
+    <!-- ==================================== -->
+
+    <section class="search-section">
+
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (keyup.enter)="searchJobs()"
+        placeholder="Search jobs by title, skills or location..."
+      />
+
+      <button
+        type="button"
+        (click)="searchJobs()"
+      >
+        Search
+      </button>
+
+    </section>
+
+
+    <!-- ==================================== -->
+    <!-- JOBS -->
+    <!-- ==================================== -->
+
+    <section class="jobs-section">
+
+
+      <!-- SECTION HEADING -->
+
+      <div class="section-heading">
+
+        <div>
+
+          <h2>
+            Available Jobs
+          </h2>
+
+          <p>
+            Explore the latest placement opportunities
+          </p>
+
+        </div>
+
+        <span class="job-count">
+
+          {{ filteredJobs.length }}
+
+          {{ filteredJobs.length === 1 ? 'Job' : 'Jobs' }}
+
+        </span>
+
+      </div>
+
+
+      <!-- LOADING -->
+
+      @if (loading) {
+
+        <div class="loading">
+          Loading jobs...
+        </div>
+
+      }
+
+
+      <!-- ERROR -->
+
+      @if (!loading && message) {
+
+        <div class="error-message">
+
+          {{ message }}
+
+        </div>
+
+      }
+
+
+      <!-- JOB CARDS -->
+
+      @if (
+        !loading &&
+        filteredJobs.length > 0
+      ) {
+
+        <div class="job-grid">
+
+
+          @for (
+            job of filteredJobs;
+            track job.id
+          ) {
+
+            <article class="job-card">
+
+
+              <!-- JOB HEADER -->
+
+              <div class="job-card-header">
+
+                <div class="company-icon">
+
+                  {{ job.title?.charAt(0) }}
+
+                </div>
+
+
+                <div>
+
+                  <h3>
+                    {{ job.title }}
+                  </h3>
+
+                  <p>
+                    Company ID:
+                    {{ job.companyId }}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <!-- JOB INFORMATION -->
+
+              <div class="job-info">
+
+                <span>
+                  📍 {{ job.location }}
+                </span>
+
+                <span>
+                  💼 {{ job.jobType }}
+                </span>
+
+                <span>
+                  💰 ₹{{ job.salary }}
+                </span>
+
+              </div>
+
+
+              <!-- SKILLS -->
+
+              <div class="skills">
+
+                <strong>
+                  Skills
+                </strong>
+
+                <p>
+                  {{ job.skills }}
+                </p>
+
+              </div>
+
+
+              <!-- DESCRIPTION -->
+
+              <div class="description">
+
+                <strong>
+                  Description
+                </strong>
+
+                <p>
+                  {{ job.description }}
+                </p>
+
+              </div>
+
+
+              <!-- ACTION BUTTONS -->
+
+              <div class="job-actions">
+
+
+                <!-- VIEW DETAILS -->
+
+                <a
+                  class="view-button"
+                  [routerLink]="[
+                    '/jobs',
+                    job.id
+                  ]"
+                >
+                  View Details
+                </a>
+
+
+                <!-- APPLY -->
+
+                <button
+                  type="button"
+                  class="apply-button"
+                  (click)="applyForJob(job.id)"
+                >
+                  Apply Now
+                </button>
+
+              </div>
+
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+
+      <!-- NO JOBS -->
+
+      @if (
+        !loading &&
+        filteredJobs.length === 0 &&
+        !message
+      ) {
+
+        <div class="no-jobs">
+
+          <h3>
+            No Jobs Found
+          </h3>
+
+          <p>
+            Try searching with a different
+            title, skill or location.
+          </p>
+
+        </div>
+
+      }
+
+    </section>
+
+  </main>
+
+</div>

@@ -1,0 +1,141 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="logo">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <!-- Heading -->
+    <h2>
+      Welcome Back 👋
+    </h2>
+
+    <p class="subtitle">
+      Login to continue to your placement dashboard
+    </p>
+
+
+    <!-- Login Form -->
+    <form (ngSubmit)="login()">
+
+      <!-- Email -->
+      <div class="form-group">
+
+        <label for="email">
+          Email Address
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+          required
+        />
+
+      </div>
+
+
+      <!-- Password -->
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+          required
+        />
+
+      </div>
+
+
+      <!-- Remember + Forgot -->
+      <div class="form-options">
+
+        <label class="remember">
+
+          <input
+            type="checkbox"
+          />
+
+          <span>
+            Remember me
+          </span>
+
+        </label>
+
+        <a href="#">
+          Forgot Password?
+        </a>
+
+      </div>
+
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        [disabled]="loading"
+      >
+
+        {{ loading ? 'Logging in...' : 'Login' }}
+
+      </button>
+
+    </form>
+
+
+    <!-- Login Message -->
+    @if (message) {
+
+      <p
+        [style.color]="message.includes('successful') ? 'green' : 'red'"
+        style="text-align: center; margin-top: 15px;"
+      >
+        {{ message }}
+      </p>
+
+    }
+
+
+    <!-- Divider -->
+    <div class="divider">
+
+      <span>
+        OR
+      </span>
+
+    </div>
+
+
+    <!-- Register -->
+    <p class="register-text">
+
+      Don't have an account?
+
+      <a href="#">
+        Create Account
+      </a>
+
+    </p>
+
+  </div>
+
+</div>
