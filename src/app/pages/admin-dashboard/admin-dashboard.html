@@ -1,0 +1,392 @@
+<div class="admin-page">
+
+  <!-- ========================= -->
+  <!-- NAVBAR -->
+  <!-- ========================= -->
+
+  <nav class="navbar">
+
+    <div class="brand">
+      <span class="brand-icon">P</span>
+      <span>PlacementHub</span>
+    </div>
+
+    <div class="nav-links">
+
+      <a routerLink="/admin-dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Student Jobs
+      </a>
+
+      <a routerLink="/company-dashboard">
+        Company
+      </a>
+
+      <a routerLink="/admin-applications">
+        Applications
+      </a>
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()">
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================= -->
+
+  <main class="container">
+
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <section class="welcome-section">
+
+      <p class="page-label">
+        ADMIN DASHBOARD
+      </p>
+
+      <h1>
+        Welcome Back 👋
+      </h1>
+
+      <p class="subtitle">
+        Manage the PlacementHub platform.
+      </p>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- STATISTICS -->
+    <!-- ========================= -->
+
+    <section class="stats-grid">
+
+
+      <!-- ========================= -->
+      <!-- TOTAL USERS -->
+      <!-- ========================= -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          👥
+        </div>
+
+        <div>
+
+          <p class="stat-title">
+            Total Users
+          </p>
+
+          <h2>
+            {{ totalUsers }}
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- STUDENTS -->
+      <!-- ========================= -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🎓
+        </div>
+
+        <div>
+
+          <p class="stat-title">
+            Students
+          </p>
+
+          <h2>
+            {{ totalStudents }}
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- COMPANIES -->
+      <!-- ========================= -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🏢
+        </div>
+
+        <div>
+
+          <p class="stat-title">
+            Companies
+          </p>
+
+          <h2>
+            {{ totalCompanies }}
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- JOBS -->
+      <!-- ========================= -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          💼
+        </div>
+
+        <div>
+
+          <p class="stat-title">
+            Jobs
+          </p>
+
+          <h2>
+            {{ totalJobs }}
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- APPLICATIONS -->
+      <!-- ========================= -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📋
+        </div>
+
+        <div>
+
+          <p class="stat-title">
+            Applications
+          </p>
+
+          <h2>
+            {{ totalApplications }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- MANAGEMENT -->
+    <!-- ========================= -->
+
+    <section class="management-section">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <p class="section-label">
+            MANAGEMENT
+          </p>
+
+          <h2>
+            Platform Management
+          </h2>
+
+          <p>
+            Manage students, companies, jobs and applications.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- MANAGEMENT CARDS -->
+      <!-- ========================= -->
+
+      <div class="management-grid">
+
+
+        <!-- ========================= -->
+        <!-- STUDENTS -->
+        <!-- ========================= -->
+
+        <div class="management-card">
+
+          <div class="management-icon">
+            🎓
+          </div>
+
+          <h3>
+            Students
+          </h3>
+
+          <p>
+            View and manage registered students.
+          </p>
+
+          <button
+            type="button"
+            routerLink="/admin-students">
+
+            Manage Students
+
+          </button>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- COMPANIES -->
+        <!-- ========================= -->
+
+        <div class="management-card">
+
+          <div class="management-icon">
+            🏢
+          </div>
+
+          <h3>
+            Companies
+          </h3>
+
+          <p>
+            View and manage company accounts.
+          </p>
+
+          <button
+            type="button"
+            routerLink="/admin-companies">
+
+            Manage Companies
+
+          </button>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- JOBS -->
+        <!-- ========================= -->
+
+        <div class="management-card">
+
+          <div class="management-icon">
+            💼
+          </div>
+
+          <h3>
+            Jobs
+          </h3>
+
+          <p>
+            Monitor and manage jobs posted on the platform.
+          </p>
+
+          <a routerLink="/admin-jobs">
+
+            Manage Jobs
+
+          </a>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- APPLICATIONS -->
+        <!-- ========================= -->
+
+        <div class="management-card">
+
+          <div class="management-icon">
+            📋
+          </div>
+
+          <h3>
+            Applications
+          </h3>
+
+          <p>
+            Review student job applications.
+          </p>
+
+          <a routerLink="/admin-applications">
+
+            View Applications
+
+          </a>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- LOADING -->
+    <!-- ========================= -->
+
+    @if (loading) {
+
+      <div class="loading">
+
+        Loading dashboard...
+
+      </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- MESSAGE -->
+    <!-- ========================= -->
+
+    @if (message) {
+
+      <div class="message">
+
+        {{ message }}
+
+      </div>
+
+    }
+
+
+  </main>
+
+</div>

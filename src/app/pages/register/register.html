@@ -1,0 +1,197 @@
+<div class="register-page">
+
+  <div class="register-card">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <!-- HEADING -->
+
+    <h2>
+      Create Account 🎓
+    </h2>
+
+    <p class="subtitle">
+      Create your student account to start your placement journey
+    </p>
+
+
+    <!-- REGISTER FORM -->
+
+    <form (ngSubmit)="register()">
+
+
+      <!-- NAME -->
+
+      <div class="form-group">
+
+        <label for="name">
+          Full Name
+        </label>
+
+        <input
+          id="name"
+          type="text"
+          name="name"
+          [(ngModel)]="name"
+          placeholder="Enter your full name"
+          required
+        />
+
+      </div>
+
+
+      <!-- EMAIL -->
+
+      <div class="form-group">
+
+        <label for="email">
+          Email Address
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+          required
+        />
+
+      </div>
+
+
+      <!-- PASSWORD -->
+
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Create a password"
+          required
+        />
+
+      </div>
+
+
+      <!-- CONFIRM PASSWORD -->
+
+      <div class="form-group">
+
+        <label for="confirmPassword">
+          Confirm Password
+        </label>
+
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          placeholder="Confirm your password"
+          required
+        />
+
+      </div>
+
+
+      <!-- STUDENT ROLE -->
+
+      <div class="student-role">
+
+        <span class="role-icon">
+          🎓
+        </span>
+
+        <div>
+
+          <strong>
+            Student Account
+          </strong>
+
+          <small>
+            You are registering as a Student
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- REGISTER BUTTON -->
+
+      <button
+        type="submit"
+        [disabled]="loading"
+      >
+
+        {{
+          loading
+            ? 'Creating Account...'
+            : 'Create Account'
+        }}
+
+      </button>
+
+    </form>
+
+
+    <!-- MESSAGE -->
+
+    @if (message) {
+
+      <p
+        class="message"
+        [class.success]="message.includes('successfully')"
+        [class.error]="!message.includes('successfully')"
+      >
+        {{ message }}
+      </p>
+
+    }
+
+
+    <!-- DIVIDER -->
+
+    <div class="divider">
+
+      <span>
+        OR
+      </span>
+
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <p class="login-text">
+
+      Already have an account?
+
+      <a routerLink="/login">
+        Login
+      </a>
+
+    </p>
+
+  </div>
+
+</div>

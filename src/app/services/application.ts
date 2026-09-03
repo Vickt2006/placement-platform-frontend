@@ -7,16 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class Application {
 
-  private apiUrl = 'http://localhost:8080/api/applications';
+  private apiUrl = 'https://placement-platform-backend-production.up.railway.app/api/applications';
 
   constructor(
     private http: HttpClient
   ) {}
 
-  // ==========================================
   // APPLY FOR JOB
-  // ==========================================
-
   apply(
     studentId: number,
     jobId: number
@@ -31,11 +28,15 @@ export class Application {
     );
   }
 
+  // GET ALL APPLICATIONS
+  getAllApplications(): Observable<any[]> {
 
-  // ==========================================
-  // GET ALL APPLICATIONS OF STUDENT
-  // ==========================================
+    return this.http.get<any[]>(
+      this.apiUrl
+    );
+  }
 
+  // GET APPLICATIONS BY STUDENT
   getApplicationsByStudent(
     studentId: number
   ): Observable<any[]> {
@@ -45,11 +46,17 @@ export class Application {
     );
   }
 
+  // GET APPLICATIONS BY JOB
+  getApplicationsByJob(
+    jobId: number
+  ): Observable<any[]> {
 
-  // ==========================================
+    return this.http.get<any[]>(
+      `${this.apiUrl}/job/${jobId}`
+    );
+  }
+
   // GET APPLICATION BY ID
-  // ==========================================
-
   getApplicationById(
     id: number
   ): Observable<any> {
@@ -59,4 +66,29 @@ export class Application {
     );
   }
 
+  // UPDATE APPLICATION
+  updateApplication(
+    id: number,
+    application: any
+  ): Observable<any> {
+
+    return this.http.put<any>(
+      `${this.apiUrl}/${id}`,
+      application
+    );
+  }
+
+  // UPDATE APPLICATION STATUS
+  updateApplicationStatus(
+    id: number,
+    status: string
+  ): Observable<any> {
+
+    return this.http.put<any>(
+      `${this.apiUrl}/${id}`,
+      {
+        status: status
+      }
+    );
+  }
 }

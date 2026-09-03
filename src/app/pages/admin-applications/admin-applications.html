@@ -1,0 +1,510 @@
+<div class="admin-applications-page">
+
+  <!-- ==========================================
+       NAVBAR
+       ========================================== -->
+
+  <nav class="navbar">
+
+    <div class="brand">
+
+      <span class="brand-icon">
+        P
+      </span>
+
+      <span>
+        PlacementHub
+      </span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a
+        routerLink="/admin-dashboard">
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/admin-students">
+        Students
+      </a>
+
+      <a
+        routerLink="/admin-companies">
+        Companies
+      </a>
+
+      <a
+        routerLink="/admin-jobs">
+        Jobs
+      </a>
+
+      <a
+        routerLink="/admin-applications"
+        class="active">
+        Applications
+      </a>
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()">
+        Logout
+      </button>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- ==========================================
+       MAIN CONTENT
+       ========================================== -->
+
+  <main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+      <p class="page-label">
+        ADMIN MANAGEMENT
+      </p>
+
+      <h1>
+        Applications 📋
+      </h1>
+
+      <p class="subtitle">
+        Review and manage student job applications.
+      </p>
+
+    </section>
+
+
+
+    <!-- TOOLBAR -->
+
+    <section class="toolbar">
+
+      <div>
+
+        <h2>
+          All Applications
+        </h2>
+
+        <p>
+          Total Applications:
+          <strong>
+            {{ applications.length }}
+          </strong>
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="refresh-btn"
+        (click)="refreshApplications()"
+        [disabled]="loading">
+
+        ↻ Refresh
+
+      </button>
+
+    </section>
+
+
+
+    <!-- LOADING -->
+
+    @if (loading) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          ⏳
+        </div>
+
+        <h3>
+          Loading applications...
+        </h3>
+
+        <p>
+          Please wait while we fetch application data.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- ERROR -->
+
+    @if (!loading && message) {
+
+      <div class="error-box">
+
+        <div class="state-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Something went wrong
+        </h3>
+
+        <p>
+          {{ message }}
+        </p>
+
+        <button
+          type="button"
+          class="try-btn"
+          (click)="refreshApplications()">
+
+          Try Again
+
+        </button>
+
+      </div>
+
+    }
+
+
+
+    <!-- APPLICATIONS TABLE -->
+
+    @if (
+      !loading &&
+      !message &&
+      applications.length > 0
+    ) {
+
+      <section class="applications-card">
+
+
+        <!-- TABLE HEADER -->
+
+        <div class="table-header">
+
+          <div>
+
+            <h2>
+              Student Applications
+            </h2>
+
+            <p>
+              Monitor application progress and status.
+            </p>
+
+          </div>
+
+
+          <span class="count-badge">
+
+            {{ applications.length }}
+            Applications
+
+          </span>
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  ID
+                </th>
+
+                <th>
+                  Student
+                </th>
+
+                <th>
+                  Job
+                </th>
+
+                <th>
+                  Company
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Applied At
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                application of applications;
+                track application.id
+              ) {
+
+                <tr>
+
+
+                  <!-- ID -->
+
+                  <td>
+
+                    <span class="application-id">
+                      #{{ application.id }}
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- STUDENT -->
+
+                  <td>
+
+                    <div class="student-info">
+
+                      <div class="student-avatar">
+
+                        {{
+                          application.studentName
+                            ? application.studentName
+                                .charAt(0)
+                                .toUpperCase()
+                            : 'S'
+                        }}
+
+                      </div>
+
+
+                      <div>
+
+                        <strong>
+                          {{
+                            application.studentName
+                              || 'Unknown Student'
+                          }}
+                        </strong>
+
+                        <span>
+                          {{
+                            application.studentEmail
+                              || 'N/A'
+                          }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- JOB -->
+
+                  <td>
+
+                    <div class="job-info">
+
+                      <div class="job-icon">
+                        💼
+                      </div>
+
+
+                      <div>
+
+                        <strong>
+                          {{
+                            application.jobTitle
+                              || 'Unknown Job'
+                          }}
+                        </strong>
+
+                        <span>
+                          Job ID:
+                          #{{ application.jobId }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- COMPANY -->
+
+                  <td>
+
+                    <div class="company-info">
+
+                      <div class="company-avatar">
+
+                        {{
+                          application.companyName
+                            ? application.companyName
+                                .charAt(0)
+                                .toUpperCase()
+                            : 'C'
+                        }}
+
+                      </div>
+
+
+                      <span>
+
+                        {{
+                          application.companyName
+                            || 'Unknown Company'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    <select
+                      class="status-select"
+                      [class]="
+                        getStatusClass(
+                          application.status
+                        )
+                      "
+                      [value]="application.status"
+                      (change)="
+                        updateStatus(
+                          application,
+                          $event
+                        )
+                      "
+                      [disabled]="
+                        updatingApplicationId ===
+                        application.id
+                      ">
+
+                      <option value="APPLIED">
+                        Applied
+                      </option>
+
+                      <option value="UNDER_REVIEW">
+                        Under Review
+                      </option>
+
+                      <option value="SHORTLISTED">
+                        Shortlisted
+                      </option>
+
+                      <option value="SELECTED">
+                        Selected
+                      </option>
+
+                      <option value="REJECTED">
+                        Rejected
+                      </option>
+
+                    </select>
+
+                  </td>
+
+
+
+                  <!-- APPLIED AT -->
+
+                  <td>
+
+                    <span class="applied-at">
+
+                      {{
+                        application.appliedAt
+                          || 'N/A'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    }
+
+
+
+    <!-- NO APPLICATIONS -->
+
+    @if (
+      !loading &&
+      !message &&
+      applications.length === 0
+    ) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          📋
+        </div>
+
+        <h2>
+          No Applications Found
+        </h2>
+
+        <p>
+          There are currently no applications
+          on the platform.
+        </p>
+
+        <button
+          type="button"
+          class="try-btn"
+          (click)="refreshApplications()">
+
+          Refresh
+
+        </button>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

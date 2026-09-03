@@ -1,0 +1,364 @@
+<div class="profile-page">
+
+  <!-- NAVBAR -->
+
+  <header class="navbar">
+
+    <div class="brand">
+
+      <div class="logo">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+    <nav>
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/jobs">
+        Jobs
+      </a>
+
+      <a routerLink="/applications">
+        My Applications
+      </a>
+
+      <a routerLink="/profile" class="active">
+        Profile
+      </a>
+
+      <button
+        type="button"
+        (click)="logout()">
+
+        Logout
+
+      </button>
+
+    </nav>
+
+  </header>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="container">
+
+    <section class="page-header">
+
+      <p class="label">
+        STUDENT PROFILE
+      </p>
+
+      <h2>
+        My Profile 👤
+      </h2>
+
+      <p>
+        Manage your personal and academic information.
+      </p>
+
+    </section>
+
+
+    @if (loading) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          ⏳
+        </div>
+
+        <h3>
+          Loading Profile...
+        </h3>
+
+        <p>
+          Please wait while we load your profile.
+        </p>
+
+      </div>
+
+    }
+
+
+    @if (!loading) {
+
+      <section class="profile-card">
+
+        <!-- PROFILE HEADER -->
+
+        <div class="profile-header">
+
+          <div class="profile-avatar">
+
+            {{ profile.user?.name?.charAt(0)?.toUpperCase() || 'S' }}
+
+          </div>
+
+          <div>
+
+            <h2>
+              {{ profile.user?.name || 'Student' }}
+            </h2>
+
+            <p>
+              {{ profile.user?.email || 'Student Account' }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- SUCCESS MESSAGE -->
+
+        @if (message) {
+
+          <div class="success-message">
+
+            ✓ {{ message }}
+
+          </div>
+
+        }
+
+
+        <!-- ERROR MESSAGE -->
+
+        @if (errorMessage) {
+
+          <div class="error-message">
+
+            ⚠ {{ errorMessage }}
+
+          </div>
+
+        }
+
+
+        <!-- PERSONAL INFORMATION -->
+
+        <div class="section-title">
+
+          <h3>
+            Personal Information
+          </h3>
+
+          <p>
+            Enter your contact details.
+          </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>
+              Phone Number
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="profile.phone"
+              placeholder="Enter phone number"
+            />
+
+          </div>
+
+          <div class="form-group">
+
+            <label>
+              Email
+            </label>
+
+            <input
+              type="email"
+              [value]="profile.user?.email || ''"
+              disabled
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- ACADEMIC INFORMATION -->
+
+        <div class="section-title academic-title">
+
+          <h3>
+            Academic Information
+          </h3>
+
+          <p>
+            Add your educational details.
+          </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>
+              College
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="profile.college"
+              placeholder="Enter college name"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Degree
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="profile.degree"
+              placeholder="e.g. B.E., B.Tech"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Branch
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="profile.branch"
+              placeholder="e.g. Computer Engineering"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Graduation Year
+            </label>
+
+            <input
+              type="number"
+              [(ngModel)]="profile.graduationYear"
+              placeholder="e.g. 2027"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              CGPA
+            </label>
+
+            <input
+              type="number"
+              step="0.01"
+              [(ngModel)]="profile.cgpa"
+              placeholder="e.g. 8.50"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- RESUME -->
+
+        <div class="section-title resume-title">
+
+          <h3>
+            Resume
+          </h3>
+
+          <p>
+            Add the URL of your resume.
+          </p>
+
+        </div>
+
+
+        <div class="form-group full-width">
+
+          <label>
+            Resume URL
+          </label>
+
+          <input
+            type="url"
+            [(ngModel)]="profile.resumeUrl"
+            placeholder="https://drive.google.com/..."
+          />
+
+          @if (profile.resumeUrl) {
+
+            <a
+              class="resume-link"
+              [href]="profile.resumeUrl"
+              target="_blank"
+              rel="noopener noreferrer">
+
+              📄 View Resume
+
+            </a>
+
+          }
+
+        </div>
+
+
+        <!-- SAVE BUTTON -->
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="save-button"
+            (click)="saveProfile()"
+            [disabled]="saving">
+
+            @if (saving) {
+
+              Saving...
+
+            } @else {
+
+              Save Profile
+
+            }
+
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+  </main>
+
+</div>

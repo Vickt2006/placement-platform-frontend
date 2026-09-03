@@ -1,0 +1,362 @@
+<div class="jobs-page">
+
+  <!-- ==========================================
+       NAVBAR
+       ========================================== -->
+
+  <header class="navbar">
+
+    <div class="brand">
+
+      <div class="logo">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <nav>
+
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/jobs"
+        class="active"
+      >
+        Jobs
+      </a>
+
+      <a routerLink="/applications">
+        My Applications
+      </a>
+
+      <a routerLink="/profile">
+        Profile
+      </a>
+
+      <button
+        type="button"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+
+    </nav>
+
+  </header>
+
+
+  <!-- ==========================================
+       MAIN CONTENT
+       ========================================== -->
+
+  <main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+      <p class="label">
+        CAREER OPPORTUNITIES
+      </p>
+
+      <h2>
+        Find Your Next Job 🚀
+      </h2>
+
+      <p>
+        Explore placement opportunities
+        and find the right job for you.
+      </p>
+
+    </section>
+
+
+    <!-- ==========================================
+         SEARCH
+         ========================================== -->
+
+    <section class="search-box">
+
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (keyup.enter)="searchJobs()"
+        placeholder="Search by job title, skills or location..."
+      />
+
+      <button
+        type="button"
+        (click)="searchJobs()"
+      >
+        🔍 Search
+      </button>
+
+    </section>
+
+
+    <!-- ==========================================
+         JOB HEADER
+         ========================================== -->
+
+    <section class="jobs-header">
+
+      <div>
+
+        <h2>
+          Available Jobs
+        </h2>
+
+        <p>
+          Explore the latest placement opportunities
+        </p>
+
+      </div>
+
+
+      <span class="count">
+
+        {{ filteredJobs.length }}
+
+        {{
+          filteredJobs.length === 1
+            ? 'Job'
+            : 'Jobs'
+        }}
+
+      </span>
+
+    </section>
+
+
+    <!-- ==========================================
+         LOADING
+         ========================================== -->
+
+    @if (loading) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          ⏳
+        </div>
+
+        <h3>
+          Loading Jobs...
+        </h3>
+
+        <p>
+          Please wait while we fetch available jobs.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ==========================================
+         ERROR
+         ========================================== -->
+
+    @if (!loading && message) {
+
+      <div class="state-box error">
+
+        <div class="state-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Something went wrong
+        </h3>
+
+        <p>
+          {{ message }}
+        </p>
+
+        <button
+          type="button"
+          (click)="loadJobs()"
+        >
+          Try Again
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ==========================================
+         JOB CARDS
+         ========================================== -->
+
+    @if (
+      !loading &&
+      !message &&
+      filteredJobs.length > 0
+    ) {
+
+      <section class="job-grid">
+
+
+        @for (
+          job of filteredJobs;
+          track job.id
+        ) {
+
+          <article class="job-card">
+
+
+            <!-- JOB HEADER -->
+
+            <div class="job-header">
+
+              <div class="job-icon">
+
+                {{
+                  job.title?.charAt(0) || 'J'
+                }}
+
+              </div>
+
+
+              <div>
+
+                <h3>
+                  {{ job.title || 'Untitled Job' }}
+                </h3>
+
+                <p>
+                  Company ID:
+                  {{ job.companyId || 'N/A' }}
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- JOB INFORMATION -->
+
+            <div class="job-info">
+
+              <span>
+                📍
+                {{ job.location || 'Not specified' }}
+              </span>
+
+              <span>
+                💼
+                {{ job.jobType || 'Not specified' }}
+              </span>
+
+              <span>
+                💰
+                {{
+                  job.salary != null
+                    ? '₹' + job.salary
+                    : 'Not specified'
+                }}
+              </span>
+
+            </div>
+
+
+            <!-- SKILLS -->
+
+            <div class="details">
+
+              <h4>
+                Required Skills
+              </h4>
+
+              <p class="skills">
+                {{ job.skills || 'Not specified' }}
+              </p>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="details">
+
+              <h4>
+                Description
+              </h4>
+
+              <p>
+                {{
+                  job.description ||
+                  'No description available.'
+                }}
+              </p>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="actions">
+
+              <a
+                class="details-btn"
+                [routerLink]="[
+                  '/jobs',
+                  job.id
+                ]"
+              >
+                View Details
+              </a>
+
+            </div>
+
+
+          </article>
+
+        }
+
+      </section>
+
+    }
+
+
+    <!-- ==========================================
+         NO JOBS
+         ========================================== -->
+
+    @if (
+      !loading &&
+      !message &&
+      filteredJobs.length === 0
+    ) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          🔎
+        </div>
+
+        <h3>
+          No Jobs Found
+        </h3>
+
+        <p>
+          Try searching with a different
+          title, skill or location.
+        </p>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

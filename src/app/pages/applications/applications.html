@@ -1,5 +1,9 @@
 <div class="applications-page">
 
+  <!-- ========================================== -->
+  <!-- HEADER -->
+  <!-- ========================================== -->
+
   <header class="applications-header">
 
     <div class="brand">
@@ -14,13 +18,14 @@
 
     </div>
 
+
     <nav class="nav-menu">
 
       <a routerLink="/dashboard">
         Dashboard
       </a>
 
-      <a routerLink="/dashboard">
+      <a routerLink="/jobs">
         Jobs
       </a>
 
@@ -31,12 +36,25 @@
         My Applications
       </a>
 
+      <a routerLink="/profile">
+        Profile
+      </a>
+
     </nav>
 
   </header>
 
 
+  <!-- ========================================== -->
+  <!-- MAIN -->
+  <!-- ========================================== -->
+
   <main class="applications-container">
+
+
+    <!-- ======================================== -->
+    <!-- PAGE HEADING -->
+    <!-- ======================================== -->
 
     <section class="page-heading">
 
@@ -55,6 +73,10 @@
     </section>
 
 
+    <!-- ======================================== -->
+    <!-- LOADING -->
+    <!-- ======================================== -->
+
     @if (loading) {
 
       <div class="loading">
@@ -70,36 +92,68 @@
     }
 
 
+    <!-- ======================================== -->
+    <!-- ERROR / MESSAGE -->
+    <!-- ======================================== -->
+
     @if (!loading && message) {
 
       <div class="error-message">
+
         {{ message }}
+
       </div>
 
     }
 
 
+    <!-- ======================================== -->
+    <!-- APPLICATION LIST -->
+    <!-- ======================================== -->
+
     @if (!loading && applications.length > 0) {
 
       <div class="applications-list">
 
-        @for (application of applications; track application.id) {
+
+        @for (
+          application of applications;
+          track application.id
+        ) {
+
+
+          <!-- ================================== -->
+          <!-- APPLICATION CARD -->
+          <!-- ================================== -->
 
           <article class="application-card">
 
 
+            <!-- ================================= -->
+            <!-- APPLICATION HEADER -->
+            <!-- ================================= -->
+
             <div class="application-header">
 
+
               <div class="job-title-section">
+
 
                 <div class="application-icon">
 
                   @if (application.job) {
-                    {{ application.job.title?.charAt(0) }}
+
+                    {{
+                      application.job.title?.charAt(0)
+                      || 'A'
+                    }}
+
                   }
 
                   @if (!application.job) {
+
                     A
+
                   }
 
                 </div>
@@ -113,12 +167,16 @@
                       {{ application.job.title }}
                     </h3>
 
+
                     <p class="company-name">
+
                       Company ID:
                       {{ application.job.companyId }}
+
                     </p>
 
                   }
+
 
                   @if (!application.job) {
 
@@ -134,26 +192,53 @@
               </div>
 
 
+              <!-- STATUS -->
+
               <span
                 class="status-badge"
-                [class.applied]="application.status === 'APPLIED'"
-                [class.under-review]="application.status === 'UNDER_REVIEW'"
-                [class.shortlisted]="application.status === 'SHORTLISTED'"
-                [class.selected]="application.status === 'SELECTED'"
-                [class.rejected]="application.status === 'REJECTED'"
+
+                [class.applied]="
+                  application.status === 'APPLIED'
+                "
+
+                [class.under-review]="
+                  application.status === 'UNDER_REVIEW'
+                "
+
+                [class.shortlisted]="
+                  application.status === 'SHORTLISTED'
+                "
+
+                [class.selected]="
+                  application.status === 'SELECTED'
+                "
+
+                [class.rejected]="
+                  application.status === 'REJECTED'
+                "
               >
 
-                {{ getStatusLabel(application.status) }}
+                {{
+                  getStatusLabel(
+                    application.status
+                  )
+                }}
 
               </span>
 
             </div>
 
 
+            <!-- ================================= -->
+            <!-- JOB INFORMATION -->
+            <!-- ================================= -->
+
             @if (application.job) {
 
               <div class="job-information">
 
+
+                <!-- LOCATION -->
 
                 <div class="information-item">
 
@@ -168,13 +253,18 @@
                     </small>
 
                     <p>
-                      {{ application.job.location }}
+                      {{
+                        application.job.location
+                        || 'Not specified'
+                      }}
                     </p>
 
                   </div>
 
                 </div>
 
+
+                <!-- JOB TYPE -->
 
                 <div class="information-item">
 
@@ -189,13 +279,18 @@
                     </small>
 
                     <p>
-                      {{ application.job.jobType }}
+                      {{
+                        application.job.jobType
+                        || 'Not specified'
+                      }}
                     </p>
 
                   </div>
 
                 </div>
 
+
+                <!-- SALARY -->
 
                 <div class="information-item">
 
@@ -210,7 +305,21 @@
                     </small>
 
                     <p>
-                      ₹{{ application.job.salary }}
+
+                      @if (
+                        application.job.salary
+                      ) {
+
+                        ₹{{ application.job.salary }}
+
+                      }
+
+                      @else {
+
+                        Not specified
+
+                      }
+
                     </p>
 
                   </div>
@@ -220,6 +329,10 @@
               </div>
 
 
+              <!-- ================================= -->
+              <!-- SKILLS -->
+              <!-- ================================= -->
+
               <div class="skills-section">
 
                 <strong>
@@ -227,7 +340,12 @@
                 </strong>
 
                 <p>
-                  {{ application.job.skills }}
+
+                  {{
+                    application.job.skills
+                    || 'Not specified'
+                  }}
+
                 </p>
 
               </div>
@@ -235,7 +353,12 @@
             }
 
 
+            <!-- ================================= -->
+            <!-- APPLICATION DETAILS -->
+            <!-- ================================= -->
+
             <div class="application-details">
+
 
               <div>
 
@@ -257,13 +380,22 @@
                 </small>
 
                 <strong>
-                  {{ application.appliedAt }}
+
+                  {{
+                    application.appliedAt
+                    || 'Not available'
+                  }}
+
                 </strong>
 
               </div>
 
             </div>
 
+
+            <!-- ================================= -->
+            <!-- APPLICATION TIMELINE -->
+            <!-- ================================= -->
 
             <div class="timeline-section">
 
@@ -275,9 +407,17 @@
               <div class="timeline">
 
 
+                <!-- APPLIED -->
+
                 <div
                   class="timeline-step"
-                  [class.active]="isStepActive(application.status, 'APPLIED')"
+
+                  [class.active]="
+                    isStepActive(
+                      application.status,
+                      'APPLIED'
+                    )
+                  "
                 >
 
                   <div class="timeline-dot">
@@ -302,9 +442,17 @@
                 <div class="timeline-line"></div>
 
 
+                <!-- UNDER REVIEW -->
+
                 <div
                   class="timeline-step"
-                  [class.active]="isStepActive(application.status, 'UNDER_REVIEW')"
+
+                  [class.active]="
+                    isStepActive(
+                      application.status,
+                      'UNDER_REVIEW'
+                    )
+                  "
                 >
 
                   <div class="timeline-dot">
@@ -329,9 +477,17 @@
                 <div class="timeline-line"></div>
 
 
+                <!-- SHORTLISTED -->
+
                 <div
                   class="timeline-step"
-                  [class.active]="isStepActive(application.status, 'SHORTLISTED')"
+
+                  [class.active]="
+                    isStepActive(
+                      application.status,
+                      'SHORTLISTED'
+                    )
+                  "
                 >
 
                   <div class="timeline-dot">
@@ -356,9 +512,17 @@
                 <div class="timeline-line"></div>
 
 
+                <!-- SELECTED -->
+
                 <div
                   class="timeline-step"
-                  [class.active]="isStepActive(application.status, 'SELECTED')"
+
+                  [class.active]="
+                    isStepActive(
+                      application.status,
+                      'SELECTED'
+                    )
+                  "
                 >
 
                   <div class="timeline-dot">
@@ -382,7 +546,13 @@
               </div>
 
 
-              @if (application.status === 'REJECTED') {
+              <!-- ================================= -->
+              <!-- REJECTED MESSAGE -->
+              <!-- ================================= -->
+
+              @if (
+                application.status === 'REJECTED'
+              ) {
 
                 <div class="rejected-message">
 
@@ -397,7 +567,8 @@
                     </strong>
 
                     <p>
-                      Unfortunately, this application was not selected.
+                      Unfortunately, this application
+                      was not selected.
                     </p>
 
                   </div>
@@ -407,7 +578,13 @@
               }
 
 
-              @if (application.status === 'SELECTED') {
+              <!-- ================================= -->
+              <!-- SELECTED MESSAGE -->
+              <!-- ================================= -->
+
+              @if (
+                application.status === 'SELECTED'
+              ) {
 
                 <div class="selected-message">
 
@@ -422,7 +599,8 @@
                     </strong>
 
                     <p>
-                      You have been selected for this opportunity.
+                      You have been selected
+                      for this opportunity.
                     </p>
 
                   </div>
@@ -443,7 +621,15 @@
     }
 
 
-    @if (!loading && applications.length === 0 && !message) {
+    <!-- ======================================== -->
+    <!-- NO APPLICATIONS -->
+    <!-- ======================================== -->
+
+    @if (
+      !loading &&
+      applications.length === 0 &&
+      !message
+    ) {
 
       <div class="no-applications">
 
@@ -460,7 +646,7 @@
         </p>
 
         <a
-          routerLink="/dashboard"
+          routerLink="/jobs"
           class="browse-button"
         >
           Browse Jobs

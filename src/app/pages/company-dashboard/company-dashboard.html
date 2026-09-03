@@ -1,0 +1,531 @@
+<div class="company-dashboard-page">
+
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
+  <header class="company-header">
+
+    <div class="brand">
+
+      <div class="logo-icon">
+        P
+      </div>
+
+      <h1>
+        Placement<span>Hub</span>
+      </h1>
+
+    </div>
+
+
+    <nav class="nav-menu">
+
+      <a routerLink="/company-dashboard">
+        Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Student Jobs
+      </a>
+
+      <a routerLink="/applications">
+        Applications
+      </a>
+
+      <button
+  type="button"
+  (click)="logout()"
+>
+  Logout
+</button>
+
+    </nav>
+
+  </header>
+
+
+
+  <!-- =========================================
+       MAIN CONTENT
+  ========================================== -->
+
+  <main class="company-content">
+
+
+    <!-- =======================================
+         WELCOME
+    ======================================== -->
+
+    <section class="welcome-section">
+
+      <p class="welcome-label">
+        COMPANY DASHBOARD
+      </p>
+
+      <h2>
+        Welcome Back 👋
+      </h2>
+
+      <p>
+        Manage your job opportunities and applications.
+      </p>
+
+    </section>
+
+
+
+    <!-- =======================================
+         COMPANY INFORMATION
+    ======================================== -->
+
+    <section class="company-info-card">
+
+      <div class="company-avatar">
+        {{ companyName.charAt(0).toUpperCase() }}
+      </div>
+
+      <div>
+
+        <p class="info-label">
+          COMPANY
+        </p>
+
+        <h3>
+          {{ companyName }}
+        </h3>
+
+        <p>
+          Company ID:
+          {{ companyId || 'N/A' }}
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================
+         STATISTICS
+    ======================================== -->
+
+    <section class="stats-grid">
+
+
+      <!-- Total -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📋
+        </div>
+
+        <div>
+
+          <p>
+            Total Applications
+          </p>
+
+          <h3>
+            {{ getTotalApplications() }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Pending -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ⏳
+        </div>
+
+        <div>
+
+          <p>
+            Pending
+          </p>
+
+          <h3>
+            {{ getPendingApplications() }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Shortlisted -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ⭐
+        </div>
+
+        <div>
+
+          <p>
+            Shortlisted
+          </p>
+
+          <h3>
+            {{ getShortlistedApplications() }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Selected -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🎉
+        </div>
+
+        <div>
+
+          <p>
+            Selected
+          </p>
+
+          <h3>
+            {{ getSelectedApplications() }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Rejected -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ❌
+        </div>
+
+        <div>
+
+          <p>
+            Rejected
+          </p>
+
+          <h3>
+            {{ getRejectedApplications() }}
+          </h3>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- =======================================
+         APPLICATIONS
+    ======================================== -->
+
+    <section class="applications-section">
+
+
+      <!-- Heading -->
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="section-label">
+            MANAGEMENT
+          </p>
+
+          <h2>
+            Recent Applications
+          </h2>
+
+          <p>
+            Review applications submitted by students.
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="refresh-button"
+          (click)="refreshApplications()"
+          [disabled]="loading"
+        >
+
+          ↻ Refresh
+
+        </button>
+
+      </div>
+
+
+
+      <!-- =====================================
+           LOADING
+      ====================================== -->
+
+      @if (loading) {
+
+        <div class="loading-box">
+
+          <div class="loading-spinner">
+            ⏳
+          </div>
+
+          <p>
+            Loading applications...
+          </p>
+
+        </div>
+
+      }
+
+
+
+      <!-- =====================================
+           ERROR
+      ====================================== -->
+
+      @if (!loading && message) {
+
+        <div class="error-box">
+
+          {{ message }}
+
+        </div>
+
+      }
+
+
+
+      <!-- =====================================
+           APPLICATION LIST
+      ====================================== -->
+
+      @if (
+        !loading &&
+        applications.length > 0
+      ) {
+
+        <div class="applications-list">
+
+
+          @for (
+            application of applications;
+            track application.id
+          ) {
+
+
+            <article class="application-card">
+
+
+              <!-- =============================
+                   STUDENT
+              ============================== -->
+
+              <div class="student-section">
+
+                <div class="student-avatar">
+
+                  S
+
+                </div>
+
+                <div>
+
+                  <p class="small-label">
+                    STUDENT
+                  </p>
+
+                  <h3>
+                    Student #{{ getStudentId(application) }}
+                  </h3>
+
+                  <p>
+                    Application #{{ application.id }}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- =============================
+                   JOB
+              ============================== -->
+
+              <div class="job-section">
+
+                <p class="small-label">
+                  JOB
+                </p>
+
+                <h3>
+                  {{ getJobTitle(application) }}
+                </h3>
+
+                <p>
+                  {{ application.location || 'Location not available' }}
+                </p>
+
+              </div>
+
+
+
+              <!-- =============================
+                   DATE
+              ============================== -->
+
+              <div class="date-section">
+
+                <p class="small-label">
+                  APPLIED AT
+                </p>
+
+                <p>
+                  {{ formatDate(application.appliedAt) }}
+                </p>
+
+              </div>
+
+
+
+              <!-- =============================
+                   STATUS
+              ============================== -->
+
+              <div class="status-section">
+
+                <p class="small-label">
+                  STATUS
+                </p>
+
+                <span
+                  class="status-badge"
+                  [class.applied]="
+                    getStatusClass(application.status) === 'applied'
+                  "
+                  [class.under-review]="
+                    getStatusClass(application.status) === 'under-review'
+                  "
+                  [class.shortlisted]="
+                    getStatusClass(application.status) === 'shortlisted'
+                  "
+                  [class.selected]="
+                    getStatusClass(application.status) === 'selected'
+                  "
+                  [class.rejected]="
+                    getStatusClass(application.status) === 'rejected'
+                  "
+                >
+
+                  {{ getStatusLabel(application.status) }}
+
+                </span>
+
+
+                <!-- Status Update -->
+
+                <select
+                  [value]="application.status"
+                  [disabled]="updating"
+                  (change)="
+                    updateApplicationStatus(
+                      application,
+                      $any($event.target).value
+                    )
+                  "
+                >
+
+                  <option value="APPLIED">
+                    Applied
+                  </option>
+
+                  <option value="UNDER_REVIEW">
+                    Under Review
+                  </option>
+
+                  <option value="SHORTLISTED">
+                    Shortlisted
+                  </option>
+
+                  <option value="SELECTED">
+                    Selected
+                  </option>
+
+                  <option value="REJECTED">
+                    Rejected
+                  </option>
+
+                </select>
+
+              </div>
+
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+
+
+      <!-- =====================================
+           NO APPLICATIONS
+      ====================================== -->
+
+      @if (
+        !loading &&
+        applications.length === 0 &&
+        !message
+      ) {
+
+        <div class="empty-box">
+
+          <div class="empty-icon">
+            📭
+          </div>
+
+          <h3>
+            No Applications Yet
+          </h3>
+
+          <p>
+            Applications submitted by students
+            will appear here.
+          </p>
+
+        </div>
+
+      }
+
+
+    </section>
+
+
+  </main>
+
+</div>

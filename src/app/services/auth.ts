@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class Auth {
 
   private apiUrl =
-    'http://localhost:8080/api/users';
+    'https://placement-platform-backend-production.up.railway.app/api/users';
 
   constructor(
     private http: HttpClient

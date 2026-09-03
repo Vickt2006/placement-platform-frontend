@@ -1,0 +1,768 @@
+<div class="admin-jobs-page">
+
+  <!-- ================= NAVBAR ================= -->
+
+  <nav class="navbar">
+
+    <div class="brand">
+      <span class="brand-icon">P</span>
+      <span>PlacementHub</span>
+    </div>
+
+    <div class="nav-links">
+
+      <a routerLink="/admin-dashboard">
+        Admin Dashboard
+      </a>
+
+      <a routerLink="/admin-students">
+        Students
+      </a>
+
+      <a routerLink="/admin-companies">
+        Companies
+      </a>
+
+      <a
+        routerLink="/admin-jobs"
+        class="active">
+        Jobs
+      </a>
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()">
+        Logout
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="container">
+
+    <!-- ================= HEADER ================= -->
+
+    <section class="page-header">
+
+      <div>
+
+        <p class="page-label">
+          ADMIN MANAGEMENT
+        </p>
+
+        <h1>
+          Jobs 💼
+        </h1>
+
+        <p class="subtitle">
+          View and manage jobs posted on the PlacementHub platform.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= TOOLBAR ================= -->
+
+    <section class="toolbar">
+
+      <div>
+
+        <h2>
+          Posted Jobs
+        </h2>
+
+        <p>
+          Total Jobs:
+          <strong>{{ jobs.length }}</strong>
+        </p>
+
+      </div>
+
+
+      <div class="toolbar-actions">
+
+        @if (!showAddJobForm) {
+
+          <button
+            type="button"
+            class="add-job-btn"
+            (click)="openAddJobForm()">
+
+            + Add New Job
+
+          </button>
+
+        }
+
+
+        <button
+          type="button"
+          class="refresh-btn"
+          (click)="refreshJobs()"
+          [disabled]="loading">
+
+          ↻ Refresh
+
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- ADD NEW JOB FORM -->
+    <!-- ================================================= -->
+
+    @if (showAddJobForm) {
+
+      <section class="add-job-card">
+
+        <!-- FORM HEADER -->
+
+        <div class="add-job-header">
+
+          <div>
+
+            <p class="page-label">
+              JOB CREATION
+            </p>
+
+            <h2>
+              Add New Job 💼
+            </h2>
+
+            <p>
+              Create a new job posting for the PlacementHub platform.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeAddJobForm()"
+            [disabled]="addingJob">
+
+            ✕
+
+          </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- JOB FORM -->
+        <!-- ================================================= -->
+
+        <form
+          class="job-form"
+          (ngSubmit)="addJob()">
+
+
+          <!-- ================= ROW 1 ================= -->
+
+          <div class="form-row">
+
+
+            <!-- JOB TITLE -->
+
+            <div class="form-group">
+
+              <label for="jobTitle">
+                Job Title
+                <span>*</span>
+              </label>
+
+              <input
+                id="jobTitle"
+                type="text"
+                name="title"
+                [(ngModel)]="newJob.title"
+                placeholder="e.g. Java Developer"
+                [disabled]="addingJob"
+                required>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="form-group">
+
+              <label for="jobLocation">
+                Location
+                <span>*</span>
+              </label>
+
+              <input
+                id="jobLocation"
+                type="text"
+                name="location"
+                [(ngModel)]="newJob.location"
+                placeholder="e.g. Pune"
+                [disabled]="addingJob"
+                required>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= ROW 2 ================= -->
+
+          <div class="form-row">
+
+
+            <!-- JOB TYPE -->
+
+            <div class="form-group">
+
+              <label for="jobType">
+                Job Type
+                <span>*</span>
+              </label>
+
+              <select
+                id="jobType"
+                name="jobType"
+                [(ngModel)]="newJob.jobType"
+                [disabled]="addingJob"
+                required>
+
+                <option value="">
+                  Select Job Type
+                </option>
+
+                <option value="FULL_TIME">
+                  Full Time
+                </option>
+
+                <option value="PART_TIME">
+                  Part Time
+                </option>
+
+                <option value="INTERNSHIP">
+                  Internship
+                </option>
+
+                <option value="CONTRACT">
+                  Contract
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- SALARY -->
+
+            <div class="form-group">
+
+              <label for="jobSalary">
+                Salary
+                <small>(Optional)</small>
+              </label>
+
+              <input
+                id="jobSalary"
+                type="number"
+                name="salary"
+                [(ngModel)]="newJob.salary"
+                placeholder="e.g. 600000"
+                min="0"
+                [disabled]="addingJob">
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= ROW 3 ================= -->
+
+          <div class="form-row">
+
+
+            <!-- SKILLS -->
+
+            <div class="form-group">
+
+              <label for="jobSkills">
+                Required Skills
+                <span>*</span>
+              </label>
+
+              <input
+                id="jobSkills"
+                type="text"
+                name="skills"
+                [(ngModel)]="newJob.skills"
+                placeholder="e.g. Java, Spring Boot, MySQL"
+                [disabled]="addingJob"
+                required>
+
+            </div>
+
+
+            <!-- COMPANY ID -->
+
+            <div class="form-group">
+
+              <label for="companyId">
+                Company ID
+                <small>(Optional)</small>
+              </label>
+
+              <input
+                id="companyId"
+                type="number"
+                name="companyId"
+                [(ngModel)]="newJob.companyId"
+                placeholder="e.g. 2"
+                min="1"
+                [disabled]="addingJob">
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= DESCRIPTION ================= -->
+
+          <div class="form-group full-width">
+
+            <label for="jobDescription">
+              Job Description
+              <span>*</span>
+            </label>
+
+            <textarea
+              id="jobDescription"
+              name="description"
+              [(ngModel)]="newJob.description"
+              placeholder="Enter complete job description..."
+              rows="6"
+              [disabled]="addingJob"
+              required>
+            </textarea>
+
+          </div>
+
+
+          <!-- ================= MESSAGE ================= -->
+
+          @if (addJobMessage) {
+
+            <div
+              class="form-message"
+              [class.success-message]="addJobMessage.includes('successfully')"
+              [class.error-message]="!addJobMessage.includes('successfully')">
+
+              {{ addJobMessage }}
+
+            </div>
+
+          }
+
+
+          <!-- ================= BUTTONS ================= -->
+
+          <div class="form-actions">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="closeAddJobForm()"
+              [disabled]="addingJob">
+
+              Cancel
+
+            </button>
+
+
+            <button
+              type="submit"
+              class="create-job-btn"
+              [disabled]="addingJob">
+
+              @if (addingJob) {
+
+                Creating...
+
+              }
+
+              @else {
+
+                + Create Job
+
+              }
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </section>
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- LOADING -->
+    <!-- ================================================= -->
+
+    @if (loading) {
+
+      <div class="state-box">
+
+        <div class="state-icon">
+          ⏳
+        </div>
+
+        <h3>
+          Loading jobs...
+        </h3>
+
+        <p>
+          Please wait while we fetch job data.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- ERROR -->
+    <!-- ================================================= -->
+
+    @if (!loading && message) {
+
+      <div class="error-box">
+
+        <div class="state-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Something went wrong
+        </h3>
+
+        <p>
+          {{ message }}
+        </p>
+
+        <button
+          type="button"
+          class="try-btn"
+          (click)="refreshJobs()">
+
+          Try Again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- JOB TABLE -->
+    <!-- ================================================= -->
+
+    @if (!loading && !message && jobs.length > 0) {
+
+      <section class="jobs-card">
+
+        <div class="table-header">
+
+          <div>
+
+            <h2>
+              All Jobs
+            </h2>
+
+            <p>
+              Manage jobs posted by companies.
+            </p>
+
+          </div>
+
+          <span class="count-badge">
+            {{ jobs.length }} Jobs
+          </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>ID</th>
+                <th>Job</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Salary</th>
+                <th>Skills</th>
+                <th>Action</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (job of jobs; track job.id) {
+
+                <tr>
+
+
+                  <!-- ID -->
+
+                  <td>
+
+                    <span class="job-id">
+                      #{{ job.id }}
+                    </span>
+
+                  </td>
+
+
+                  <!-- JOB -->
+
+                  <td>
+
+                    <div class="job-info">
+
+                      <div class="job-icon">
+                        💼
+                      </div>
+
+                      <div>
+
+                        <strong class="job-title">
+
+                          {{
+                            job.title ||
+                            'Untitled Job'
+                          }}
+
+                        </strong>
+
+                        <p class="description">
+
+                          {{
+                            job.description ||
+                            'No description available'
+                          }}
+
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- COMPANY -->
+
+                  <td>
+
+                    <div class="company-info">
+
+                      <div class="company-avatar">
+
+                        {{
+                          job.companyName
+                            ? job.companyName.charAt(0).toUpperCase()
+                            : 'C'
+                        }}
+
+                      </div>
+
+                      <span>
+
+                        {{
+                          job.companyName ||
+                          'Unknown Company'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- LOCATION -->
+
+                  <td>
+
+                    <span class="location">
+
+                      📍
+
+                      {{
+                        job.location ||
+                        'Not specified'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- TYPE -->
+
+                  <td>
+
+                    <span class="type-badge">
+
+                      {{
+                        job.jobType ||
+                        'Not specified'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- SALARY -->
+
+                  <td>
+
+                    <span class="salary">
+
+                      {{
+                        job.salary != null
+                          ? ('₹' + job.salary)
+                          : 'Not specified'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- SKILLS -->
+
+                  <td>
+
+                    <span class="skills">
+
+                      {{
+                        job.skills ||
+                        'Not specified'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- DELETE -->
+
+                  <td>
+
+                    <button
+                      type="button"
+                      class="delete-btn"
+                      (click)="deleteJob(job)"
+                      [disabled]="deletingJobId === job.id">
+
+                      @if (deletingJobId === job.id) {
+
+                        Deleting...
+
+                      }
+
+                      @else {
+
+                        🗑 Delete
+
+                      }
+
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- EMPTY STATE -->
+    <!-- ================================================= -->
+
+    @if (!loading && !message && jobs.length === 0) {
+
+      <div class="state-box empty-box">
+
+        <div class="state-icon">
+          💼
+        </div>
+
+        <h2>
+          No Jobs Found
+        </h2>
+
+        <p>
+          There are currently no jobs posted on the platform.
+        </p>
+
+
+        <button
+          type="button"
+          class="add-empty-btn"
+          (click)="openAddJobForm()">
+
+          + Add New Job
+
+        </button>
+
+
+        <button
+          type="button"
+          class="try-btn"
+          (click)="refreshJobs()">
+
+          ↻ Refresh
+
+        </button>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

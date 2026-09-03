@@ -1,0 +1,1264 @@
+/* =========================================================
+   ADMIN COMPANIES
+   PREMIUM BLACK + NEON GLASS THEME
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.admin-companies-page {
+  min-height: 100vh;
+  width: 100%;
+
+  position: relative;
+  overflow-x: hidden;
+
+  color: #f8fafc;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(37, 99, 235, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 92% 22%,
+      rgba(124, 58, 237, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(6, 182, 212, 0.10),
+      transparent 35%
+    ),
+    #020406;
+}
+
+
+/* =========================================================
+   ANIMATED CLOUDS
+   ========================================================= */
+
+.admin-companies-page::before,
+.admin-companies-page::after {
+  content: "";
+
+  position: fixed;
+
+  width: 470px;
+  height: 470px;
+
+  border-radius: 50%;
+
+  filter: blur(120px);
+
+  opacity: 0.20;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+  animation:
+    companyCloud 15s ease-in-out infinite alternate;
+}
+
+.admin-companies-page::before {
+  left: -250px;
+  top: 80px;
+
+  background: #2563eb;
+}
+
+.admin-companies-page::after {
+  right: -250px;
+  bottom: -100px;
+
+  background: #7c3aed;
+
+  animation-delay: -7s;
+}
+
+@keyframes companyCloud {
+
+  0% {
+    transform:
+      translate(0, 0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate(60px, -35px)
+      scale(1.10);
+  }
+
+  100% {
+    transform:
+      translate(-30px, 35px)
+      scale(0.95);
+  }
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+  width: 100%;
+  height: 76px;
+
+  padding: 0 5.5%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 100;
+
+  background:
+    rgba(4, 7, 12, 0.94);
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.12);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 15px 45px
+    rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 800;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5,
+      #7c3aed
+    );
+
+  box-shadow:
+    0 0 22px
+    rgba(37, 99, 235, 0.45);
+
+  animation:
+    companyLogoPulse 3s ease-in-out infinite;
+}
+
+@keyframes companyLogoPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.brand span:last-child {
+  color: #f8fafc;
+
+  font-size: 23px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   NAV LINKS
+   ========================================================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.nav-links a {
+  position: relative;
+
+  padding: 10px 13px;
+
+  border-radius: 9px;
+
+  color: #94a3b8;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.nav-links a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 4px;
+
+  width: 0;
+  height: 2px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #8b5cf6
+    );
+
+  transform: translateX(-50%);
+
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+
+  background:
+    rgba(37, 99, 235, 0.10);
+
+  transform:
+    translateY(-2px);
+}
+
+.nav-links a:hover::after {
+  width: 60%;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.logout-btn {
+  position: relative;
+
+  overflow: hidden;
+
+  margin-left: 8px;
+
+  padding: 10px 18px;
+
+  border:
+    1px solid
+    rgba(248, 113, 113, 0.25);
+
+  border-radius: 10px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #171923,
+      #090b10
+    );
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.logout-btn:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(248, 113, 113, 0.55);
+
+  box-shadow:
+    0 10px 30px
+    rgba(239, 68, 68, 0.16);
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.container {
+  width:
+    min(1150px, 90%);
+
+  margin:
+    0 auto;
+
+  padding:
+    55px 0 80px;
+
+  position:
+    relative;
+
+  z-index:
+    1;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.welcome-section {
+  margin-bottom:
+    30px;
+
+  animation:
+    companyPageEnter 0.7s ease both;
+}
+
+@keyframes companyPageEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+.page-label {
+  margin:
+    0 0 10px;
+
+  color:
+    #60a5fa;
+
+  font-size:
+    12px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    1.8px;
+
+  text-shadow:
+    0 0 15px
+    rgba(96, 165, 250, 0.45);
+}
+
+.welcome-section h1 {
+  margin:
+    0;
+
+  color:
+    #f8fafc !important;
+
+  font-size:
+    40px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    -1px;
+
+  text-shadow:
+    0 0 25px
+    rgba(255, 255, 255, 0.06);
+}
+
+.subtitle {
+  margin:
+    10px 0 0;
+
+  color:
+    #94a3b8 !important;
+
+  font-size:
+    15px;
+
+  line-height:
+    1.6;
+}
+
+
+/* =========================================================
+   COMPANIES TOOLBAR
+   ========================================================= */
+
+.companies-toolbar {
+  min-height:
+    90px;
+
+  width:
+    100%;
+
+  margin-bottom:
+    22px;
+
+  padding:
+    20px 23px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  border-radius:
+    17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.92),
+      rgba(5, 8, 14, 0.97)
+    );
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.14);
+
+  box-shadow:
+    0 18px 45px
+    rgba(0, 0, 0, 0.35);
+
+  backdrop-filter:
+    blur(18px);
+}
+
+.companies-toolbar::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    100%;
+
+  height:
+    2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #8b5cf6,
+      #06b6d4
+    );
+}
+
+.companies-toolbar h2 {
+  margin:
+    0 0 6px;
+
+  color:
+    #f8fafc !important;
+
+  font-size:
+    21px;
+
+  font-weight:
+    800;
+}
+
+.companies-toolbar p {
+  margin:
+    0;
+
+  color:
+    #64748b !important;
+
+  font-size:
+    13px;
+}
+
+.companies-toolbar strong {
+  color:
+    #60a5fa;
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
+.refresh-btn {
+  min-width:
+    112px;
+
+  height:
+    44px;
+
+  padding:
+    0 20px;
+
+  border:
+    1px solid
+    rgba(96, 165, 250, 0.45);
+
+  border-radius:
+    10px;
+
+  color:
+    #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5,
+      #7c3aed
+    ) !important;
+
+  background-size:
+    200% 200%;
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 9px 25px
+    rgba(37, 99, 235, 0.35);
+
+  animation:
+    refreshGradient 4s ease infinite;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.refresh-btn:hover {
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 15px 35px
+    rgba(37, 99, 235, 0.48);
+}
+
+.refresh-btn:active {
+  transform:
+    scale(0.97);
+}
+
+.refresh-btn:disabled {
+  opacity:
+    0.55;
+
+  cursor:
+    not-allowed;
+
+  transform:
+    none;
+}
+
+@keyframes refreshGradient {
+
+  0% {
+    background-position:
+      0% 50%;
+  }
+
+  50% {
+    background-position:
+      100% 50%;
+  }
+
+  100% {
+    background-position:
+      0% 50%;
+  }
+}
+
+
+/* =========================================================
+   COMPANIES TABLE CARD
+   ========================================================= */
+
+.companies-table,
+.table-container {
+  width:
+    100%;
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  border-radius:
+    18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(10, 15, 25, 0.96),
+      rgba(3, 6, 10, 0.98)
+    );
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.14);
+
+  box-shadow:
+    0 25px 65px
+    rgba(0, 0, 0, 0.42);
+
+  animation:
+    tableEnter 0.7s ease both;
+}
+
+@keyframes tableEnter {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(20px);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+.companies-table::before,
+.table-container::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    100%;
+
+  height:
+    2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #2563eb,
+      #8b5cf6,
+      #06b6d4,
+      transparent
+    );
+
+  z-index:
+    2;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.companies-table table,
+.table-container table {
+  width:
+    100%;
+
+  border-collapse:
+    separate;
+
+  border-spacing:
+    0;
+}
+
+.companies-table thead,
+.table-container thead {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(37, 99, 235, 0.14),
+      rgba(124, 58, 237, 0.12)
+    );
+}
+
+.companies-table th,
+.table-container th {
+  height:
+    58px;
+
+  padding:
+    0 20px;
+
+  text-align:
+    left;
+
+  color:
+    #93c5fd !important;
+
+  font-size:
+    12px;
+
+  font-weight:
+    800;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.7px;
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.12);
+}
+
+.companies-table td,
+.table-container td {
+  height:
+    72px;
+
+  padding:
+    10px 20px;
+
+  vertical-align:
+    middle;
+
+  color:
+    #cbd5e1 !important;
+
+  font-size:
+    14px;
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.07);
+}
+
+.companies-table tbody tr,
+.table-container tbody tr {
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.companies-table tbody tr:hover,
+.table-container tbody tr:hover {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(37, 99, 235, 0.09),
+      rgba(124, 58, 237, 0.06)
+    );
+
+  transform:
+    translateX(3px);
+}
+
+.companies-table tbody tr:last-child td,
+.table-container tbody tr:last-child td {
+  border-bottom:
+    none;
+}
+
+
+/* =========================================================
+   COMPANY ID
+   ========================================================= */
+
+.company-id {
+  color:
+    #60a5fa !important;
+
+  font-weight:
+    800;
+}
+
+
+/* =========================================================
+   COMPANY NAME
+   ========================================================= */
+
+.company-name {
+  color:
+    #f8fafc !important;
+
+  font-weight:
+    800;
+}
+
+
+/* =========================================================
+   COMPANY AVATAR
+   ========================================================= */
+
+.company-avatar {
+  width:
+    42px;
+
+  height:
+    42px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  margin-right:
+    10px;
+
+  border-radius:
+    11px;
+
+  color:
+    #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0891b2,
+      #2563eb,
+      #4f46e5
+    );
+
+  box-shadow:
+    0 0 18px
+    rgba(6, 182, 212, 0.20);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.companies-table tr:hover .company-avatar,
+.table-container tr:hover .company-avatar {
+  transform:
+    scale(1.08)
+    rotate(-4deg);
+
+  box-shadow:
+    0 0 28px
+    rgba(6, 182, 212, 0.35);
+}
+
+
+/* =========================================================
+   ROLE BADGE
+   ========================================================= */
+
+.role-badge {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  min-width:
+    90px;
+
+  height:
+    30px;
+
+  padding:
+    0 13px;
+
+  border-radius:
+    20px;
+
+  color:
+    #60a5fa !important;
+
+  background:
+    rgba(37, 99, 235, 0.12);
+
+  border:
+    1px solid
+    rgba(96, 165, 250, 0.28);
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    0.5px;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.role-badge:hover {
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 0 18px
+    rgba(37, 99, 235, 0.18);
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-box {
+  width:
+    100%;
+
+  padding:
+    60px 20px;
+
+  text-align:
+    center;
+
+  border-radius:
+    18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.90),
+      rgba(5, 8, 14, 0.96)
+    );
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.13);
+
+  color:
+    #94a3b8;
+
+  animation:
+    companyLoading 2s ease-in-out infinite;
+}
+
+@keyframes companyLoading {
+
+  0%,
+  100% {
+    opacity:
+      0.65;
+  }
+
+  50% {
+    opacity:
+      1;
+  }
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-message {
+  padding:
+    15px 18px;
+
+  border-radius:
+    11px;
+
+  color:
+    #fca5a5;
+
+  background:
+    rgba(127, 29, 29, 0.20);
+
+  border:
+    1px solid
+    rgba(248, 113, 113, 0.25);
+
+  animation:
+    companyError 0.45s ease;
+}
+
+@keyframes companyError {
+
+  0%,
+  100% {
+    transform:
+      translateX(0);
+  }
+
+  25% {
+    transform:
+      translateX(-5px);
+  }
+
+  75% {
+    transform:
+      translateX(5px);
+  }
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-box {
+  padding:
+    65px 20px;
+
+  text-align:
+    center;
+
+  border-radius:
+    18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.90),
+      rgba(5, 8, 14, 0.96)
+    );
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.13);
+
+  box-shadow:
+    0 20px 55px
+    rgba(0, 0, 0, 0.30);
+}
+
+.empty-box h3 {
+  margin:
+    0 0 8px;
+
+  color:
+    #f8fafc;
+}
+
+.empty-box p {
+  margin:
+    0;
+
+  color:
+    #64748b;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .navbar {
+    height:
+      auto;
+
+    padding:
+      18px 5%;
+
+    flex-direction:
+      column;
+
+    gap:
+      17px;
+  }
+
+  .nav-links {
+    flex-wrap:
+      wrap;
+
+    justify-content:
+      center;
+  }
+
+  .container {
+    width:
+      92%;
+
+    padding-top:
+      40px;
+  }
+
+  .companies-table,
+  .table-container {
+    overflow-x:
+      auto;
+  }
+
+  .companies-table table,
+  .table-container table {
+    min-width:
+      700px;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .brand span:last-child {
+    font-size:
+      20px;
+  }
+
+  .nav-links a {
+    font-size:
+      12px;
+
+    padding:
+      8px 9px;
+  }
+
+  .logout-btn {
+    margin-left:
+      0;
+
+    font-size:
+      12px;
+
+    padding:
+      9px 13px;
+  }
+
+  .container {
+    width:
+      90%;
+
+    padding:
+      35px 0 55px;
+  }
+
+  .welcome-section h1 {
+    font-size:
+      30px;
+  }
+
+  .companies-toolbar {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      15px;
+  }
+
+  .refresh-btn {
+    width:
+      100%;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}

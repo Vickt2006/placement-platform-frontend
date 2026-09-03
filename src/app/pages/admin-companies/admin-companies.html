@@ -1,0 +1,358 @@
+<div class="admin-companies-page">
+
+  <!-- ========================= -->
+  <!-- NAVBAR -->
+  <!-- ========================= -->
+
+  <nav class="navbar">
+
+    <div class="brand">
+
+      <span class="brand-icon">
+        P
+      </span>
+
+      <span>
+        PlacementHub
+      </span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+      <a routerLink="/admin-dashboard">
+        Admin Dashboard
+      </a>
+
+      <a routerLink="/dashboard">
+        Student Jobs
+      </a>
+
+      <a routerLink="/company-dashboard">
+        Company
+      </a>
+
+      <a routerLink="/applications">
+        Applications
+      </a>
+
+      <button
+        type="button"
+        class="logout-btn"
+        (click)="logout()">
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- MAIN -->
+  <!-- ========================= -->
+
+  <main class="container">
+
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <section class="welcome-section">
+
+      <p class="page-label">
+        ADMIN MANAGEMENT
+      </p>
+
+      <h1>
+        Companies 🏢
+      </h1>
+
+      <p class="subtitle">
+        View and manage registered company accounts.
+      </p>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- TOOLBAR -->
+    <!-- ========================= -->
+
+    <section class="companies-toolbar">
+
+      <div>
+
+        <h2>
+          Registered Companies
+        </h2>
+
+        <p>
+
+          Total Companies:
+
+          <strong>
+            {{ companies.length }}
+          </strong>
+
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="refresh-btn"
+        (click)="refreshCompanies()"
+        [disabled]="loading">
+
+        ↻ Refresh
+
+      </button>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- LOADING -->
+    <!-- ========================= -->
+
+    @if (loading) {
+
+      <div class="loading-box">
+
+        <div class="loading-icon">
+          ⏳
+        </div>
+
+        <h3>
+          Loading companies...
+        </h3>
+
+        <p>
+          Please wait while we fetch company data.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- ERROR -->
+    <!-- ========================= -->
+
+    @if (!loading && message) {
+
+      <div class="error-box">
+
+        <div class="error-icon">
+          ⚠️
+        </div>
+
+        <strong>
+          Error
+        </strong>
+
+        <p>
+          {{ message }}
+        </p>
+
+        <button
+          type="button"
+          (click)="refreshCompanies()">
+
+          Try Again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- COMPANY TABLE -->
+    <!-- ========================= -->
+
+    @if (
+      !loading &&
+      !message &&
+      companies.length > 0
+    ) {
+
+      <section class="companies-card">
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  ID
+                </th>
+
+                <th>
+                  Company
+                </th>
+
+                <th>
+                  Email
+                </th>
+
+                <th>
+                  Role
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                company of companies;
+                track company.id
+              ) {
+
+                <tr>
+
+
+                  <!-- ID -->
+
+                  <td>
+
+                    <span class="company-id">
+                      #{{ company.id }}
+                    </span>
+
+                  </td>
+
+
+                  <!-- COMPANY -->
+
+                  <td>
+
+                    <div class="company-info">
+
+                      <div class="company-avatar">
+
+                        {{
+                          company.name
+                            ? company.name
+                                .charAt(0)
+                                .toUpperCase()
+                            : 'C'
+                        }}
+
+                      </div>
+
+
+                      <div class="company-name">
+
+                        <strong>
+                          {{
+                            company.name ||
+                            'Unknown Company'
+                          }}
+                        </strong>
+
+                        <span>
+                          Company
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- EMAIL -->
+
+                  <td>
+
+                    <span class="email">
+                      {{ company.email }}
+                    </span>
+
+                  </td>
+
+
+                  <!-- ROLE -->
+
+                  <td>
+
+                    <span class="role-badge">
+
+                      {{
+                        company.role ||
+                        'COMPANY'
+                      }}
+
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ========================= -->
+    <!-- EMPTY -->
+    <!-- ========================= -->
+
+    @if (
+      !loading &&
+      !message &&
+      companies.length === 0
+    ) {
+
+      <div class="empty-box">
+
+        <div class="empty-icon">
+          🏢
+        </div>
+
+        <h2>
+          No Companies Found
+        </h2>
+
+        <p>
+          There are currently no registered companies.
+        </p>
+
+        <button
+          type="button"
+          (click)="refreshCompanies()">
+
+          Refresh
+
+        </button>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

@@ -1,10 +1,12 @@
 <div class="dashboard-page">
 
-  <!-- ====================================== -->
-  <!-- HEADER -->
-  <!-- ====================================== -->
+  <!-- =====================================================
+       HEADER / NAVBAR
+       ===================================================== -->
 
   <header class="dashboard-header">
+
+    <!-- BRAND -->
 
     <div class="brand">
 
@@ -19,26 +21,47 @@
     </div>
 
 
+    <!-- NAVIGATION -->
+
     <nav class="nav-menu">
 
-      <a routerLink="/dashboard">
+      <!-- DASHBOARD -->
+
+      <a
+        routerLink="/dashboard"
+      >
         Dashboard
       </a>
 
-      <a routerLink="/dashboard">
+
+      <!-- JOBS -->
+
+      <a
+        routerLink="/jobs"
+      >
         Jobs
       </a>
 
-      <a routerLink="/applications">
+
+      <!-- MY APPLICATIONS -->
+
+      <a
+        routerLink="/applications"
+      >
         My Applications
       </a>
 
+
+      <!-- PROFILE -->
+
       <a
-        href="#"
-        (click)="$event.preventDefault()"
+        routerLink="/profile"
       >
         Profile
       </a>
+
+
+      <!-- LOGOUT -->
 
       <button
         type="button"
@@ -52,39 +75,39 @@
   </header>
 
 
-  <!-- ====================================== -->
-  <!-- MAIN CONTENT -->
-  <!-- ====================================== -->
+
+  <!-- =====================================================
+       MAIN CONTENT
+       ===================================================== -->
 
   <main class="dashboard-content">
 
 
-    <!-- WELCOME -->
+    <!-- ===================================================
+         WELCOME SECTION
+         =================================================== -->
 
     <section class="welcome-section">
 
-      <div>
+      <p class="welcome-label">
+        STUDENT DASHBOARD
+      </p>
 
-        <p class="welcome-label">
-          STUDENT DASHBOARD
-        </p>
+      <h2>
+        Welcome Back 👋
+      </h2>
 
-        <h2>
-          Welcome Back 👋
-        </h2>
-
-        <p>
-          Find your next career opportunity.
-        </p>
-
-      </div>
+      <p>
+        Find your next career opportunity.
+      </p>
 
     </section>
 
 
-    <!-- ==================================== -->
-    <!-- SEARCH -->
-    <!-- ==================================== -->
+
+    <!-- ===================================================
+         SEARCH SECTION
+         =================================================== -->
 
     <section class="search-section">
 
@@ -94,6 +117,7 @@
         (keyup.enter)="searchJobs()"
         placeholder="Search jobs by title, skills or location..."
       />
+
 
       <button
         type="button"
@@ -105,14 +129,17 @@
     </section>
 
 
-    <!-- ==================================== -->
-    <!-- JOBS -->
-    <!-- ==================================== -->
+
+    <!-- ===================================================
+         JOBS SECTION
+         =================================================== -->
 
     <section class="jobs-section">
 
 
-      <!-- SECTION HEADING -->
+      <!-- =================================================
+           SECTION HEADING
+           ================================================= -->
 
       <div class="section-heading">
 
@@ -128,45 +155,77 @@
 
         </div>
 
+
         <span class="job-count">
 
           {{ filteredJobs.length }}
 
-          {{ filteredJobs.length === 1 ? 'Job' : 'Jobs' }}
+          {{
+            filteredJobs.length === 1
+              ? 'Job'
+              : 'Jobs'
+          }}
 
         </span>
 
       </div>
 
 
-      <!-- LOADING -->
+
+      <!-- =================================================
+           LOADING
+           ================================================= -->
 
       @if (loading) {
 
         <div class="loading">
-          Loading jobs...
-        </div>
 
-      }
+          <div>
+            ⏳
+          </div>
 
-
-      <!-- ERROR -->
-
-      @if (!loading && message) {
-
-        <div class="error-message">
-
-          {{ message }}
+          <p>
+            Loading jobs...
+          </p>
 
         </div>
 
       }
 
 
-      <!-- JOB CARDS -->
+
+      <!-- =================================================
+           ERROR MESSAGE
+           ================================================= -->
 
       @if (
         !loading &&
+        message
+      ) {
+
+        <div class="error-message">
+
+          <div>
+            ⚠️
+          </div>
+
+          <p>
+            {{ message }}
+          </p>
+
+        </div>
+
+      }
+
+
+
+      <!-- =================================================
+           JOB CARDS
+           ================================================= -->
+
+      @if (
+        !loading &&
+        !message &&
         filteredJobs.length > 0
       ) {
 
@@ -181,26 +240,41 @@
             <article class="job-card">
 
 
-              <!-- JOB HEADER -->
+              <!-- =========================================
+                   JOB CARD HEADER
+                   ========================================= -->
 
               <div class="job-card-header">
 
+
+                <!-- COMPANY ICON -->
+
                 <div class="company-icon">
 
-                  {{ job.title?.charAt(0) }}
+                  {{
+                    job.title?.charAt(0) || 'J'
+                  }}
 
                 </div>
 
 
+                <!-- JOB TITLE -->
+
                 <div>
 
                   <h3>
-                    {{ job.title }}
+                    {{
+                      job.title ||
+                      'Untitled Job'
+                    }}
                   </h3>
 
                   <p>
                     Company ID:
-                    {{ job.companyId }}
+                    {{
+                      job.companyId ||
+                      'N/A'
+                    }}
                   </p>
 
                 </div>
@@ -208,26 +282,63 @@
               </div>
 
 
-              <!-- JOB INFORMATION -->
+
+              <!-- =========================================
+                   JOB INFORMATION
+                   ========================================= -->
 
               <div class="job-info">
 
-                <span>
-                  📍 {{ job.location }}
-                </span>
+
+                <!-- LOCATION -->
 
                 <span>
-                  💼 {{ job.jobType }}
+
+                  📍
+
+                  {{
+                    job.location ||
+                    'Not specified'
+                  }}
+
                 </span>
 
+
+                <!-- JOB TYPE -->
+
                 <span>
-                  💰 ₹{{ job.salary }}
+
+                  💼
+
+                  {{
+                    job.jobType ||
+                    'Not specified'
+                  }}
+
+                </span>
+
+
+                <!-- SALARY -->
+
+                <span>
+
+                  💰
+
+                  {{
+                    job.salary != null
+                      ? '₹' + job.salary
+                      : 'Not specified'
+                  }}
+
                 </span>
 
               </div>
 
 
-              <!-- SKILLS -->
+
+              <!-- =========================================
+                   SKILLS
+                   ========================================= -->
 
               <div class="skills">
 
@@ -236,13 +347,21 @@
                 </strong>
 
                 <p>
-                  {{ job.skills }}
+
+                  {{
+                    job.skills ||
+                    'Not specified'
+                  }}
+
                 </p>
 
               </div>
 
 
-              <!-- DESCRIPTION -->
+
+              <!-- =========================================
+                   DESCRIPTION
+                   ========================================= -->
 
               <div class="description">
 
@@ -251,13 +370,21 @@
                 </strong>
 
                 <p>
-                  {{ job.description }}
+
+                  {{
+                    job.description ||
+                    'No description available.'
+                  }}
+
                 </p>
 
               </div>
 
 
-              <!-- ACTION BUTTONS -->
+
+              <!-- =========================================
+                   ACTION BUTTONS
+                   ========================================= -->
 
               <div class="job-actions">
 
@@ -275,7 +402,7 @@
                 </a>
 
 
-                <!-- APPLY -->
+                <!-- APPLY NOW -->
 
                 <button
                   type="button"
@@ -297,7 +424,10 @@
       }
 
 
-      <!-- NO JOBS -->
+
+      <!-- =================================================
+           NO JOBS FOUND
+           ================================================= -->
 
       @if (
         !loading &&
@@ -306,6 +436,10 @@
       ) {
 
         <div class="no-jobs">
+
+          <div class="no-jobs-icon">
+            🔎
+          </div>
 
           <h3>
             No Jobs Found

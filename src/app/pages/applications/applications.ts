@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
 import { RouterLink } from '@angular/router';
 
 import { Application } from '../../services/application';
@@ -21,11 +20,8 @@ import { Application } from '../../services/application';
   ],
 
   templateUrl: './applications.html',
-
   styleUrl: './applications.css'
 })
-
-
 export class Applications implements OnInit {
 
 
@@ -35,9 +31,9 @@ export class Applications implements OnInit {
 
   applications: any[] = [];
 
-  loading: boolean = true;
+  loading = true;
 
-  message: string = '';
+  message = '';
 
 
   // ==========================================
@@ -46,7 +42,6 @@ export class Applications implements OnInit {
 
   constructor(
     private applicationService: Application,
-
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -56,6 +51,10 @@ export class Applications implements OnInit {
   // ==========================================
 
   ngOnInit(): void {
+
+    console.log(
+      'MY APPLICATIONS PAGE OPENED'
+    );
 
     this.loadApplications();
 
@@ -85,10 +84,10 @@ export class Applications implements OnInit {
 
     if (!studentId) {
 
+      this.loading = false;
+
       this.message =
         'Student information not found. Please login again.';
-
-      this.loading = false;
 
       this.cdr.detectChanges();
 
@@ -96,19 +95,24 @@ export class Applications implements OnInit {
     }
 
 
+    console.log(
+      'Loading applications for student:',
+      studentId
+    );
+
+
     this.applicationService
       .getApplicationsByStudent(studentId)
-
       .subscribe({
 
-        // ====================================
+        // ======================================
         // SUCCESS
-        // ====================================
+        // ======================================
 
         next: (response: any[]) => {
 
           console.log(
-            'My Applications:',
+            'APPLICATIONS API RESPONSE:',
             response
           );
 
@@ -119,28 +123,64 @@ export class Applications implements OnInit {
 
           this.loading = false;
 
+
           this.cdr.detectChanges();
+
+
+          console.log(
+            'Applications loaded:',
+            this.applications
+          );
 
         },
 
 
-        // ====================================
+        // ======================================
         // ERROR
-        // ====================================
+        // ======================================
 
         error: (error: any) => {
 
           console.error(
-            'Applications Error:',
+            'APPLICATIONS API ERROR:',
             error
           );
 
 
-          this.message =
-            'Unable to load applications.';
+          this.applications = [];
 
 
           this.loading = false;
+
+
+          if (error.status === 401) {
+
+            this.message =
+              'Your login session has expired. Please login again.';
+
+          }
+
+          else if (error.status === 403) {
+
+            this.message =
+              'You are not authorized to view your applications.';
+
+          }
+
+          else if (error.status === 404) {
+
+            this.message =
+              'Applications API endpoint not found.';
+
+          }
+
+          else {
+
+            this.message =
+              'Unable to load applications.';
+
+          }
+
 
           this.cdr.detectChanges();
 
@@ -152,15 +192,19 @@ export class Applications implements OnInit {
 
 
   // ==========================================
-  // GET STUDENT ID FROM JWT TOKEN
+  // GET STUDENT ID FROM JWT
   // ==========================================
 
-  getStudentIdFromToken():
-    number | null {
-
+  getStudentIdFromToken(): number | null {
 
     const token =
       localStorage.getItem('token');
+
+
+    console.log(
+      'Token exists:',
+      !!token
+    );
 
 
     if (!token) {
@@ -189,8 +233,25 @@ export class Applications implements OnInit {
       }
 
 
-      const payload =
+      let payload =
         parts[1];
+
+
+      // JWT Base64URL → Base64
+
+      payload =
+        payload
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
+
+
+      while (
+        payload.length % 4 !== 0
+      ) {
+
+        payload += '=';
+
+      }
 
 
       const decodedPayload =
@@ -205,23 +266,45 @@ export class Applications implements OnInit {
       );
 
 
+      // ======================================
+      // USER ID
+      // ======================================
+
+      const userId =
+        decodedPayload.userId ??
+        decodedPayload.id ??
+        decodedPayload.sub;
+
+
       if (
-        decodedPayload.userId
+        userId === undefined ||
+        userId === null
       ) {
 
-        return Number(
-          decodedPayload.userId
+        console.error(
+          'User ID not found in JWT.'
         );
 
+        return null;
       }
 
 
-      console.error(
-        'userId not found in JWT.'
-      );
+      const id =
+        Number(userId);
 
 
-      return null;
+      if (Number.isNaN(id)) {
+
+        console.error(
+          'Invalid User ID:',
+          userId
+        );
+
+        return null;
+      }
+
+
+      return id;
 
     }
 
@@ -248,7 +331,6 @@ export class Applications implements OnInit {
     status: string
   ): string {
 
-
     if (!status) {
 
       return 'applied';
@@ -258,7 +340,7 @@ export class Applications implements OnInit {
 
     return status
       .toLowerCase()
-      .replace('_', '-');
+      .replace(/_/g, '-');
 
   }
 
@@ -271,7 +353,6 @@ export class Applications implements OnInit {
     status: string
   ): string {
 
-
     if (!status) {
 
       return 'Applied';
@@ -282,7 +363,6 @@ export class Applications implements OnInit {
     switch (
       status.toUpperCase()
     ) {
-
 
       case 'APPLIED':
 
@@ -327,7 +407,6 @@ export class Applications implements OnInit {
     step: string
   ): boolean {
 
-
     const order = [
 
       'APPLIED',
@@ -348,8 +427,14 @@ export class Applications implements OnInit {
 
 
     const currentStep =
-      order.indexOf(step);
+      order.indexOf(
+        step.toUpperCase()
+      );
 
+
+    // ========================================
+    // REJECTED
+    // ========================================
 
     if (
       currentStatus?.toUpperCase() ===
@@ -357,14 +442,21 @@ export class Applications implements OnInit {
     ) {
 
       return (
-        step === 'APPLIED' ||
-        step === 'UNDER_REVIEW'
+        step.toUpperCase() === 'APPLIED' ||
+        step.toUpperCase() === 'UNDER_REVIEW'
       );
 
     }
 
 
-    return current >= currentStep;
+    // ========================================
+    // NORMAL STATUS
+    // ========================================
+
+    return (
+      current >= currentStep &&
+      currentStep !== -1
+    );
 
   }
 
