@@ -58,7 +58,6 @@ export class Login {
 
   login(): void {
 
-
     // ==========================================
     // VALIDATION
     // ==========================================
@@ -79,14 +78,13 @@ export class Login {
     // ==========================================
 
     this.loading = true;
-
     this.message = '';
 
     this.cdr.detectChanges();
 
 
     // ==========================================
-    // CALL BACKEND LOGIN API
+    // CALL LOGIN API
     // ==========================================
 
     this.auth.login(
@@ -94,9 +92,8 @@ export class Login {
       this.password
     ).subscribe({
 
-
       // ========================================
-      // LOGIN SUCCESS
+      // SUCCESS
       // ========================================
 
       next: (response: any) => {
@@ -128,11 +125,10 @@ export class Login {
 
 
         // ======================================
-        // SAVE JWT TOKEN
+        // SAVE TOKEN
         // ======================================
 
-        const token =
-          response.token;
+        const token = response.token;
 
         localStorage.setItem(
           'token',
@@ -145,20 +141,19 @@ export class Login {
 
 
         // ======================================
-        // READ JWT PAYLOAD
+        // READ JWT
         // ======================================
 
         try {
 
-          const payload =
-            JSON.parse(
-              atob(
-                token
-                  .split('.')[1]
-                  .replace(/-/g, '+')
-                  .replace(/_/g, '/')
-              )
-            );
+          const payload = JSON.parse(
+            atob(
+              token
+                .split('.')[1]
+                .replace(/-/g, '+')
+                .replace(/_/g, '/')
+            )
+          );
 
 
           console.log(
@@ -167,14 +162,25 @@ export class Login {
           );
 
 
+          // ====================================
+          // NORMALIZE ROLE
+          // ====================================
+
+          const role = String(
+            payload?.role || ''
+          )
+            .replace(/^ROLE_/i, '')
+            .toUpperCase();
+
+
           console.log(
-            'LOGIN ROLE:',
-            payload.role
+            'NORMALIZED LOGIN ROLE:',
+            role
           );
 
 
           // ====================================
-          // LOGIN SUCCESS MESSAGE
+          // SUCCESS MESSAGE
           // ====================================
 
           this.message =
@@ -189,17 +195,14 @@ export class Login {
           // ADMIN
           // ====================================
 
-          if (
-            payload.role === 'ADMIN'
-          ) {
+          if (role === 'ADMIN') {
 
             console.log(
               'Redirecting to ADMIN dashboard'
             );
 
-            this.router.navigate([
-              '/admin-dashboard'
-            ]);
+            window.location.href =
+              '/admin-dashboard';
 
             return;
           }
@@ -209,17 +212,14 @@ export class Login {
           // COMPANY
           // ====================================
 
-          if (
-            payload.role === 'COMPANY'
-          ) {
+          if (role === 'COMPANY') {
 
             console.log(
               'Redirecting to COMPANY dashboard'
             );
 
-            this.router.navigate([
-              '/company-dashboard'
-            ]);
+            window.location.href =
+              '/company-dashboard';
 
             return;
           }
@@ -229,13 +229,38 @@ export class Login {
           // STUDENT
           // ====================================
 
-          console.log(
-            'Redirecting to STUDENT dashboard'
+          if (role === 'STUDENT') {
+
+            console.log(
+              'Redirecting to STUDENT dashboard'
+            );
+
+            window.location.href =
+              '/dashboard';
+
+            return;
+          }
+
+
+          // ====================================
+          // UNKNOWN ROLE
+          // ====================================
+
+          console.error(
+            'Unknown user role:',
+            payload?.role
           );
 
-          this.router.navigate([
-            '/dashboard'
-          ]);
+          localStorage.removeItem(
+            'token'
+          );
+
+          this.message =
+            'Unable to identify user role.';
+
+          this.loading = false;
+
+          this.cdr.detectChanges();
 
         }
 
@@ -261,6 +286,7 @@ export class Login {
           this.loading = false;
 
           this.cdr.detectChanges();
+
         }
 
       },
@@ -283,6 +309,7 @@ export class Login {
         this.loading = false;
 
         this.cdr.detectChanges();
+
       }
 
     });
