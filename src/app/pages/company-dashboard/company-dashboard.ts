@@ -6,12 +6,13 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
-import { Job } from '../../services/job';
 import { Application } from '../../services/application';
 
 @Component({
   selector: 'app-company-dashboard',
+
   standalone: true,
 
   imports: [
@@ -20,17 +21,34 @@ import { Application } from '../../services/application';
   ],
 
   templateUrl: './company-dashboard.html',
+
   styleUrl: './company-dashboard.css'
 })
 export class CompanyDashboard implements OnInit {
 
   // ==========================================
+  // API
+  // ==========================================
+
+  private companyApi =
+    'https://placement-platform-backend-production.up.railway.app/api/companies';
+
+
+  // ==========================================
   // COMPANY
   // ==========================================
 
-  companyId: number = 3;
+  companyId: number | null = null;
 
-  companyName: string = 'Company';
+  companyName = 'Company';
+
+  companyEmail = '';
+
+  companyLocation = '';
+
+  companyWebsite = '';
+
+  companyDescription = '';
 
 
   // ==========================================
@@ -46,26 +64,30 @@ export class CompanyDashboard implements OnInit {
   // STATISTICS
   // ==========================================
 
-  totalApplications: number = 0;
+  totalJobs = 0;
 
-  pendingApplications: number = 0;
+  totalApplications = 0;
 
-  shortlistedApplications: number = 0;
+  pendingApplications = 0;
 
-  selectedApplications: number = 0;
+  shortlistedApplications = 0;
 
-  rejectedApplications: number = 0;
+  selectedApplications = 0;
+
+  rejectedApplications = 0;
 
 
   // ==========================================
   // UI
   // ==========================================
 
-  loading: boolean = false;
+  loading = false;
 
-  updating: boolean = false;
+  updating = false;
 
-  message: string = '';
+  message = '';
+
+  successMessage = '';
 
 
   // ==========================================
@@ -73,7 +95,7 @@ export class CompanyDashboard implements OnInit {
   // ==========================================
 
   constructor(
-    private jobService: Job,
+    private http: HttpClient,
     private applicationService: Application,
     private router: Router,
     private cdr: ChangeDetectorRef
@@ -92,7 +114,7 @@ export class CompanyDashboard implements OnInit {
 
 
   // ==========================================
-  // LOAD DASHBOARD
+  // LOAD COMPANY DASHBOARD
   // ==========================================
 
   loadCompanyDashboard(): void {
@@ -101,105 +123,86 @@ export class CompanyDashboard implements OnInit {
 
     this.message = '';
 
-    // IMPORTANT:
-    // First load jobs.
-    // Then load applications.
-    this.loadCompanyJobs();
-
-  }
+    this.successMessage = '';
 
 
-  // ==========================================
-  // LOAD COMPANY JOBS
-  // ==========================================
-
-  loadCompanyJobs(): void {
-
-    this.jobService
-      .getJobsByCompany(this.companyId)
+    this.http
+      .get<any>(
+        `${this.companyApi}/my/dashboard`
+      )
       .subscribe({
 
-        next: (data: any[]) => {
+        // ====================================
+        // SUCCESS
+        // ====================================
+
+        next: (data: any) => {
 
           console.log(
-            'Company Jobs:',
+            'COMPANY DASHBOARD DATA:',
             data
           );
 
-          this.jobs = data || [];
 
-          // Jobs loaded successfully.
-          // NOW load applications.
-          this.loadCompanyApplications();
+          // ==================================
+          // COMPANY
+          // ==================================
 
-        },
-
-        error: (error: any) => {
-
-          console.error(
-            'Unable to load company jobs:',
-            error
-          );
-
-          this.message =
-            'Unable to load company jobs.';
-
-          this.loading = false;
-
-          this.cdr.detectChanges();
-
-        }
-
-      });
-
-  }
+          const company =
+            data?.company || null;
 
 
-  // ==========================================
-  // LOAD COMPANY APPLICATIONS
-  // ==========================================
+          if (company) {
 
-  loadCompanyApplications(): void {
+            this.companyId =
+              company.id ?? null;
 
-    this.applicationService
-      .getAllApplications()
-      .subscribe({
+            this.companyName =
+              company.name || 'Company';
 
-        next: (data: any[]) => {
+            this.companyEmail =
+              company.user?.email ||
+              company.email ||
+              '';
 
-          console.log(
-            'All Applications:',
-            data
-          );
+            this.companyLocation =
+              company.location ||
+              '';
 
-          const allApplications =
-            data || [];
+            this.companyWebsite =
+              company.website ||
+              '';
+
+            this.companyDescription =
+              company.description ||
+              '';
+
+          }
 
 
-          // Only applications belonging
-          // to this company's jobs
+          // ==================================
+          // JOBS
+          // ==================================
+
+          this.jobs =
+            Array.isArray(data?.jobs)
+              ? data.jobs
+              : [];
+
+
+          // ==================================
+          // APPLICATIONS
+          // ==================================
+
           this.applications =
-            allApplications.filter(
-              (application: any) => {
-
-                return this.jobs.some(
-                  (job: any) => {
-
-                    return Number(job.id) ===
-                      Number(application.jobId);
-
-                  }
-                );
-
-              }
-            );
+            Array.isArray(data?.applications)
+              ? data.applications
+              : [];
 
 
-          console.log(
-            'Company Applications:',
-            this.applications
-          );
-
+          // ==================================
+          // STATISTICS
+          // ==================================
 
           this.calculateStatistics();
 
@@ -210,17 +213,50 @@ export class CompanyDashboard implements OnInit {
 
         },
 
+
+        // ====================================
+        // ERROR
+        // ====================================
+
         error: (error: any) => {
 
           console.error(
-            'Unable to load applications:',
+            'COMPANY DASHBOARD ERROR:',
             error
           );
 
-          this.message =
-            'Unable to load applications.';
 
           this.loading = false;
+
+
+          if (error?.status === 401) {
+
+            this.message =
+              'Session expired. Please login again.';
+
+          }
+
+          else if (error?.status === 403) {
+
+            this.message =
+              'You do not have permission to access the company dashboard.';
+
+          }
+
+          else if (error?.status === 404) {
+
+            this.message =
+              'Company profile not found. Please create your company profile first.';
+
+          }
+
+          else {
+
+            this.message =
+              'Unable to load company dashboard.';
+
+          }
+
 
           this.cdr.detectChanges();
 
@@ -237,11 +273,7 @@ export class CompanyDashboard implements OnInit {
 
   refreshApplications(): void {
 
-    this.message = '';
-
-    this.loading = true;
-
-    this.loadCompanyJobs();
+    this.loadCompanyDashboard();
 
   }
 
@@ -251,6 +283,10 @@ export class CompanyDashboard implements OnInit {
   // ==========================================
 
   calculateStatistics(): void {
+
+    this.totalJobs =
+      this.jobs.length;
+
 
     this.totalApplications =
       this.applications.length;
@@ -262,7 +298,7 @@ export class CompanyDashboard implements OnInit {
 
           const status =
             this.getStatusClass(
-              application.status
+              application?.status
             );
 
           return (
@@ -280,7 +316,7 @@ export class CompanyDashboard implements OnInit {
         (application: any) => {
 
           return this.getStatusClass(
-            application.status
+            application?.status
           ) === 'shortlisted';
 
         }
@@ -292,7 +328,7 @@ export class CompanyDashboard implements OnInit {
         (application: any) => {
 
           return this.getStatusClass(
-            application.status
+            application?.status
           ) === 'selected';
 
         }
@@ -304,7 +340,7 @@ export class CompanyDashboard implements OnInit {
         (application: any) => {
 
           return this.getStatusClass(
-            application.status
+            application?.status
           ) === 'rejected';
 
         }
@@ -314,7 +350,7 @@ export class CompanyDashboard implements OnInit {
 
 
   // ==========================================
-  // GET TOTAL
+  // STAT GETTERS
   // ==========================================
 
   getTotalApplications(): number {
@@ -360,17 +396,14 @@ export class CompanyDashboard implements OnInit {
     application: any
   ): any {
 
-    if (application.studentId) {
+    if (application?.studentId != null) {
 
       return application.studentId;
 
     }
 
 
-    if (
-      application.student &&
-      application.student.id
-    ) {
+    if (application?.student?.id != null) {
 
       return application.student.id;
 
@@ -383,6 +416,60 @@ export class CompanyDashboard implements OnInit {
 
 
   // ==========================================
+  // STUDENT NAME
+  // ==========================================
+
+  getStudentName(
+    application: any
+  ): string {
+
+    if (application?.studentName) {
+
+      return application.studentName;
+
+    }
+
+
+    if (application?.student?.name) {
+
+      return application.student.name;
+
+    }
+
+
+    return `Student #${this.getStudentId(application)}`;
+
+  }
+
+
+  // ==========================================
+  // STUDENT EMAIL
+  // ==========================================
+
+  getStudentEmail(
+    application: any
+  ): string {
+
+    if (application?.studentEmail) {
+
+      return application.studentEmail;
+
+    }
+
+
+    if (application?.student?.email) {
+
+      return application.student.email;
+
+    }
+
+
+    return 'Email not available';
+
+  }
+
+
+  // ==========================================
   // JOB TITLE
   // ==========================================
 
@@ -390,19 +477,26 @@ export class CompanyDashboard implements OnInit {
     application: any
   ): string {
 
-    if (application.jobTitle) {
+    if (application?.jobTitle) {
 
       return application.jobTitle;
 
     }
 
 
+    if (application?.job?.title) {
+
+      return application.job.title;
+
+    }
+
+
     const job =
       this.jobs.find(
-        (j: any) => {
+        (item: any) => {
 
-          return Number(j.id) ===
-            Number(application.jobId);
+          return Number(item?.id) ===
+            Number(application?.jobId);
 
         }
       );
@@ -416,6 +510,51 @@ export class CompanyDashboard implements OnInit {
 
 
     return 'Unknown Job';
+
+  }
+
+
+  // ==========================================
+  // JOB LOCATION
+  // ==========================================
+
+  getJobLocation(
+    application: any
+  ): string {
+
+    if (application?.location) {
+
+      return application.location;
+
+    }
+
+
+    if (application?.job?.location) {
+
+      return application.job.location;
+
+    }
+
+
+    const job =
+      this.jobs.find(
+        (item: any) => {
+
+          return Number(item?.id) ===
+            Number(application?.jobId);
+
+        }
+      );
+
+
+    if (job?.location) {
+
+      return job.location;
+
+    }
+
+
+    return 'Location not available';
 
   }
 
@@ -447,7 +586,9 @@ export class CompanyDashboard implements OnInit {
           }
         );
 
-    } catch {
+    }
+
+    catch {
 
       return 'N/A';
 
@@ -473,7 +614,7 @@ export class CompanyDashboard implements OnInit {
 
     return String(status)
       .toLowerCase()
-      .replace('_', '-')
+      .replace(/_/g, '-')
       .trim();
 
   }
@@ -528,11 +669,25 @@ export class CompanyDashboard implements OnInit {
     status: string
   ): void {
 
-    if (!application || !application.id) {
+    if (
+      !application ||
+      !application.id ||
+      !status
+    ) {
 
-      console.error(
-        'Invalid application'
-      );
+      return;
+
+    }
+
+
+    const oldStatus =
+      application.status;
+
+
+    if (
+      String(oldStatus).toUpperCase() ===
+      String(status).toUpperCase()
+    ) {
 
       return;
 
@@ -543,39 +698,31 @@ export class CompanyDashboard implements OnInit {
 
     this.message = '';
 
+    this.successMessage = '';
+
 
     this.applicationService
       .updateApplicationStatus(
-        application.id,
+        Number(application.id),
         status
       )
       .subscribe({
 
+        // ==================================
+        // SUCCESS
+        // ==================================
+
         next: (updatedApplication: any) => {
 
           console.log(
-            'Updated Application:',
+            'APPLICATION STATUS UPDATED:',
             updatedApplication
           );
 
 
-          const index =
-            this.applications.findIndex(
-              (item: any) => {
-
-                return Number(item.id) ===
-                  Number(application.id);
-
-              }
-            );
-
-
-          if (index !== -1) {
-
-            this.applications[index] =
-              updatedApplication;
-
-          }
+          application.status =
+            updatedApplication?.status ||
+            status;
 
 
           this.calculateStatistics();
@@ -583,23 +730,65 @@ export class CompanyDashboard implements OnInit {
 
           this.updating = false;
 
+          this.successMessage =
+            'Application status updated successfully.';
+
+
           this.cdr.detectChanges();
 
+
+          // Automatically hide message
+          setTimeout(() => {
+
+            this.successMessage = '';
+
+            this.cdr.detectChanges();
+
+          }, 3000);
+
         },
+
+
+        // ==================================
+        // ERROR
+        // ==================================
 
         error: (error: any) => {
 
           console.error(
-            'Unable to update application status:',
+            'STATUS UPDATE ERROR:',
             error
           );
 
 
-          this.message =
-            'Unable to update application status.';
+          application.status =
+            oldStatus;
 
 
           this.updating = false;
+
+
+          if (error?.status === 403) {
+
+            this.message =
+              'You do not have permission to update this application.';
+
+          }
+
+          else if (error?.status === 404) {
+
+            this.message =
+              'Application not found.';
+
+          }
+
+          else {
+
+            this.message =
+              'Unable to update application status.';
+
+          }
+
 
           this.cdr.detectChanges();
 
@@ -616,9 +805,7 @@ export class CompanyDashboard implements OnInit {
 
   logout(): void {
 
-    localStorage.removeItem(
-      'token'
-    );
+    localStorage.removeItem('token');
 
     this.router.navigate([
       '/login'

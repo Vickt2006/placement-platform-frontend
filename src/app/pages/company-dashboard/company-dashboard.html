@@ -1,6 +1,5 @@
 <div class="company-dashboard-page">
 
-
   <!-- =========================================
        HEADER
   ========================================== -->
@@ -13,16 +12,24 @@
         P
       </div>
 
-      <h1>
-        Placement<span>Hub</span>
-      </h1>
+      <div>
+        <h1>
+          Placement<span>Hub</span>
+        </h1>
+
+        <small>
+          Company Portal
+        </small>
+      </div>
 
     </div>
 
 
     <nav class="nav-menu">
 
-      <a routerLink="/company-dashboard">
+      <a
+        routerLink="/company-dashboard"
+        class="active">
         Dashboard
       </a>
 
@@ -35,20 +42,18 @@
       </a>
 
       <button
-  type="button"
-  (click)="logout()"
->
-  Logout
-</button>
+        type="button"
+        (click)="logout()">
+        Logout
+      </button>
 
     </nav>
 
   </header>
 
 
-
   <!-- =========================================
-       MAIN CONTENT
+       MAIN
   ========================================== -->
 
   <main class="company-content">
@@ -65,466 +70,672 @@
       </p>
 
       <h2>
-        Welcome Back 👋
+        Welcome Back, {{ companyName }} 👋
       </h2>
 
       <p>
-        Manage your job opportunities and applications.
+        Manage your company, jobs and student applications from one place.
       </p>
 
     </section>
 
 
-
     <!-- =======================================
-         COMPANY INFORMATION
+         ERROR
     ======================================== -->
 
-    <section class="company-info-card">
+    @if (!loading && message) {
 
-      <div class="company-avatar">
-        {{ companyName.charAt(0).toUpperCase() }}
-      </div>
+      <section class="error-box">
 
-      <div>
-
-        <p class="info-label">
-          COMPANY
-        </p>
-
-        <h3>
-          {{ companyName }}
-        </h3>
-
-        <p>
-          Company ID:
-          {{ companyId || 'N/A' }}
-        </p>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =======================================
-         STATISTICS
-    ======================================== -->
-
-    <section class="stats-grid">
-
-
-      <!-- Total -->
-
-      <div class="stat-card">
-
-        <div class="stat-icon">
-          📋
+        <div class="error-icon">
+          ⚠️
         </div>
 
         <div>
 
-          <p>
-            Total Applications
-          </p>
-
-          <h3>
-            {{ getTotalApplications() }}
-          </h3>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- Pending -->
-
-      <div class="stat-card">
-
-        <div class="stat-icon">
-          ⏳
-        </div>
-
-        <div>
+          <strong>
+            Something went wrong
+          </strong>
 
           <p>
-            Pending
-          </p>
-
-          <h3>
-            {{ getPendingApplications() }}
-          </h3>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- Shortlisted -->
-
-      <div class="stat-card">
-
-        <div class="stat-icon">
-          ⭐
-        </div>
-
-        <div>
-
-          <p>
-            Shortlisted
-          </p>
-
-          <h3>
-            {{ getShortlistedApplications() }}
-          </h3>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- Selected -->
-
-      <div class="stat-card">
-
-        <div class="stat-icon">
-          🎉
-        </div>
-
-        <div>
-
-          <p>
-            Selected
-          </p>
-
-          <h3>
-            {{ getSelectedApplications() }}
-          </h3>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- Rejected -->
-
-      <div class="stat-card">
-
-        <div class="stat-icon">
-          ❌
-        </div>
-
-        <div>
-
-          <p>
-            Rejected
-          </p>
-
-          <h3>
-            {{ getRejectedApplications() }}
-          </h3>
-
-        </div>
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- =======================================
-         APPLICATIONS
-    ======================================== -->
-
-    <section class="applications-section">
-
-
-      <!-- Heading -->
-
-      <div class="section-heading">
-
-        <div>
-
-          <p class="section-label">
-            MANAGEMENT
-          </p>
-
-          <h2>
-            Recent Applications
-          </h2>
-
-          <p>
-            Review applications submitted by students.
+            {{ message }}
           </p>
 
         </div>
-
 
         <button
           type="button"
-          class="refresh-button"
-          (click)="refreshApplications()"
-          [disabled]="loading"
-        >
+          (click)="loadCompanyDashboard()">
 
-          ↻ Refresh
+          Try Again
 
         </button>
 
-      </div>
+      </section>
 
+    }
+
+
+    @if (!message) {
 
 
       <!-- =====================================
-           LOADING
+           COMPANY INFORMATION
       ====================================== -->
 
-      @if (loading) {
+      <section class="company-info-card">
 
-        <div class="loading-box">
+        <div class="company-avatar">
 
-          <div class="loading-spinner">
+          {{
+            companyName
+              ? companyName.charAt(0).toUpperCase()
+              : 'C'
+          }}
+
+        </div>
+
+
+        <div class="company-details">
+
+          <p class="info-label">
+            COMPANY PROFILE
+          </p>
+
+          <h3>
+            {{ companyName }}
+          </h3>
+
+          <div class="company-meta">
+
+            @if (companyId) {
+
+              <span>
+                ID #{{ companyId }}
+              </span>
+
+            }
+
+            @if (companyEmail) {
+
+              <span>
+                ✉ {{ companyEmail }}
+              </span>
+
+            }
+
+            @if (companyLocation) {
+
+              <span>
+                📍 {{ companyLocation }}
+              </span>
+
+            }
+
+          </div>
+
+        </div>
+
+
+        @if (companyWebsite) {
+
+          <a
+            class="website-button"
+            [href]="companyWebsite"
+            target="_blank"
+            rel="noopener noreferrer">
+
+            Visit Website ↗
+
+          </a>
+
+        }
+
+      </section>
+
+
+      <!-- =====================================
+           STATISTICS
+      ====================================== -->
+
+      <section class="stats-grid">
+
+
+        <!-- JOBS -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            💼
+          </div>
+
+          <div>
+
+            <p>
+              My Jobs
+            </p>
+
+            <h3>
+              {{ totalJobs }}
+            </h3>
+
+          </div>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            📋
+          </div>
+
+          <div>
+
+            <p>
+              Total Applications
+            </p>
+
+            <h3>
+              {{ getTotalApplications() }}
+            </h3>
+
+          </div>
+
+        </div>
+
+
+        <!-- PENDING -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
             ⏳
           </div>
 
-          <p>
-            Loading applications...
-          </p>
+          <div>
+
+            <p>
+              Pending
+            </p>
+
+            <h3>
+              {{ getPendingApplications() }}
+            </h3>
+
+          </div>
 
         </div>
 
-      }
 
+        <!-- SHORTLISTED -->
 
+        <div class="stat-card">
 
-      <!-- =====================================
-           ERROR
-      ====================================== -->
+          <div class="stat-icon">
+            ⭐
+          </div>
 
-      @if (!loading && message) {
+          <div>
 
-        <div class="error-box">
+            <p>
+              Shortlisted
+            </p>
 
-          {{ message }}
+            <h3>
+              {{ getShortlistedApplications() }}
+            </h3>
+
+          </div>
 
         </div>
 
-      }
 
+        <!-- SELECTED -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🎉
+          </div>
+
+          <div>
+
+            <p>
+              Selected
+            </p>
+
+            <h3>
+              {{ getSelectedApplications() }}
+            </h3>
+
+          </div>
+
+        </div>
+
+
+        <!-- REJECTED -->
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            ❌
+          </div>
+
+          <div>
+
+            <p>
+              Rejected
+            </p>
+
+            <h3>
+              {{ getRejectedApplications() }}
+            </h3>
+
+          </div>
+
+        </div>
+
+
+      </section>
 
 
       <!-- =====================================
-           APPLICATION LIST
+           MY JOBS
       ====================================== -->
 
-      @if (
-        !loading &&
-        applications.length > 0
-      ) {
+      <section class="jobs-section">
 
-        <div class="applications-list">
+        <div class="section-heading">
+
+          <div>
+
+            <p class="section-label">
+              JOB MANAGEMENT
+            </p>
+
+            <h2>
+              My Jobs
+            </h2>
+
+            <p>
+              Jobs currently associated with your company.
+            </p>
+
+          </div>
 
 
-          @for (
-            application of applications;
-            track application.id
-          ) {
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="loadCompanyDashboard()"
+            [disabled]="loading">
+
+            ↻ Refresh
+
+          </button>
+
+        </div>
 
 
-            <article class="application-card">
+        @if (!loading && jobs.length > 0) {
 
+          <div class="jobs-grid">
 
-              <!-- =============================
-                   STUDENT
-              ============================== -->
+            @for (
+              job of jobs;
+              track job.id
+            ) {
 
-              <div class="student-section">
+              <article class="job-card">
 
-                <div class="student-avatar">
+                <div class="job-icon">
+                  💼
+                </div>
 
-                  S
+                <div class="job-content">
+
+                  <h3>
+                    {{ job.title || 'Untitled Job' }}
+                  </h3>
+
+                  <p class="job-location">
+                    📍 {{ job.location || 'Location not specified' }}
+                  </p>
+
+                  <div class="job-tags">
+
+                    @if (job.jobType) {
+
+                      <span>
+                        {{ job.jobType }}
+                      </span>
+
+                    }
+
+                    @if (job.salary) {
+
+                      <span>
+                        ₹{{ job.salary }}
+                      </span>
+
+                    }
+
+                  </div>
 
                 </div>
 
-                <div>
+              </article>
+
+            }
+
+          </div>
+
+        }
+
+
+        @if (!loading && jobs.length === 0) {
+
+          <div class="empty-jobs">
+
+            <div>
+              💼
+            </div>
+
+            <h3>
+              No Jobs Found
+            </h3>
+
+            <p>
+              No jobs are currently associated with your company.
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+
+      <!-- =====================================
+           APPLICATIONS
+      ====================================== -->
+
+      <section class="applications-section">
+
+
+        <div class="section-heading">
+
+          <div>
+
+            <p class="section-label">
+              APPLICATION MANAGEMENT
+            </p>
+
+            <h2>
+              Student Applications
+            </h2>
+
+            <p>
+              Review candidates who applied to your company jobs.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="refreshApplications()"
+            [disabled]="loading">
+
+            ↻ Refresh
+
+          </button>
+
+        </div>
+
+
+        <!-- SUCCESS -->
+
+        @if (successMessage) {
+
+          <div class="success-box">
+
+            ✓ {{ successMessage }}
+
+          </div>
+
+        }
+
+
+        <!-- LOADING -->
+
+        @if (loading) {
+
+          <div class="loading-box">
+
+            <div class="loading-spinner">
+              ⏳
+            </div>
+
+            <h3>
+              Loading dashboard...
+            </h3>
+
+            <p>
+              Please wait while we fetch your company data.
+            </p>
+
+          </div>
+
+        }
+
+
+        <!-- APPLICATION LIST -->
+
+        @if (
+          !loading &&
+          applications.length > 0
+        ) {
+
+          <div class="applications-list">
+
+
+            @for (
+              application of applications;
+              track application.id
+            ) {
+
+              <article class="application-card">
+
+
+                <!-- STUDENT -->
+
+                <div class="student-section">
+
+                  <div class="student-avatar">
+
+                    {{
+                      getStudentName(application)
+                        .charAt(0)
+                        .toUpperCase()
+                    }}
+
+                  </div>
+
+
+                  <div>
+
+                    <p class="small-label">
+                      STUDENT
+                    </p>
+
+                    <h3>
+                      {{ getStudentName(application) }}
+                    </h3>
+
+                    <p>
+                      {{ getStudentEmail(application) }}
+                    </p>
+
+                    <span class="application-number">
+                      Application #{{ application.id }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- JOB -->
+
+                <div class="job-section">
 
                   <p class="small-label">
-                    STUDENT
+                    JOB
                   </p>
 
                   <h3>
-                    Student #{{ getStudentId(application) }}
+                    {{ getJobTitle(application) }}
                   </h3>
 
                   <p>
-                    Application #{{ application.id }}
+                    {{ getJobLocation(application) }}
                   </p>
 
                 </div>
 
-              </div>
+
+                <!-- DATE -->
+
+                <div class="date-section">
+
+                  <p class="small-label">
+                    APPLIED AT
+                  </p>
+
+                  <p>
+                    {{ formatDate(application.appliedAt) }}
+                  </p>
+
+                </div>
 
 
+                <!-- STATUS -->
 
-              <!-- =============================
-                   JOB
-              ============================== -->
+                <div class="status-section">
 
-              <div class="job-section">
-
-                <p class="small-label">
-                  JOB
-                </p>
-
-                <h3>
-                  {{ getJobTitle(application) }}
-                </h3>
-
-                <p>
-                  {{ application.location || 'Location not available' }}
-                </p>
-
-              </div>
+                  <p class="small-label">
+                    STATUS
+                  </p>
 
 
+                  <span
+                    class="status-badge"
+                    [class.applied]="
+                      getStatusClass(application.status) === 'applied'
+                    "
+                    [class.pending]="
+                      getStatusClass(application.status) === 'pending'
+                    "
+                    [class.under-review]="
+                      getStatusClass(application.status) === 'under-review'
+                    "
+                    [class.shortlisted]="
+                      getStatusClass(application.status) === 'shortlisted'
+                    "
+                    [class.selected]="
+                      getStatusClass(application.status) === 'selected'
+                    "
+                    [class.rejected]="
+                      getStatusClass(application.status) === 'rejected'
+                    "
+                  >
 
-              <!-- =============================
-                   DATE
-              ============================== -->
+                    {{ getStatusLabel(application.status) }}
 
-              <div class="date-section">
-
-                <p class="small-label">
-                  APPLIED AT
-                </p>
-
-                <p>
-                  {{ formatDate(application.appliedAt) }}
-                </p>
-
-              </div>
-
-
-
-              <!-- =============================
-                   STATUS
-              ============================== -->
-
-              <div class="status-section">
-
-                <p class="small-label">
-                  STATUS
-                </p>
-
-                <span
-                  class="status-badge"
-                  [class.applied]="
-                    getStatusClass(application.status) === 'applied'
-                  "
-                  [class.under-review]="
-                    getStatusClass(application.status) === 'under-review'
-                  "
-                  [class.shortlisted]="
-                    getStatusClass(application.status) === 'shortlisted'
-                  "
-                  [class.selected]="
-                    getStatusClass(application.status) === 'selected'
-                  "
-                  [class.rejected]="
-                    getStatusClass(application.status) === 'rejected'
-                  "
-                >
-
-                  {{ getStatusLabel(application.status) }}
-
-                </span>
+                  </span>
 
 
-                <!-- Status Update -->
+                  <select
+                    [value]="application.status || 'APPLIED'"
+                    [disabled]="updating"
+                    (change)="
+                      updateApplicationStatus(
+                        application,
+                        $any($event.target).value
+                      )
+                    "
+                  >
 
-                <select
-                  [value]="application.status"
-                  [disabled]="updating"
-                  (change)="
-                    updateApplicationStatus(
-                      application,
-                      $any($event.target).value
-                    )
-                  "
-                >
+                    <option value="APPLIED">
+                      Applied
+                    </option>
 
-                  <option value="APPLIED">
-                    Applied
-                  </option>
+                    <option value="UNDER_REVIEW">
+                      Under Review
+                    </option>
 
-                  <option value="UNDER_REVIEW">
-                    Under Review
-                  </option>
+                    <option value="SHORTLISTED">
+                      Shortlisted
+                    </option>
 
-                  <option value="SHORTLISTED">
-                    Shortlisted
-                  </option>
+                    <option value="SELECTED">
+                      Selected
+                    </option>
 
-                  <option value="SELECTED">
-                    Selected
-                  </option>
+                    <option value="REJECTED">
+                      Rejected
+                    </option>
 
-                  <option value="REJECTED">
-                    Rejected
-                  </option>
+                  </select>
 
-                </select>
-
-              </div>
+                </div>
 
 
-            </article>
+              </article>
 
-          }
+            }
 
-        </div>
-
-      }
-
-
-
-      <!-- =====================================
-           NO APPLICATIONS
-      ====================================== -->
-
-      @if (
-        !loading &&
-        applications.length === 0 &&
-        !message
-      ) {
-
-        <div class="empty-box">
-
-          <div class="empty-icon">
-            📭
           </div>
 
-          <h3>
-            No Applications Yet
-          </h3>
-
-          <p>
-            Applications submitted by students
-            will appear here.
-          </p>
-
-        </div>
-
-      }
+        }
 
 
-    </section>
+        <!-- EMPTY APPLICATIONS -->
 
+        @if (
+          !loading &&
+          applications.length === 0
+        ) {
+
+          <div class="empty-box">
+
+            <div class="empty-icon">
+              📭
+            </div>
+
+            <h3>
+              No Applications Yet
+            </h3>
+
+            <p>
+              Applications submitted by students for your jobs will appear here.
+            </p>
+
+          </div>
+
+        }
+
+
+      </section>
+
+
+    }
 
   </main>
 
