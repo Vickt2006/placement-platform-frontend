@@ -98,7 +98,9 @@
       <article class="job-card">
 
 
-        <!-- Job Header -->
+        <!-- ================================== -->
+        <!-- JOB HEADER -->
+        <!-- ================================== -->
 
         <div class="job-header">
 
@@ -119,9 +121,10 @@
               {{ job.title }}
             </h2>
 
+            <!-- COMPANY NAME -->
+
             <p class="company">
-              Company ID:
-              {{ job.companyId }}
+              {{ job.companyName || 'Company' }}
             </p>
 
           </div>
@@ -132,10 +135,14 @@
         <hr>
 
 
-        <!-- Job Information -->
+        <!-- ================================== -->
+        <!-- JOB INFORMATION -->
+        <!-- ================================== -->
 
         <div class="job-info-grid">
 
+
+          <!-- LOCATION -->
 
           <div class="info-box">
 
@@ -150,13 +157,15 @@
               </strong>
 
               <p>
-                {{ job.location }}
+                {{ job.location || 'Not specified' }}
               </p>
 
             </div>
 
           </div>
 
+
+          <!-- JOB TYPE -->
 
           <div class="info-box">
 
@@ -171,13 +180,15 @@
               </strong>
 
               <p>
-                {{ job.jobType }}
+                {{ job.jobType || 'Not specified' }}
               </p>
 
             </div>
 
           </div>
 
+
+          <!-- SALARY -->
 
           <div class="info-box">
 
@@ -192,7 +203,7 @@
               </strong>
 
               <p>
-                ₹{{ job.salary }}
+                ₹{{ job.salary || 'Not specified' }}
               </p>
 
             </div>
@@ -202,7 +213,9 @@
         </div>
 
 
-        <!-- Skills -->
+        <!-- ================================== -->
+        <!-- SKILLS -->
+        <!-- ================================== -->
 
         <section class="job-section">
 
@@ -211,13 +224,15 @@
           </h3>
 
           <p>
-            {{ job.skills }}
+            {{ job.skills || 'Not specified' }}
           </p>
 
         </section>
 
 
-        <!-- Description -->
+        <!-- ================================== -->
+        <!-- DESCRIPTION -->
+        <!-- ================================== -->
 
         <section class="job-section">
 
@@ -226,7 +241,7 @@
           </h3>
 
           <p>
-            {{ job.description }}
+            {{ job.description || 'No description available.' }}
           </p>
 
         </section>
@@ -235,7 +250,9 @@
         <hr>
 
 
-        <!-- Apply -->
+        <!-- ================================== -->
+        <!-- APPLY -->
+        <!-- ================================== -->
 
         <div class="apply-section">
 
@@ -259,7 +276,9 @@
           </button>
 
 
-          <!-- Message -->
+          <!-- ================================= -->
+          <!-- MESSAGE -->
+          <!-- ================================= -->
 
           @if (message) {
 

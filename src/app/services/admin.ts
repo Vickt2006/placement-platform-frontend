@@ -12,11 +12,20 @@ export class Admin {
 
   constructor(private http: HttpClient) {}
 
+  // ==========================================
+  // ADMIN DASHBOARD
+  // ==========================================
+
   getDashboardStatistics(): Observable<any> {
     return this.http.get<any>(
       `${this.apiUrl}/dashboard`
     );
   }
+
+
+  // ==========================================
+  // GET ALL STUDENTS
+  // ==========================================
 
   getAllStudents(): Observable<any[]> {
     return this.http.get<any[]>(
@@ -24,17 +33,43 @@ export class Admin {
     );
   }
 
+
+  // ==========================================
+  // GET ALL COMPANIES
+  // ==========================================
+
   getAllCompanies(): Observable<any[]> {
     return this.http.get<any[]>(
       'https://placement-platform-backend-production.up.railway.app/api/users/companies'
     );
   }
 
+
+  // ==========================================
+  // DELETE COMPANY
+  // ==========================================
+
+  deleteCompany(userId: number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.apiUrl}/companies/${userId}`
+    );
+  }
+
+
+  // ==========================================
+  // GET ALL JOBS
+  // ==========================================
+
   getAllJobs(): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiUrl}/jobs`
     );
   }
+
+
+  // ==========================================
+  // ADD JOB
+  // ==========================================
 
   addJob(job: any): Observable<any> {
     return this.http.post<any>(
@@ -43,17 +78,32 @@ export class Admin {
     );
   }
 
+
+  // ==========================================
+  // DELETE JOB
+  // ==========================================
+
   deleteJob(id: number): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/jobs/${id}`
     );
   }
 
+
+  // ==========================================
+  // GET ALL APPLICATIONS
+  // ==========================================
+
   getAllApplications(): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.apiUrl}/applications`
     );
   }
+
+
+  // ==========================================
+  // UPDATE APPLICATION STATUS
+  // ==========================================
 
   updateApplicationStatus(
     id: number,
@@ -70,4 +120,5 @@ export class Admin {
       }
     );
   }
+
 }

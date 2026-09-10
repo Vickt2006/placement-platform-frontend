@@ -7,6 +7,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .admin-page {
   min-height: 100vh;
   width: 100%;
@@ -111,7 +117,7 @@
    ========================================================= */
 
 .navbar {
-  height: 76px;
+  min-height: 76px;
 
   padding:
     0 6%;
@@ -455,7 +461,7 @@
 
 .container {
   width:
-    min(1150px, 90%);
+    min(1200px, 90%);
 
   margin:
     0 auto;
@@ -556,7 +562,8 @@
 
 
 /* =========================================================
-   STAT CARDS
+   STATISTICS GRID
+   5 CARDS
    ========================================================= */
 
 .stats-grid {
@@ -564,14 +571,19 @@
     grid;
 
   grid-template-columns:
-    repeat(4, 1fr);
+    repeat(5, minmax(0, 1fr));
 
   gap:
-    18px;
+    16px;
 
   margin-bottom:
-    35px;
+    40px;
 }
+
+
+/* =========================================================
+   STAT CARD
+   ========================================================= */
 
 .stat-card {
   position:
@@ -580,8 +592,20 @@
   overflow:
     hidden;
 
+  min-height:
+    150px;
+
   padding:
-    23px;
+    22px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    15px;
 
   border-radius:
     17px;
@@ -613,6 +637,17 @@
     cardEnter 0.65s ease both;
 }
 
+
+/* Companies clickable card */
+
+.clickable-card {
+  cursor:
+    pointer;
+}
+
+
+/* Animation delay */
+
 .stat-card:nth-child(2) {
   animation-delay:
     0.08s;
@@ -626,6 +661,11 @@
 .stat-card:nth-child(4) {
   animation-delay:
     0.24s;
+}
+
+.stat-card:nth-child(5) {
+  animation-delay:
+    0.32s;
 }
 
 @keyframes cardEnter {
@@ -648,6 +688,9 @@
       scale(1);
   }
 }
+
+
+/* Top neon line */
 
 .stat-card::before {
   content:
@@ -680,6 +723,9 @@
     0.8;
 }
 
+
+/* Hover */
+
 .stat-card:hover {
   transform:
     translateY(-7px);
@@ -695,9 +741,56 @@
     rgba(37, 99, 235, 0.08);
 }
 
-.stat-card h3 {
+
+/* =========================================================
+   STAT ICON
+   ========================================================= */
+
+.stat-icon {
+  width:
+    46px;
+
+  height:
+    46px;
+
+  flex:
+    0 0 46px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.20),
+      rgba(124, 58, 237, 0.20)
+    );
+
+  border:
+    1px solid
+    rgba(96, 165, 250, 0.20);
+
+  font-size:
+    20px;
+}
+
+
+/* =========================================================
+   STAT TEXT
+   ========================================================= */
+
+.stat-title {
   margin:
-    0 0 10px;
+    0 0 8px;
 
   color:
     #94a3b8;
@@ -709,12 +802,15 @@
     700;
 }
 
-.stat-card strong {
+.stat-card h2 {
+  margin:
+    0;
+
   color:
     #f8fafc;
 
   font-size:
-    30px;
+    28px;
 
   font-weight:
     800;
@@ -722,7 +818,68 @@
 
 
 /* =========================================================
+   MANAGEMENT SECTION
+   ========================================================= */
+
+.management-section {
+  margin-top:
+    10px;
+}
+
+.section-header {
+  margin-bottom:
+    25px;
+}
+
+.section-label {
+  margin:
+    0 0 8px;
+
+  color:
+    #60a5fa;
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    1.5px;
+}
+
+.section-header h2 {
+  margin:
+    0 0 8px;
+
+  color:
+    #f8fafc;
+
+  font-size:
+    27px;
+
+  font-weight:
+    800;
+}
+
+.section-header > div > p:last-child {
+  margin:
+    0;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    14px;
+
+  line-height:
+    1.6;
+}
+
+
+/* =========================================================
    MANAGEMENT GRID
+   4 CARDS
    ========================================================= */
 
 .management-grid {
@@ -730,7 +887,7 @@
     grid;
 
   grid-template-columns:
-    repeat(2, 1fr);
+    repeat(2, minmax(0, 1fr));
 
   gap:
     20px;
@@ -747,6 +904,9 @@
 
   overflow:
     hidden;
+
+  min-height:
+    275px;
 
   padding:
     28px;
@@ -975,8 +1135,7 @@
 
 
 /* =========================================================
-   MANAGEMENT BUTTONS
-   Works for BOTH <a> and <button>
+   MANAGEMENT BUTTONS / LINKS
    ========================================================= */
 
 .management-card a,
@@ -1268,15 +1427,21 @@
    LOADING
    ========================================================= */
 
-.loading-box {
+.loading {
+  margin-top:
+    25px;
+
   padding:
-    55px 20px;
+    20px;
 
   text-align:
     center;
 
   border-radius:
-    18px;
+    12px;
+
+  color:
+    #94a3b8;
 
   background:
     rgba(15, 23, 42, 0.75);
@@ -1284,26 +1449,6 @@
   border:
     1px solid
     rgba(148, 163, 184, 0.12);
-
-  color:
-    #94a3b8;
-
-  animation:
-    pulseBox 2s ease-in-out infinite;
-}
-
-@keyframes pulseBox {
-
-  0%,
-  100% {
-    opacity:
-      0.70;
-  }
-
-  50% {
-    opacity:
-      1;
-  }
 }
 
 
@@ -1312,6 +1457,9 @@
    ========================================================= */
 
 .message {
+  margin-top:
+    20px;
+
   padding:
     14px 17px;
 
@@ -1353,37 +1501,41 @@
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE - 1100px
    ========================================================= */
 
-@media (max-width: 950px) {
+@media (max-width: 1100px) {
+
+  .container {
+    width:
+      92%;
+  }
 
   .stats-grid {
     grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .management-grid {
-    grid-template-columns:
-      1fr;
+      repeat(3, minmax(0, 1fr));
   }
 }
 
 
-@media (max-width: 700px) {
+/* =========================================================
+   RESPONSIVE - 850px
+   ========================================================= */
+
+@media (max-width: 850px) {
 
   .navbar {
     height:
       auto;
 
     padding:
-      16px 5%;
+      18px 5%;
 
     flex-direction:
       column;
 
     gap:
-      15px;
+      17px;
   }
 
   .nav-links {
@@ -1392,6 +1544,42 @@
 
     justify-content:
       center;
+  }
+
+  .stats-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .management-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .container {
+    width:
+      92%;
+
+    padding-top:
+      40px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - 600px
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .brand span:last-child {
+    font-size:
+      20px;
+  }
+
+  .nav-links {
+    gap:
+      2px;
   }
 
   .nav-links a {
@@ -1403,14 +1591,14 @@
   }
 
   .logout-btn {
+    margin-left:
+      0;
+
     font-size:
       12px;
 
     padding:
       9px 13px;
-
-    margin-left:
-      0;
   }
 
   .container {
@@ -1418,7 +1606,7 @@
       90%;
 
     padding:
-      38px 0 60px;
+      35px 0 55px;
   }
 
   .welcome-section h1 {
@@ -1431,7 +1619,18 @@
       1fr;
   }
 
+  .stat-card {
+    min-height:
+      125px;
+
+    padding:
+      20px;
+  }
+
   .management-card {
+    min-height:
+      auto;
+
     padding:
       23px;
   }

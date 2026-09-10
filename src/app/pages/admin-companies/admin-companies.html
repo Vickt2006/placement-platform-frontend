@@ -1,23 +1,13 @@
 <div class="admin-companies-page">
 
-  <!-- ========================= -->
-  <!-- NAVBAR -->
-  <!-- ========================= -->
+  <!-- ================= NAVBAR ================= -->
 
   <nav class="navbar">
 
     <div class="brand">
-
-      <span class="brand-icon">
-        P
-      </span>
-
-      <span>
-        PlacementHub
-      </span>
-
+      <span class="brand-icon">P</span>
+      <span>PlacementHub</span>
     </div>
-
 
     <div class="nav-links">
 
@@ -51,16 +41,11 @@
   </nav>
 
 
-  <!-- ========================= -->
-  <!-- MAIN -->
-  <!-- ========================= -->
+  <!-- ================= MAIN ================= -->
 
   <main class="container">
 
-
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
+    <!-- PAGE HEADER -->
 
     <section class="welcome-section">
 
@@ -79,47 +64,74 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- TOOLBAR -->
-    <!-- ========================= -->
+    <!-- ================= TOOLBAR ================= -->
 
     <section class="companies-toolbar">
 
-      <div>
+      <div class="toolbar-left">
 
         <h2>
           Registered Companies
         </h2>
 
         <p>
-
-          Total Companies:
-
-          <strong>
-            {{ companies.length }}
-          </strong>
-
+          Showing
+          <strong>{{ filteredCompanies.length }}</strong>
+          of
+          <strong>{{ companies.length }}</strong>
+          companies
         </p>
 
       </div>
 
 
-      <button
-        type="button"
-        class="refresh-btn"
-        (click)="refreshCompanies()"
-        [disabled]="loading">
+      <div class="toolbar-actions">
 
-        ↻ Refresh
+        <div class="search-box">
 
-      </button>
+          <span class="search-icon">
+            🔍
+          </span>
+
+          <input
+            type="text"
+            placeholder="Search company, email, location..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+
+          @if (searchTerm) {
+
+            <button
+              type="button"
+              class="clear-search"
+              (click)="clearSearch()">
+
+              ×
+
+            </button>
+
+          }
+
+        </div>
+
+
+        <button
+          type="button"
+          class="refresh-btn"
+          (click)="refreshCompanies()"
+          [disabled]="loading || deletingCompanyId !== null">
+
+          ↻ Refresh
+
+        </button>
+
+      </div>
 
     </section>
 
 
-    <!-- ========================= -->
-    <!-- LOADING -->
-    <!-- ========================= -->
+    <!-- ================= LOADING ================= -->
 
     @if (loading) {
 
@@ -142,9 +154,7 @@
     }
 
 
-    <!-- ========================= -->
-    <!-- ERROR -->
-    <!-- ========================= -->
+    <!-- ================= MESSAGE ================= -->
 
     @if (!loading && message) {
 
@@ -155,7 +165,7 @@
         </div>
 
         <strong>
-          Error
+          Message
         </strong>
 
         <p>
@@ -166,7 +176,7 @@
           type="button"
           (click)="refreshCompanies()">
 
-          Try Again
+          Refresh
 
         </button>
 
@@ -175,14 +185,12 @@
     }
 
 
-    <!-- ========================= -->
-    <!-- COMPANY TABLE -->
-    <!-- ========================= -->
+    <!-- ================= COMPANY TABLE ================= -->
 
     @if (
       !loading &&
       !message &&
-      companies.length > 0
+      filteredCompanies.length > 0
     ) {
 
       <section class="companies-card">
@@ -208,7 +216,19 @@
                 </th>
 
                 <th>
+                  Location
+                </th>
+
+                <th>
+                  Website
+                </th>
+
+                <th>
                   Role
+                </th>
+
+                <th>
+                  Actions
                 </th>
 
               </tr>
@@ -219,12 +239,11 @@
             <tbody>
 
               @for (
-                company of companies;
+                company of filteredCompanies;
                 track company.id
               ) {
 
                 <tr>
-
 
                   <!-- ID -->
 
@@ -247,26 +266,20 @@
 
                         {{
                           company.name
-                            ? company.name
-                                .charAt(0)
-                                .toUpperCase()
+                            ? company.name.charAt(0).toUpperCase()
                             : 'C'
                         }}
 
                       </div>
 
-
                       <div class="company-name">
 
                         <strong>
-                          {{
-                            company.name ||
-                            'Unknown Company'
-                          }}
+                          {{ company.name || 'Unknown Company' }}
                         </strong>
 
                         <span>
-                          Company
+                          Company Account
                         </span>
 
                       </div>
@@ -281,8 +294,48 @@
                   <td>
 
                     <span class="email">
-                      {{ company.email }}
+                      {{ company.email || 'N/A' }}
                     </span>
+
+                  </td>
+
+
+                  <!-- LOCATION -->
+
+                  <td>
+
+                    <span class="location">
+                      {{ company.location || 'N/A' }}
+                    </span>
+
+                  </td>
+
+
+                  <!-- WEBSITE -->
+
+                  <td>
+
+                    @if (company.website) {
+
+                      <a
+                        class="website-link"
+                        [href]="company.website"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        Visit Website ↗
+
+                      </a>
+
+                    }
+
+                    @else {
+
+                      <span class="not-available">
+                        N/A
+                      </span>
+
+                    }
 
                   </td>
 
@@ -292,13 +345,53 @@
                   <td>
 
                     <span class="role-badge">
-
-                      {{
-                        company.role ||
-                        'COMPANY'
-                      }}
-
+                      {{ company.role || 'COMPANY' }}
                     </span>
+
+                  </td>
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="company-actions">
+
+                      <!-- COMPANY BUTTON -->
+
+                      <button
+                        type="button"
+                        class="company-action-btn"
+                        (click)="openCompany(company)">
+
+                        🏢 Company
+
+                      </button>
+
+
+                      <!-- DELETE BUTTON -->
+
+                      <button
+                        type="button"
+                        class="delete-action-btn"
+                        [disabled]="deletingCompanyId === company.id"
+                        (click)="deleteCompany(company)">
+
+                        @if (deletingCompanyId === company.id) {
+
+                          ⏳ Deleting...
+
+                        }
+
+                        @else {
+
+                          🗑 Delete
+
+                        }
+
+                      </button>
+
+                    </div>
 
                   </td>
 
@@ -317,9 +410,43 @@
     }
 
 
-    <!-- ========================= -->
-    <!-- EMPTY -->
-    <!-- ========================= -->
+    <!-- ================= NO SEARCH RESULT ================= -->
+
+    @if (
+      !loading &&
+      !message &&
+      companies.length > 0 &&
+      filteredCompanies.length === 0
+    ) {
+
+      <div class="empty-box">
+
+        <div class="empty-icon">
+          🔍
+        </div>
+
+        <h2>
+          No Matching Companies
+        </h2>
+
+        <p>
+          No company matches your search.
+        </p>
+
+        <button
+          type="button"
+          (click)="clearSearch()">
+
+          Clear Search
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ================= NO COMPANIES ================= -->
 
     @if (
       !loading &&
@@ -354,5 +481,180 @@
     }
 
   </main>
+
+
+  <!-- ================= COMPANY DETAILS MODAL ================= -->
+
+  @if (selectedCompany) {
+
+    <div
+      class="company-modal-overlay"
+      (click)="closeCompany()">
+
+      <div
+        class="company-modal"
+        (click)="$event.stopPropagation()">
+
+        <!-- MODAL HEADER -->
+
+        <div class="company-modal-header">
+
+          <div>
+
+            <p class="modal-label">
+              COMPANY DETAILS
+            </p>
+
+            <h2>
+              {{ selectedCompany.name || 'Unknown Company' }}
+            </h2>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="modal-close-btn"
+            (click)="closeCompany()">
+
+            ×
+
+          </button>
+
+        </div>
+
+
+        <!-- MODAL BODY -->
+
+        <div class="company-modal-body">
+
+          <div class="modal-company-avatar">
+
+            {{
+              selectedCompany.name
+                ? selectedCompany.name.charAt(0).toUpperCase()
+                : 'C'
+            }}
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Company ID
+            </span>
+
+            <strong>
+              #{{ selectedCompany.id }}
+            </strong>
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Company Name
+            </span>
+
+            <strong>
+              {{ selectedCompany.name || 'N/A' }}
+            </strong>
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Email
+            </span>
+
+            <strong>
+              {{ selectedCompany.email || 'N/A' }}
+            </strong>
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Location
+            </span>
+
+            <strong>
+              {{ selectedCompany.location || 'N/A' }}
+            </strong>
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Website
+            </span>
+
+            @if (selectedCompany.website) {
+
+              <a
+                [href]="selectedCompany.website"
+                target="_blank"
+                rel="noopener noreferrer">
+
+                {{ selectedCompany.website }}
+
+              </a>
+
+            }
+
+            @else {
+
+              <strong>
+                N/A
+              </strong>
+
+            }
+
+          </div>
+
+
+          <div class="company-detail-item">
+
+            <span>
+              Role
+            </span>
+
+            <strong>
+              {{ selectedCompany.role || 'COMPANY' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- MODAL FOOTER -->
+
+        <div class="company-modal-footer">
+
+          <button
+            type="button"
+            class="modal-close-button"
+            (click)="closeCompany()">
+
+            Close
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
 
 </div>

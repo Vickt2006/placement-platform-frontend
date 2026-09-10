@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { Admin } from '../../services/admin';
 
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -21,6 +22,8 @@ import { Admin } from '../../services/admin';
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })
+
+
 export class AdminDashboard implements OnInit {
 
   // ==========================================
@@ -79,6 +82,7 @@ export class AdminDashboard implements OnInit {
 
     this.message = '';
 
+
     this.adminService
       .getDashboardStatistics()
       .subscribe({
@@ -90,26 +94,33 @@ export class AdminDashboard implements OnInit {
             data
           );
 
+
           this.totalUsers =
             Number(data?.totalUsers || 0);
+
 
           this.totalStudents =
             Number(data?.totalStudents || 0);
 
+
           this.totalCompanies =
             Number(data?.totalCompanies || 0);
+
 
           this.totalJobs =
             Number(data?.totalJobs || 0);
 
+
           this.totalApplications =
             Number(data?.totalApplications || 0);
+
 
           this.loading = false;
 
           this.cdr.detectChanges();
 
         },
+
 
         error: (error: any) => {
 
@@ -118,8 +129,10 @@ export class AdminDashboard implements OnInit {
             error
           );
 
+
           this.message =
             'Unable to load admin dashboard data.';
+
 
           this.loading = false;
 
@@ -133,12 +146,89 @@ export class AdminDashboard implements OnInit {
 
 
   // ==========================================
+  // OPEN ADMIN COMPANIES
+  // ==========================================
+
+  openCompanies(): void {
+
+    console.log(
+      'ADMIN: Opening Companies page'
+    );
+
+    console.log(
+      'Navigating to: /admin-companies'
+    );
+
+
+    this.router.navigateByUrl(
+      '/admin-companies'
+    );
+
+  }
+
+
+  // ==========================================
+  // OPEN ADMIN STUDENTS
+  // ==========================================
+
+  openStudents(): void {
+
+    console.log(
+      'ADMIN: Opening Students page'
+    );
+
+
+    this.router.navigateByUrl(
+      '/admin-students'
+    );
+
+  }
+
+
+  // ==========================================
+  // OPEN ADMIN JOBS
+  // ==========================================
+
+  openJobs(): void {
+
+    console.log(
+      'ADMIN: Opening Jobs page'
+    );
+
+
+    this.router.navigateByUrl(
+      '/admin-jobs'
+    );
+
+  }
+
+
+  // ==========================================
+  // OPEN ADMIN APPLICATIONS
+  // ==========================================
+
+  openApplications(): void {
+
+    console.log(
+      'ADMIN: Opening Applications page'
+    );
+
+
+    this.router.navigateByUrl(
+      '/admin-applications'
+    );
+
+  }
+
+
+  // ==========================================
   // LOGOUT
   // ==========================================
 
   logout(): void {
 
     localStorage.removeItem('token');
+
 
     this.router.navigate([
       '/login'

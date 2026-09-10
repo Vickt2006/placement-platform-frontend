@@ -21,8 +21,8 @@
         Student Jobs
       </a>
 
-      <a routerLink="/company-dashboard">
-        Company
+      <a routerLink="/admin-companies">
+        Companies
       </a>
 
       <a routerLink="/admin-applications">
@@ -78,9 +78,7 @@
     <section class="stats-grid">
 
 
-      <!-- ========================= -->
       <!-- TOTAL USERS -->
-      <!-- ========================= -->
 
       <div class="stat-card">
 
@@ -103,9 +101,7 @@
       </div>
 
 
-      <!-- ========================= -->
       <!-- STUDENTS -->
-      <!-- ========================= -->
 
       <div class="stat-card">
 
@@ -128,11 +124,11 @@
       </div>
 
 
-      <!-- ========================= -->
       <!-- COMPANIES -->
-      <!-- ========================= -->
 
-      <div class="stat-card">
+      <div
+        class="stat-card clickable-card"
+        (click)="openCompanies()">
 
         <div class="stat-icon">
           🏢
@@ -153,9 +149,7 @@
       </div>
 
 
-      <!-- ========================= -->
       <!-- JOBS -->
-      <!-- ========================= -->
 
       <div class="stat-card">
 
@@ -178,9 +172,7 @@
       </div>
 
 
-      <!-- ========================= -->
       <!-- APPLICATIONS -->
-      <!-- ========================= -->
 
       <div class="stat-card">
 
@@ -240,9 +232,7 @@
       <div class="management-grid">
 
 
-        <!-- ========================= -->
         <!-- STUDENTS -->
-        <!-- ========================= -->
 
         <div class="management-card">
 
@@ -260,7 +250,7 @@
 
           <button
             type="button"
-            routerLink="/admin-students">
+            (click)="openStudents()">
 
             Manage Students
 
@@ -269,9 +259,7 @@
         </div>
 
 
-        <!-- ========================= -->
         <!-- COMPANIES -->
-        <!-- ========================= -->
 
         <div class="management-card">
 
@@ -284,12 +272,12 @@
           </h3>
 
           <p>
-            View and manage company accounts.
+            View and manage registered companies.
           </p>
 
           <button
             type="button"
-            routerLink="/admin-companies">
+            (click)="openCompanies()">
 
             Manage Companies
 
@@ -298,9 +286,7 @@
         </div>
 
 
-        <!-- ========================= -->
         <!-- JOBS -->
-        <!-- ========================= -->
 
         <div class="management-card">
 
@@ -325,9 +311,7 @@
         </div>
 
 
-        <!-- ========================= -->
         <!-- APPLICATIONS -->
-        <!-- ========================= -->
 
         <div class="management-card">
 

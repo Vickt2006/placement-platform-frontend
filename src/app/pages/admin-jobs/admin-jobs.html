@@ -26,14 +26,18 @@
       <a
         routerLink="/admin-jobs"
         class="active">
+
         Jobs
+
       </a>
 
       <button
         type="button"
         class="logout-btn"
         (click)="logout()">
+
         Logout
+
       </button>
 
     </div>
@@ -44,6 +48,7 @@
   <!-- ================= MAIN ================= -->
 
   <main class="container">
+
 
     <!-- ================= HEADER ================= -->
 
@@ -79,14 +84,20 @@
         </h2>
 
         <p>
+
           Total Jobs:
-          <strong>{{ jobs.length }}</strong>
+
+          <strong>
+            {{ jobs.length }}
+          </strong>
+
         </p>
 
       </div>
 
 
       <div class="toolbar-actions">
+
 
         @if (!showAddJobForm) {
 
@@ -106,7 +117,7 @@
           type="button"
           class="refresh-btn"
           (click)="refreshJobs()"
-          [disabled]="loading">
+          [disabled]="loading || addingJob">
 
           ↻ Refresh
 
@@ -125,7 +136,8 @@
 
       <section class="add-job-card">
 
-        <!-- FORM HEADER -->
+
+        <!-- ================= FORM HEADER ================= -->
 
         <div class="add-job-header">
 
@@ -178,9 +190,13 @@
             <div class="form-group">
 
               <label for="jobTitle">
+
                 Job Title
+
                 <span>*</span>
+
               </label>
+
 
               <input
                 id="jobTitle"
@@ -194,14 +210,110 @@
             </div>
 
 
+            <!-- COMPANY -->
+
+            <div class="form-group">
+
+              <label for="companyId">
+
+                Company
+
+                <span>*</span>
+
+              </label>
+
+
+              @if (companiesLoading) {
+
+                <select
+                  id="companyId"
+                  name="companyId"
+                  disabled>
+
+                  <option value="">
+                    Loading companies...
+                  </option>
+
+                </select>
+
+              }
+
+              @else {
+
+                <select
+                  id="companyId"
+                  name="companyId"
+                  [(ngModel)]="newJob.companyId"
+                  [disabled]="addingJob"
+                  required>
+
+                  <option [ngValue]="null">
+                    Select Company
+                  </option>
+
+
+                  @for (
+                    company of companies;
+                    track company.id
+                  ) {
+
+                    <option
+                      [ngValue]="company.id">
+
+                      {{ company.name || 'Unknown Company' }}
+
+                      @if (company.email) {
+
+                        -
+                        {{ company.email }}
+
+                      }
+
+                    </option>
+
+                  }
+
+
+                </select>
+
+              }
+
+
+              @if (
+                !companiesLoading &&
+                companies.length === 0
+              ) {
+
+                <small class="company-help-text">
+
+                  No registered companies found.
+
+                </small>
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= ROW 2 ================= -->
+
+          <div class="form-row">
+
+
             <!-- LOCATION -->
 
             <div class="form-group">
 
               <label for="jobLocation">
+
                 Location
+
                 <span>*</span>
+
               </label>
+
 
               <input
                 id="jobLocation"
@@ -214,22 +326,19 @@
 
             </div>
 
-          </div>
-
-
-          <!-- ================= ROW 2 ================= -->
-
-          <div class="form-row">
-
 
             <!-- JOB TYPE -->
 
             <div class="form-group">
 
               <label for="jobType">
+
                 Job Type
+
                 <span>*</span>
+
               </label>
+
 
               <select
                 id="jobType"
@@ -262,15 +371,28 @@
 
             </div>
 
+          </div>
+
+
+          <!-- ================= ROW 3 ================= -->
+
+          <div class="form-row">
+
 
             <!-- SALARY -->
 
             <div class="form-group">
 
               <label for="jobSalary">
+
                 Salary
-                <small>(Optional)</small>
+
+                <small>
+                  (Optional)
+                </small>
+
               </label>
+
 
               <input
                 id="jobSalary"
@@ -283,22 +405,19 @@
 
             </div>
 
-          </div>
-
-
-          <!-- ================= ROW 3 ================= -->
-
-          <div class="form-row">
-
 
             <!-- SKILLS -->
 
             <div class="form-group">
 
               <label for="jobSkills">
+
                 Required Skills
+
                 <span>*</span>
+
               </label>
+
 
               <input
                 id="jobSkills"
@@ -311,27 +430,6 @@
 
             </div>
 
-
-            <!-- COMPANY ID -->
-
-            <div class="form-group">
-
-              <label for="companyId">
-                Company ID
-                <small>(Optional)</small>
-              </label>
-
-              <input
-                id="companyId"
-                type="number"
-                name="companyId"
-                [(ngModel)]="newJob.companyId"
-                placeholder="e.g. 2"
-                min="1"
-                [disabled]="addingJob">
-
-            </div>
-
           </div>
 
 
@@ -340,9 +438,13 @@
           <div class="form-group full-width">
 
             <label for="jobDescription">
+
               Job Description
+
               <span>*</span>
+
             </label>
+
 
             <textarea
               id="jobDescription"
@@ -377,6 +479,7 @@
 
           <div class="form-actions">
 
+
             <button
               type="button"
               class="cancel-btn"
@@ -391,7 +494,11 @@
             <button
               type="submit"
               class="create-job-btn"
-              [disabled]="addingJob">
+              [disabled]="
+                addingJob ||
+                companiesLoading ||
+                companies.length === 0
+              ">
 
               @if (addingJob) {
 
@@ -408,6 +515,7 @@
             </button>
 
           </div>
+
 
         </form>
 
@@ -479,9 +587,14 @@
     <!-- JOB TABLE -->
     <!-- ================================================= -->
 
-    @if (!loading && !message && jobs.length > 0) {
+    @if (
+      !loading &&
+      !message &&
+      jobs.length > 0
+    ) {
 
       <section class="jobs-card">
+
 
         <div class="table-header">
 
@@ -497,8 +610,11 @@
 
           </div>
 
+
           <span class="count-badge">
+
             {{ jobs.length }} Jobs
+
           </span>
 
         </div>
@@ -512,14 +628,37 @@
 
               <tr>
 
-                <th>ID</th>
-                <th>Job</th>
-                <th>Company</th>
-                <th>Location</th>
-                <th>Type</th>
-                <th>Salary</th>
-                <th>Skills</th>
-                <th>Action</th>
+                <th>
+                  ID
+                </th>
+
+                <th>
+                  Job
+                </th>
+
+                <th>
+                  Company
+                </th>
+
+                <th>
+                  Location
+                </th>
+
+                <th>
+                  Type
+                </th>
+
+                <th>
+                  Salary
+                </th>
+
+                <th>
+                  Skills
+                </th>
+
+                <th>
+                  Action
+                </th>
 
               </tr>
 
@@ -528,7 +667,10 @@
 
             <tbody>
 
-              @for (job of jobs; track job.id) {
+              @for (
+                job of jobs;
+                track job.id
+              ) {
 
                 <tr>
 
@@ -538,7 +680,9 @@
                   <td>
 
                     <span class="job-id">
+
                       #{{ job.id }}
+
                     </span>
 
                   </td>
@@ -554,6 +698,7 @@
                         💼
                       </div>
 
+
                       <div>
 
                         <strong class="job-title">
@@ -564,6 +709,7 @@
                           }}
 
                         </strong>
+
 
                         <p class="description">
 
@@ -587,6 +733,7 @@
 
                     <div class="company-info">
 
+
                       <div class="company-avatar">
 
                         {{
@@ -596,6 +743,7 @@
                         }}
 
                       </div>
+
 
                       <span>
 
@@ -688,7 +836,9 @@
                       (click)="deleteJob(job)"
                       [disabled]="deletingJobId === job.id">
 
-                      @if (deletingJobId === job.id) {
+                      @if (
+                        deletingJobId === job.id
+                      ) {
 
                         Deleting...
 
@@ -703,6 +853,7 @@
                     </button>
 
                   </td>
+
 
                 </tr>
 
@@ -723,7 +874,11 @@
     <!-- EMPTY STATE -->
     <!-- ================================================= -->
 
-    @if (!loading && !message && jobs.length === 0) {
+    @if (
+      !loading &&
+      !message &&
+      jobs.length === 0
+    ) {
 
       <div class="state-box empty-box">
 

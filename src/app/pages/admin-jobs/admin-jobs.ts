@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -20,7 +19,6 @@ import { Admin } from '../../services/admin';
 
 @Component({
   selector: 'app-admin-jobs',
-
   standalone: true,
 
   imports: [
@@ -30,19 +28,26 @@ import { Admin } from '../../services/admin';
   ],
 
   templateUrl: './admin-jobs.html',
-
   styleUrl: './admin-jobs.css'
 })
 
 
 export class AdminJobs implements OnInit {
 
-
   // ==========================================
   // JOBS
   // ==========================================
 
   jobs: any[] = [];
+
+
+  // ==========================================
+  // COMPANIES
+  // ==========================================
+
+  companies: any[] = [];
+
+  companiesLoading: boolean = false;
 
 
   // ==========================================
@@ -119,6 +124,8 @@ export class AdminJobs implements OnInit {
 
     this.loadJobs();
 
+    this.loadCompanies();
+
   }
 
 
@@ -154,15 +161,14 @@ export class AdminJobs implements OnInit {
 
         next: (data: any[]) => {
 
-          if (Array.isArray(data)) {
+          this.jobs = Array.isArray(data)
+            ? data
+            : [];
 
-            this.jobs = data;
-
-          } else {
-
-            this.jobs = [];
-
-          }
+          console.log(
+            'ADMIN JOBS:',
+            this.jobs
+          );
 
           this.cdr.detectChanges();
 
@@ -175,7 +181,6 @@ export class AdminJobs implements OnInit {
             'ADMIN JOBS API ERROR:',
             error
           );
-
 
           this.jobs = [];
 
@@ -208,6 +213,65 @@ export class AdminJobs implements OnInit {
 
           }
 
+          this.cdr.detectChanges();
+
+        }
+
+      });
+
+  }
+
+
+  // ==========================================
+  // LOAD COMPANIES
+  // ==========================================
+
+  loadCompanies(): void {
+
+    this.companiesLoading = true;
+
+
+    this.adminService
+      .getAllCompanies()
+
+      .pipe(
+
+        finalize(() => {
+
+          this.companiesLoading = false;
+
+          this.cdr.detectChanges();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: (data: any[]) => {
+
+          this.companies = Array.isArray(data)
+            ? data
+            : [];
+
+          console.log(
+            'REGISTERED COMPANIES:',
+            this.companies
+          );
+
+          this.cdr.detectChanges();
+
+        },
+
+
+        error: (error: any) => {
+
+          console.error(
+            'COMPANIES API ERROR:',
+            error
+          );
+
+          this.companies = [];
 
           this.cdr.detectChanges();
 
@@ -229,6 +293,8 @@ export class AdminJobs implements OnInit {
     this.addJobMessage = '';
 
     this.message = '';
+
+    this.loadCompanies();
 
     this.cdr.detectChanges();
 
@@ -253,7 +319,7 @@ export class AdminJobs implements OnInit {
 
 
   // ==========================================
-  // RESET JOB FORM
+  // RESET JOB
   // ==========================================
 
   resetNewJob(): void {
@@ -280,7 +346,7 @@ export class AdminJobs implements OnInit {
 
 
   // ==========================================
-  // ADD NEW JOB
+  // ADD JOB
   // ==========================================
 
   addJob(): void {
@@ -288,9 +354,7 @@ export class AdminJobs implements OnInit {
     this.addJobMessage = '';
 
 
-    // ========================================
-    // VALIDATION
-    // ========================================
+    // JOB TITLE
 
     if (
       !this.newJob.title ||
@@ -305,6 +369,8 @@ export class AdminJobs implements OnInit {
     }
 
 
+    // DESCRIPTION
+
     if (
       !this.newJob.description ||
       !this.newJob.description.trim()
@@ -317,6 +383,8 @@ export class AdminJobs implements OnInit {
 
     }
 
+
+    // LOCATION
 
     if (
       !this.newJob.location ||
@@ -331,6 +399,8 @@ export class AdminJobs implements OnInit {
     }
 
 
+    // SKILLS
+
     if (
       !this.newJob.skills ||
       !this.newJob.skills.trim()
@@ -343,6 +413,8 @@ export class AdminJobs implements OnInit {
 
     }
 
+
+    // JOB TYPE
 
     if (
       !this.newJob.jobType ||
@@ -357,9 +429,23 @@ export class AdminJobs implements OnInit {
     }
 
 
-    // ========================================
-    // START REQUEST
-    // ========================================
+    // COMPANY
+
+    if (
+      this.newJob.companyId === null ||
+      this.newJob.companyId === '' ||
+      this.newJob.companyId === undefined
+    ) {
+
+      this.addJobMessage =
+        'Please select a company.';
+
+      return;
+
+    }
+
+
+    // START
 
     this.addingJob = true;
 
@@ -368,9 +454,7 @@ export class AdminJobs implements OnInit {
     this.cdr.detectChanges();
 
 
-    // ========================================
-    // PREPARE JOB
-    // ========================================
+    // JOB OBJECT
 
     const job = {
 
@@ -396,32 +480,23 @@ export class AdminJobs implements OnInit {
         this.newJob.jobType.trim(),
 
       companyId:
-        this.newJob.companyId !== null &&
-        this.newJob.companyId !== ''
-          ? Number(this.newJob.companyId)
-          : null
+        Number(this.newJob.companyId)
 
     };
 
 
     console.log(
-      'Adding new job:',
+      'ADDING NEW JOB:',
       job
     );
 
 
-    // ========================================
     // BACKEND REQUEST
-    // ========================================
 
     this.adminService
       .addJob(job)
 
       .subscribe({
-
-        // ====================================
-        // SUCCESS
-        // ====================================
 
         next: (response: any) => {
 
@@ -433,12 +508,9 @@ export class AdminJobs implements OnInit {
 
           this.addingJob = false;
 
-
           this.addJobMessage =
             'Job added successfully!';
 
-
-          // Add new job at top of list
 
           if (response) {
 
@@ -455,8 +527,6 @@ export class AdminJobs implements OnInit {
           this.cdr.detectChanges();
 
 
-          // Close form after success
-
           setTimeout(() => {
 
             this.showAddJobForm = false;
@@ -469,10 +539,6 @@ export class AdminJobs implements OnInit {
 
         },
 
-
-        // ====================================
-        // ERROR
-        // ====================================
 
         error: (error: any) => {
 
@@ -565,7 +631,8 @@ export class AdminJobs implements OnInit {
     }
 
 
-    this.deletingJobId = job.id;
+    this.deletingJobId =
+      Number(job.id);
 
     this.message = '';
 
@@ -573,20 +640,17 @@ export class AdminJobs implements OnInit {
 
 
     this.adminService
-      .deleteJob(job.id)
+      .deleteJob(Number(job.id))
 
       .subscribe({
-
-        // ====================================
-        // SUCCESS
-        // ====================================
 
         next: () => {
 
           this.jobs =
             this.jobs.filter(
               item =>
-                item.id !== job.id
+                Number(item.id) !==
+                Number(job.id)
             );
 
 
@@ -596,10 +660,6 @@ export class AdminJobs implements OnInit {
 
         },
 
-
-        // ====================================
-        // ERROR
-        // ====================================
 
         error: (error: any) => {
 
@@ -658,6 +718,8 @@ export class AdminJobs implements OnInit {
 
     this.loadJobs();
 
+    this.loadCompanies();
+
   }
 
 
@@ -669,7 +731,9 @@ export class AdminJobs implements OnInit {
 
     localStorage.removeItem('token');
 
-    this.router.navigate(['/login']);
+    this.router.navigate([
+      '/login'
+    ]);
 
   }
 
