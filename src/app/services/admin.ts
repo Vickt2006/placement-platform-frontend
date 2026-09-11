@@ -10,13 +10,18 @@ export class Admin {
   private apiUrl =
     'https://placement-platform-backend-production.up.railway.app/api/admin';
 
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient
+  ) {}
+
 
   // ==========================================
   // ADMIN DASHBOARD
   // ==========================================
 
   getDashboardStatistics(): Observable<any> {
+
     return this.http.get<any>(
       `${this.apiUrl}/dashboard`
     );
@@ -28,6 +33,7 @@ export class Admin {
   // ==========================================
 
   getAllStudents(): Observable<any[]> {
+
     return this.http.get<any[]>(
       'https://placement-platform-backend-production.up.railway.app/api/users/students'
     );
@@ -39,6 +45,7 @@ export class Admin {
   // ==========================================
 
   getAllCompanies(): Observable<any[]> {
+
     return this.http.get<any[]>(
       'https://placement-platform-backend-production.up.railway.app/api/users/companies'
     );
@@ -49,7 +56,10 @@ export class Admin {
   // DELETE COMPANY
   // ==========================================
 
-  deleteCompany(userId: number): Observable<any> {
+  deleteCompany(
+      userId: number
+  ): Observable<any> {
+
     return this.http.delete<any>(
       `${this.apiUrl}/companies/${userId}`
     );
@@ -61,6 +71,7 @@ export class Admin {
   // ==========================================
 
   getAllJobs(): Observable<any[]> {
+
     return this.http.get<any[]>(
       `${this.apiUrl}/jobs`
     );
@@ -71,7 +82,10 @@ export class Admin {
   // ADD JOB
   // ==========================================
 
-  addJob(job: any): Observable<any> {
+  addJob(
+      job: any
+  ): Observable<any> {
+
     return this.http.post<any>(
       `${this.apiUrl}/jobs`,
       job
@@ -83,7 +97,10 @@ export class Admin {
   // DELETE JOB
   // ==========================================
 
-  deleteJob(id: number): Observable<void> {
+  deleteJob(
+      id: number
+  ): Observable<void> {
+
     return this.http.delete<void>(
       `${this.apiUrl}/jobs/${id}`
     );
@@ -95,8 +112,9 @@ export class Admin {
   // ==========================================
 
   getAllApplications(): Observable<any[]> {
+
     return this.http.get<any[]>(
-      `${this.apiUrl}/applications`
+      'https://placement-platform-backend-production.up.railway.app/api/applications'
     );
   }
 
@@ -106,18 +124,32 @@ export class Admin {
   // ==========================================
 
   updateApplicationStatus(
-    id: number,
-    status: string
+      id: number,
+      status: string
   ): Observable<any> {
 
     return this.http.put<any>(
-      `${this.apiUrl}/applications/${id}/status`,
+      `https://placement-platform-backend-production.up.railway.app/api/applications/${id}/status`,
       null,
       {
         params: {
           status: status
         }
       }
+    );
+  }
+
+
+  // ==========================================
+  // DELETE APPLICATION
+  // ==========================================
+
+  deleteApplication(
+      id: number
+  ): Observable<void> {
+
+    return this.http.delete<void>(
+      `https://placement-platform-backend-production.up.railway.app/api/applications/${id}`
     );
   }
 
