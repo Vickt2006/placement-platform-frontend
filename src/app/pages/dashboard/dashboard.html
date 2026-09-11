@@ -1,7 +1,33 @@
 <div class="dashboard-page">
 
   <!-- =====================================================
-       HEADER / NAVBAR
+       ANIMATED BACKGROUND
+       ===================================================== -->
+
+  <div class="background-grid"></div>
+
+  <div class="floating-orb orb-one"></div>
+  <div class="floating-orb orb-two"></div>
+  <div class="floating-orb orb-three"></div>
+
+  <div class="dashboard-particles">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+
+  <!-- =====================================================
+       HEADER
        ===================================================== -->
 
   <header class="dashboard-header">
@@ -10,13 +36,27 @@
 
     <div class="brand">
 
-      <div class="logo-icon">
-        P
+      <div class="logo-wrapper">
+
+        <div class="logo-ring"></div>
+
+        <div class="logo-icon">
+          P
+        </div>
+
       </div>
 
-      <h1>
-        Placement<span>Hub</span>
-      </h1>
+      <div class="brand-text">
+
+        <h1>
+          Placement<span>Hub</span>
+        </h1>
+
+        <small>
+          STUDENT PORTAL
+        </small>
+
+      </div>
 
     </div>
 
@@ -25,48 +65,34 @@
 
     <nav class="nav-menu">
 
-      <!-- DASHBOARD -->
-
       <a
         routerLink="/dashboard"
+        class="active"
       >
+        <span class="nav-icon">⌂</span>
         Dashboard
       </a>
 
-
-      <!-- JOBS -->
-
-      <a
-        routerLink="/jobs"
-      >
+      <a routerLink="/jobs">
+        <span class="nav-icon">◈</span>
         Jobs
       </a>
 
-
-      <!-- MY APPLICATIONS -->
-
-      <a
-        routerLink="/applications"
-      >
+      <a routerLink="/applications">
+        <span class="nav-icon">▣</span>
         My Applications
       </a>
 
-
-      <!-- PROFILE -->
-
-      <a
-        routerLink="/profile"
-      >
+      <a routerLink="/profile">
+        <span class="nav-icon">◎</span>
         Profile
       </a>
-
-
-      <!-- LOGOUT -->
 
       <button
         type="button"
         (click)="logout()"
       >
+        <span>↪</span>
         Logout
       </button>
 
@@ -77,96 +103,228 @@
 
 
   <!-- =====================================================
-       MAIN CONTENT
+       MAIN
        ===================================================== -->
 
   <main class="dashboard-content">
 
 
-    <!-- ===================================================
-         WELCOME SECTION
-         =================================================== -->
+    <!-- =================================================
+         HERO / WELCOME
+         ================================================= -->
 
-    <section class="welcome-section">
+    <section class="hero-section">
 
-      <p class="welcome-label">
-        STUDENT DASHBOARD
-      </p>
+      <div class="hero-content">
 
-      <h2>
-        Welcome Back 👋
-      </h2>
+        <div class="system-status">
 
-      <p>
-        Find your next career opportunity.
-      </p>
+          <span class="status-pulse"></span>
 
-    </section>
-
-
-
-    <!-- ===================================================
-         SEARCH SECTION
-         =================================================== -->
-
-    <section class="search-section">
-
-      <input
-        type="text"
-        [(ngModel)]="searchText"
-        (keyup.enter)="searchJobs()"
-        placeholder="Search jobs by title, skills or location..."
-      />
-
-
-      <button
-        type="button"
-        (click)="searchJobs()"
-      >
-        Search
-      </button>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         JOBS SECTION
-         =================================================== -->
-
-    <section class="jobs-section">
-
-
-      <!-- =================================================
-           SECTION HEADING
-           ================================================= -->
-
-      <div class="section-heading">
-
-        <div>
-
-          <h2>
-            Available Jobs
-          </h2>
-
-          <p>
-            Explore the latest placement opportunities
-          </p>
+          PLACEMENT SYSTEM ONLINE
 
         </div>
 
 
-        <span class="job-count">
+        <p class="welcome-label">
+          STUDENT DASHBOARD
+        </p>
 
-          {{ filteredJobs.length }}
 
-          {{
-            filteredJobs.length === 1
-              ? 'Job'
-              : 'Jobs'
-          }}
+        <h2>
+          Welcome Back,
+          <span>Future Professional.</span>
+        </h2>
 
-        </span>
+
+        <p class="hero-description">
+          Discover opportunities, apply for your dream roles,
+          and take the next step toward your career.
+        </p>
+
+
+        <div class="hero-actions">
+
+          <a
+            routerLink="/jobs"
+            class="hero-button primary"
+          >
+            <span>EXPLORE JOBS</span>
+            <b>→</b>
+          </a>
+
+
+          <a
+            routerLink="/applications"
+            class="hero-button secondary"
+          >
+            <span>MY APPLICATIONS</span>
+            <b>↗</b>
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- HERO CORE -->
+
+      <div class="hero-core">
+
+        <div class="core-orbit orbit-one"></div>
+
+        <div class="core-orbit orbit-two"></div>
+
+        <div class="core-orbit orbit-three"></div>
+
+        <div class="core-circle">
+
+          <div class="core-inner">
+            P
+          </div>
+
+        </div>
+
+        <div class="core-label">
+          <span>CAREER</span>
+          ENGINE
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SEARCH
+         ================================================= -->
+
+    <section class="search-section">
+
+      <div class="search-heading">
+
+        <div class="search-icon">
+          ⌕
+        </div>
+
+        <div>
+
+          <strong>
+            FIND YOUR OPPORTUNITY
+          </strong>
+
+          <small>
+            Search by title, skill, location or job type
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <div class="search-box">
+
+        <div class="search-input-wrapper">
+
+          <span>
+            ⌕
+          </span>
+
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            (keyup.enter)="searchJobs()"
+            placeholder="Search your next opportunity..."
+          />
+
+          @if (searchText) {
+
+            <button
+              type="button"
+              class="clear-search"
+              (click)="searchText = ''; searchJobs()"
+            >
+              ×
+            </button>
+
+          }
+
+        </div>
+
+
+        <button
+          type="button"
+          class="search-button"
+          (click)="searchJobs()"
+        >
+
+          <span>
+            SEARCH
+          </span>
+
+          <b>
+            →
+          </b>
+
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         JOBS SECTION
+         ================================================= -->
+
+    <section class="jobs-section">
+
+
+      <!-- SECTION HEADER -->
+
+      <div class="section-heading">
+
+        <div class="section-title">
+
+          <div class="section-line"></div>
+
+          <div>
+
+            <p>
+              OPPORTUNITIES
+            </p>
+
+            <h2>
+              Available Jobs
+            </h2>
+
+            <span>
+              Explore the latest placement opportunities
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="job-count">
+
+          <strong>
+            {{ filteredJobs.length }}
+          </strong>
+
+          <span>
+            {{
+              filteredJobs.length === 1
+                ? 'OPEN POSITION'
+                : 'OPEN POSITIONS'
+            }}
+          </span>
+
+        </div>
 
       </div>
 
@@ -178,15 +336,31 @@
 
       @if (loading) {
 
-        <div class="loading">
+        <div class="loading-panel">
 
-          <div>
-            ⏳
+          <div class="loading-core">
+
+            <div class="loading-ring"></div>
+
+            <div class="loading-ring ring-two"></div>
+
+            <span>
+              P
+            </span>
+
           </div>
 
+          <strong>
+            SCANNING OPPORTUNITIES
+          </strong>
+
           <p>
-            Loading jobs...
+            Loading available placement positions...
           </p>
+
+          <div class="loading-bar">
+            <span></span>
+          </div>
 
         </div>
 
@@ -195,7 +369,7 @@
 
 
       <!-- =================================================
-           ERROR MESSAGE
+           ERROR
            ================================================= -->
 
       @if (
@@ -203,15 +377,23 @@
         message
       ) {
 
-        <div class="error-message">
+        <div class="error-panel">
 
-          <div>
-            ⚠️
+          <div class="error-icon">
+            !
           </div>
 
-          <p>
-            {{ message }}
-          </p>
+          <div>
+
+            <strong>
+              SYSTEM WARNING
+            </strong>
+
+            <p>
+              {{ message }}
+            </p>
+
+          </div>
 
         </div>
 
@@ -220,7 +402,7 @@
 
 
       <!-- =================================================
-           JOB CARDS
+           JOB GRID
            ================================================= -->
 
       @if (
@@ -231,7 +413,6 @@
 
         <div class="job-grid">
 
-
           @for (
             job of filteredJobs;
             track job.id
@@ -240,41 +421,56 @@
             <article class="job-card">
 
 
-              <!-- =========================================
-                   JOB CARD HEADER
-                   ========================================= -->
+              <!-- CARD TOP SCAN -->
+
+              <div class="card-scan-line"></div>
+
+
+              <!-- CARD NUMBER -->
+
+              <div class="card-number">
+                JOB #{{ job.id }}
+              </div>
+
+
+              <!-- JOB HEADER -->
 
               <div class="job-card-header">
 
 
-                <!-- COMPANY ICON -->
+                <div class="company-icon-wrapper">
 
-                <div class="company-icon">
+                  <div class="company-icon">
 
-                  {{
-                    job.title?.charAt(0) || 'J'
-                  }}
+                    {{
+                      job.title?.charAt(0) || 'J'
+                    }}
+
+                  </div>
+
+                  <span class="company-pulse"></span>
 
                 </div>
 
 
-                <!-- JOB TITLE -->
-
-                <div>
+                <div class="job-title-area">
 
                   <h3>
+
                     {{
                       job.title ||
                       'Untitled Job'
                     }}
+
                   </h3>
 
                   <p>
-                    Company ID:
+
                     {{
-                      job.companyId ||
-                      'N/A'
+                      job.companyName ||
+                      'Placement Company'
                     }}
+
                   </p>
 
                 </div>
@@ -283,113 +479,97 @@
 
 
 
-              <!-- =========================================
-                   JOB INFORMATION
-                   ========================================= -->
+              <!-- JOB INFO -->
 
               <div class="job-info">
 
-
-                <!-- LOCATION -->
-
                 <span>
-
-                  📍
-
+                  <b>⌖</b>
                   {{
                     job.location ||
                     'Not specified'
                   }}
-
                 </span>
 
-
-                <!-- JOB TYPE -->
-
                 <span>
-
-                  💼
-
+                  <b>◈</b>
                   {{
                     job.jobType ||
                     'Not specified'
                   }}
-
                 </span>
 
-
-                <!-- SALARY -->
-
                 <span>
-
-                  💰
-
+                  <b>₹</b>
                   {{
                     job.salary != null
                       ? '₹' + job.salary
                       : 'Not specified'
                   }}
-
                 </span>
 
               </div>
 
 
 
-              <!-- =========================================
-                   SKILLS
-                   ========================================= -->
+              <!-- SKILLS -->
 
-              <div class="skills">
+              <div class="skills-section">
 
-                <strong>
-                  Skills
-                </strong>
+                <div class="mini-heading">
+
+                  <span>
+                    REQUIRED SKILLS
+                  </span>
+
+                  <b>
+                    // 01
+                  </b>
+
+                </div>
 
                 <p>
-
                   {{
                     job.skills ||
-                    'Not specified'
+                    'Skills not specified'
                   }}
-
                 </p>
 
               </div>
 
 
 
-              <!-- =========================================
-                   DESCRIPTION
-                   ========================================= -->
+              <!-- DESCRIPTION -->
 
-              <div class="description">
+              <div class="description-section">
 
-                <strong>
-                  Description
-                </strong>
+                <div class="mini-heading">
+
+                  <span>
+                    ROLE DESCRIPTION
+                  </span>
+
+                  <b>
+                    // 02
+                  </b>
+
+                </div>
 
                 <p>
-
                   {{
                     job.description ||
                     'No description available.'
                   }}
-
                 </p>
 
               </div>
 
 
 
-              <!-- =========================================
-                   ACTION BUTTONS
-                   ========================================= -->
+              <!-- CARD FOOTER -->
 
               <div class="job-actions">
 
-
-                <!-- VIEW DETAILS -->
 
                 <a
                   class="view-button"
@@ -398,22 +578,43 @@
                     job.id
                   ]"
                 >
-                  View Details
+
+                  <span>
+                    VIEW DETAILS
+                  </span>
+
+                  <b>
+                    ↗
+                  </b>
+
                 </a>
 
-
-                <!-- APPLY NOW -->
 
                 <button
                   type="button"
                   class="apply-button"
                   (click)="applyForJob(job.id)"
                 >
-                  Apply Now
+
+                  <span>
+                    APPLY NOW
+                  </span>
+
+                  <b>
+                    →
+                  </b>
+
                 </button>
 
               </div>
 
+
+              <!-- CARD CORNERS -->
+
+              <span class="corner corner-top-left"></span>
+              <span class="corner corner-top-right"></span>
+              <span class="corner corner-bottom-left"></span>
+              <span class="corner corner-bottom-right"></span>
 
             </article>
 
@@ -426,7 +627,7 @@
 
 
       <!-- =================================================
-           NO JOBS FOUND
+           NO JOBS
            ================================================= -->
 
       @if (
@@ -437,18 +638,31 @@
 
         <div class="no-jobs">
 
-          <div class="no-jobs-icon">
-            🔎
+          <div class="empty-orbit">
+
+            <div class="empty-ring"></div>
+
+            <span>
+              ?
+            </span>
+
           </div>
 
-          <h3>
-            No Jobs Found
-          </h3>
+          <div class="empty-content">
 
-          <p>
-            Try searching with a different
-            title, skill or location.
-          </p>
+            <p>
+              SEARCH RESULT
+            </p>
+
+            <h3>
+              No Opportunities Found
+            </h3>
+
+            <span>
+              Try another title, skill, location or job type.
+            </span>
+
+          </div>
 
         </div>
 
@@ -457,5 +671,34 @@
     </section>
 
   </main>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="dashboard-footer">
+
+    <span>
+      PLACEMENT ENGINE v1.0
+    </span>
+
+    <b>
+      •
+    </b>
+
+    <span>
+      BUILD YOUR FUTURE
+    </span>
+
+    <b>
+      •
+    </b>
+
+    <span class="footer-online">
+      SYSTEM ONLINE
+    </span>
+
+  </footer>
 
 </div>

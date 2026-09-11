@@ -1,8 +1,8 @@
 <div class="job-details-page">
 
-  <!-- ====================================== -->
-  <!-- HEADER -->
-  <!-- ====================================== -->
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
 
   <header class="job-details-header">
 
@@ -12,9 +12,15 @@
         P
       </div>
 
-      <h1>
-        Placement<span>Hub</span>
-      </h1>
+      <div class="brand-text">
+        <h1>
+          Placement<span>Hub</span>
+        </h1>
+
+        <small>
+          STUDENT PORTAL
+        </small>
+      </div>
 
     </div>
 
@@ -22,14 +28,17 @@
     <nav class="nav-menu">
 
       <a routerLink="/dashboard">
+        <span>⌂</span>
         Dashboard
       </a>
 
       <a routerLink="/dashboard">
+        <span>◈</span>
         Jobs
       </a>
 
       <a routerLink="/applications">
+        <span>▣</span>
         My Applications
       </a>
 
@@ -38,12 +47,12 @@
   </header>
 
 
-  <!-- ====================================== -->
-  <!-- MAIN -->
-  <!-- ====================================== -->
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
 
   <main class="job-details-container">
-
 
     <!-- BACK -->
 
@@ -51,246 +60,436 @@
       routerLink="/dashboard"
       class="back-link"
     >
-      ← Back to Jobs
+      <span class="back-arrow">←</span>
+      <span>Back to Opportunities</span>
     </a>
 
 
-    <!-- ==================================== -->
-    <!-- LOADING -->
-    <!-- ==================================== -->
+
+    <!-- ===================================================
+         LOADING
+         =================================================== -->
 
     @if (loading) {
 
-      <div class="loading">
-        Loading job details...
-      </div>
+      <div class="loading-screen">
 
-    }
+        <div class="loading-orbit">
 
-
-    <!-- ==================================== -->
-    <!-- ERROR -->
-    <!-- ==================================== -->
-
-    @if (
-      !loading &&
-      !job
-    ) {
-
-      <div class="error-message">
-
-        {{ message }}
-
-      </div>
-
-    }
-
-
-    <!-- ==================================== -->
-    <!-- JOB -->
-    <!-- ==================================== -->
-
-    @if (
-      !loading &&
-      job
-    ) {
-
-      <article class="job-card">
-
-
-        <!-- ================================== -->
-        <!-- JOB HEADER -->
-        <!-- ================================== -->
-
-        <div class="job-header">
-
-          <div class="company-icon">
-
-            {{ job.title?.charAt(0) }}
-
-          </div>
-
-
-          <div>
-
-            <p class="job-label">
-              JOB OPPORTUNITY
-            </p>
-
-            <h2>
-              {{ job.title }}
-            </h2>
-
-            <!-- COMPANY NAME -->
-
-            <p class="company">
-              {{ job.companyName || 'Company' }}
-            </p>
-
+          <div class="loading-core">
+            P
           </div>
 
         </div>
 
+        <p>
+          CONNECTING TO PLACEMENT NETWORK
+        </p>
 
-        <hr>
+        <span>
+          Loading opportunity...
+        </span>
+
+      </div>
+
+    }
 
 
-        <!-- ================================== -->
-        <!-- JOB INFORMATION -->
-        <!-- ================================== -->
 
-        <div class="job-info-grid">
+    <!-- ===================================================
+         ERROR
+         =================================================== -->
+
+    @if (!loading && !job) {
+
+      <div class="error-message">
+
+        <div class="error-icon">
+          !
+        </div>
+
+        <h3>
+          Opportunity Unavailable
+        </h3>
+
+        <p>
+          {{ message }}
+        </p>
+
+        <a routerLink="/dashboard">
+          Return to Jobs
+        </a>
+
+      </div>
+
+    }
+
+
+
+    <!-- ===================================================
+         JOB DETAILS
+         =================================================== -->
+
+    @if (!loading && job) {
+
+      <article class="job-card">
+
+
+        <!-- TOP ACCENT -->
+
+        <div class="card-top-accent"></div>
+
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="job-hero">
+
+          <div class="company-avatar">
+
+            <div class="avatar-glow"></div>
+
+            <span>
+              {{ job.title?.charAt(0) || 'J' }}
+            </span>
+
+          </div>
+
+
+          <div class="hero-content">
+
+            <div class="opportunity-badge">
+
+              <span class="live-dot"></span>
+
+              OPEN OPPORTUNITY
+
+            </div>
+
+
+            <h2>
+              {{ job.title || 'Untitled Job' }}
+            </h2>
+
+
+            <p class="company-name">
+
+              <span class="company-symbol">
+                ◈
+              </span>
+
+              {{ job.companyName || 'Placement Company' }}
+
+            </p>
+
+          </div>
+
+
+          <div class="hero-status">
+
+            <span>
+              STATUS
+            </span>
+
+            <strong>
+              ACTIVE
+            </strong>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DIVIDER
+             ================================================= -->
+
+        <div class="section-divider">
+          <span></span>
+        </div>
+
+
+
+        <!-- =================================================
+             QUICK INFORMATION
+             ================================================= -->
+
+        <section class="job-info-grid">
 
 
           <!-- LOCATION -->
 
           <div class="info-box">
 
-            <span class="info-icon">
+            <div class="info-icon location-icon">
               📍
-            </span>
+            </div>
 
-            <div>
+            <div class="info-content">
+
+              <span>
+                LOCATION
+              </span>
 
               <strong>
-                Location
-              </strong>
-
-              <p>
                 {{ job.location || 'Not specified' }}
-              </p>
+              </strong>
 
             </div>
 
+            <div class="info-corner"></div>
+
           </div>
+
 
 
           <!-- JOB TYPE -->
 
           <div class="info-box">
 
-            <span class="info-icon">
+            <div class="info-icon type-icon">
               💼
-            </span>
+            </div>
 
-            <div>
+            <div class="info-content">
+
+              <span>
+                JOB TYPE
+              </span>
 
               <strong>
-                Job Type
-              </strong>
-
-              <p>
                 {{ job.jobType || 'Not specified' }}
-              </p>
+              </strong>
 
             </div>
 
+            <div class="info-corner"></div>
+
           </div>
+
 
 
           <!-- SALARY -->
 
-          <div class="info-box">
+          <div class="info-box salary-box">
 
-            <span class="info-icon">
-              💰
-            </span>
+            <div class="info-icon salary-icon">
+              ₹
+            </div>
+
+            <div class="info-content">
+
+              <span>
+                PACKAGE / SALARY
+              </span>
+
+              <strong>
+                @if (job.salary != null) {
+                  ₹{{ job.salary }}
+                } @else {
+                  Not specified
+                }
+              </strong>
+
+            </div>
+
+            <div class="info-corner"></div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SKILLS
+             ================================================= -->
+
+        <section class="job-section skills-section">
+
+          <div class="section-title">
+
+            <div class="title-icon">
+              ◇
+            </div>
 
             <div>
 
-              <strong>
-                Salary
-              </strong>
+              <span>
+                REQUIREMENTS
+              </span>
 
-              <p>
-                ₹{{ job.salary || 'Not specified' }}
-              </p>
+              <h3>
+                Required Skills
+              </h3>
 
             </div>
 
           </div>
 
-        </div>
 
+          <div class="skills-panel">
 
-        <!-- ================================== -->
-        <!-- SKILLS -->
-        <!-- ================================== -->
+            @if (job.skills) {
 
-        <section class="job-section">
+              @for (
+                skill of job.skills.split(',');
+                track $index
+              ) {
 
-          <h3>
-            Required Skills
-          </h3>
+                <span class="skill-chip">
 
-          <p>
-            {{ job.skills || 'Not specified' }}
-          </p>
+                  <i>
+                    ✓
+                  </i>
 
-        </section>
+                  {{ skill.trim() }}
 
+                </span>
 
-        <!-- ================================== -->
-        <!-- DESCRIPTION -->
-        <!-- ================================== -->
+              }
 
-        <section class="job-section">
+            } @else {
 
-          <h3>
-            Job Description
-          </h3>
+              <span class="skill-chip">
+                Skills not specified
+              </span>
 
-          <p>
-            {{ job.description || 'No description available.' }}
-          </p>
+            }
+
+          </div>
 
         </section>
 
 
-        <hr>
+
+        <!-- =================================================
+             DESCRIPTION
+             ================================================= -->
+
+        <section class="job-section description-section">
+
+          <div class="section-title">
+
+            <div class="title-icon">
+              ◈
+            </div>
+
+            <div>
+
+              <span>
+                OPPORTUNITY DETAILS
+              </span>
+
+              <h3>
+                Job Description
+              </h3>
+
+            </div>
+
+          </div>
 
 
-        <!-- ================================== -->
-        <!-- APPLY -->
-        <!-- ================================== -->
+          <div class="description-panel">
 
-        <div class="apply-section">
+            <div class="description-line"></div>
+
+            <p>
+              {{ job.description || 'No description available.' }}
+            </p>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             APPLICATION AREA
+             ================================================= -->
+
+        <section class="apply-section">
+
+          <div class="apply-info">
+
+            <div class="apply-status">
+
+              <span class="status-pulse"></span>
+
+              APPLICATIONS OPEN
+
+            </div>
+
+            <p>
+              Ready to take the next step in your career?
+            </p>
+
+          </div>
+
 
           <button
             type="button"
             class="apply-button"
-            [disabled]="applying"
+            [class.launching]="applying"
+            [disabled]="applying || applicationAnimation"
             (click)="applyNow()"
           >
 
-            @if (applying) {
+            <span class="apply-button-bg"></span>
 
-              Applying...
+            <span class="apply-button-content">
 
-            } @else {
+              @if (applying) {
 
-              Apply Now
+                <span class="button-loader"></span>
 
-            }
+                <span>
+                  TRANSMITTING APPLICATION...
+                </span>
+
+              } @else {
+
+                <span class="apply-rocket">
+                  🚀
+                </span>
+
+                <span>
+                  APPLY NOW
+                </span>
+
+                <span class="button-arrow">
+                  →
+                </span>
+
+              }
+
+            </span>
+
+            <span class="button-shine"></span>
 
           </button>
 
 
-          <!-- ================================= -->
-          <!-- MESSAGE -->
-          <!-- ================================= -->
-
-          @if (message) {
+          @if (message && !applicationAnimation) {
 
             <div
               class="application-message"
-              [class.success]="
-                messageType === 'success'
-              "
-              [class.error]="
-                messageType === 'error'
-              "
+              [class.success]="messageType === 'success'"
+              [class.error]="messageType === 'error'"
             >
+
+              <span class="message-icon">
+
+                @if (messageType === 'success') {
+                  ✓
+                } @else {
+                  !
+                }
+
+              </span>
 
               {{ message }}
 
@@ -298,13 +497,237 @@
 
           }
 
-        </div>
+        </section>
 
+
+
+        <!-- =================================================
+             CARD FOOTER
+             ================================================= -->
+
+        <footer class="job-card-footer">
+
+          <span>
+            PLACEMENTHUB
+          </span>
+
+          <i></i>
+
+          <span>
+            SECURE APPLICATION SYSTEM
+          </span>
+
+          <i></i>
+
+          <span>
+            JWT PROTECTED
+          </span>
+
+        </footer>
 
       </article>
 
     }
 
   </main>
+
+
+
+  <!-- =====================================================
+       CINEMATIC APPLICATION ANIMATION
+       ===================================================== -->
+
+  @if (applicationAnimation) {
+
+    <div class="placement-overlay">
+
+
+      <!-- BACKGROUND GRID -->
+
+      <div class="overlay-grid"></div>
+
+
+      <!-- GLOW ORBS -->
+
+      <div class="overlay-orb orb-one"></div>
+      <div class="overlay-orb orb-two"></div>
+      <div class="overlay-orb orb-three"></div>
+
+
+      <!-- PARTICLES -->
+
+      <div class="space-particles">
+
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div class="mission-status">
+
+        <span class="status-dot"></span>
+
+        PLACEMENT ENGINE ACTIVE
+
+        <span class="status-code">
+          / APPLICATION TRANSFER
+        </span>
+
+      </div>
+
+
+
+      <!-- MAIN STAGE -->
+
+      <div class="placement-stage">
+
+
+        <!-- APPLICATION PACKET -->
+
+        <div class="application-packet">
+
+          <div class="packet-glow"></div>
+
+          <div class="packet-icon">
+            📄
+          </div>
+
+          <div class="packet-content">
+
+            <span>
+              APPLICATION PACKET
+            </span>
+
+            <strong>
+              {{ job?.title || 'Job Application' }}
+            </strong>
+
+            <small>
+              {{ job?.companyName || 'Placement Company' }}
+            </small>
+
+          </div>
+
+          <div class="packet-check">
+            ✓
+          </div>
+
+        </div>
+
+
+
+        <!-- ENERGY PATH -->
+
+        <div class="energy-path">
+
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </div>
+
+
+
+        <!-- PLACEMENT HUB -->
+
+        <div class="placement-box">
+
+          <div class="box-ring ring-one"></div>
+
+          <div class="box-ring ring-two"></div>
+
+          <div class="box-ring ring-three"></div>
+
+          <div class="box-top-line"></div>
+
+          <div class="box-icon">
+            P
+          </div>
+
+          <div class="box-title">
+            PLACEMENT
+          </div>
+
+          <div class="box-subtitle">
+            APPLICATION HUB
+          </div>
+
+          <div class="box-scanner"></div>
+
+          <div class="box-grid"></div>
+
+        </div>
+
+
+
+        <!-- SUCCESS -->
+
+        <div class="success-core">
+
+          <div class="success-ring ring-a"></div>
+
+          <div class="success-ring ring-b"></div>
+
+          <div class="success-ring ring-c"></div>
+
+          <div class="success-check">
+            ✓
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FINAL MESSAGE -->
+
+      <div class="mission-complete">
+
+        <div class="complete-small">
+          CAREER PIPELINE
+        </div>
+
+        <h2>
+          Application Submitted
+        </h2>
+
+        <p>
+          Your application has entered the PlacementHub system.
+        </p>
+
+        <div class="complete-line">
+
+          <span></span>
+
+          <b>
+            APPLICATION SECURED
+          </b>
+
+          <span></span>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  }
 
 </div>

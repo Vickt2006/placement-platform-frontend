@@ -13,6 +13,7 @@ import {
 import { Job } from '../../services/job';
 import { Application } from '../../services/application';
 
+
 @Component({
   selector: 'app-job-details',
   standalone: true,
@@ -22,24 +23,18 @@ import { Application } from '../../services/application';
 })
 export class JobDetails implements OnInit {
 
-  // ==========================================
-  // VARIABLES
-  // ==========================================
-
   job: any = null;
 
   loading: boolean = true;
 
   applying: boolean = false;
 
+  applicationAnimation: boolean = false;
+
   message: string = '';
 
   messageType: string = '';
 
-
-  // ==========================================
-  // CONSTRUCTOR
-  // ==========================================
 
   constructor(
     private route: ActivatedRoute,
@@ -50,9 +45,9 @@ export class JobDetails implements OnInit {
   ) {}
 
 
-  // ==========================================
-  // INITIALIZE
-  // ==========================================
+  // =====================================================
+  // PAGE LOAD
+  // =====================================================
 
   ngOnInit(): void {
 
@@ -68,7 +63,8 @@ export class JobDetails implements OnInit {
       this.messageType =
         'error';
 
-      this.loading = false;
+      this.loading =
+        false;
 
       this.cdr.detectChanges();
 
@@ -82,24 +78,25 @@ export class JobDetails implements OnInit {
   }
 
 
-  // ==========================================
+  // =====================================================
   // LOAD JOB
-  // ==========================================
+  // =====================================================
 
   loadJob(id: number): void {
 
-    this.loading = true;
+    this.loading =
+      true;
 
-    this.message = '';
+    this.message =
+      '';
+
+    this.messageType =
+      '';
 
 
     this.jobService
       .getJobById(id)
       .subscribe({
-
-        // ================================
-        // SUCCESS
-        // ================================
 
         next: (response: any) => {
 
@@ -108,17 +105,17 @@ export class JobDetails implements OnInit {
             response
           );
 
-          this.job = response;
 
-          this.loading = false;
+          this.job =
+            response;
+
+          this.loading =
+            false;
+
 
           this.cdr.detectChanges();
         },
 
-
-        // ================================
-        // ERROR
-        // ================================
 
         error: (error: any) => {
 
@@ -127,13 +124,19 @@ export class JobDetails implements OnInit {
             error
           );
 
+
+          this.job =
+            null;
+
           this.message =
             'Unable to load job details.';
 
           this.messageType =
             'error';
 
-          this.loading = false;
+          this.loading =
+            false;
+
 
           this.cdr.detectChanges();
         }
@@ -142,13 +145,16 @@ export class JobDetails implements OnInit {
   }
 
 
-  // ==========================================
+  // =====================================================
   // APPLY NOW
-  // ==========================================
+  // =====================================================
 
   applyNow(): void {
 
-    // Job check
+    // ---------------------------------------------------
+    // CHECK JOB
+    // ---------------------------------------------------
+
     if (
       !this.job ||
       !this.job.id
@@ -160,16 +166,33 @@ export class JobDetails implements OnInit {
       this.messageType =
         'error';
 
+      this.cdr.detectChanges();
+
       return;
     }
 
 
-    // Get student ID
+    // ---------------------------------------------------
+    // PREVENT DOUBLE CLICK
+    // ---------------------------------------------------
+
+    if (
+      this.applying ||
+      this.applicationAnimation
+    ) {
+
+      return;
+    }
+
+
+    // ---------------------------------------------------
+    // GET STUDENT ID
+    // ---------------------------------------------------
+
     const studentId =
       this.getStudentIdFromToken();
 
 
-    // Student check
     if (!studentId) {
 
       this.message =
@@ -184,18 +207,19 @@ export class JobDetails implements OnInit {
     }
 
 
-    // Prevent multiple clicks
-    if (this.applying) {
+    // ---------------------------------------------------
+    // START LOADING
+    // ---------------------------------------------------
 
-      return;
-    }
+    this.applying =
+      true;
 
+    this.message =
+      '';
 
-    this.applying = true;
+    this.messageType =
+      '';
 
-    this.message = '';
-
-    this.messageType = '';
 
     this.cdr.detectChanges();
 
@@ -205,7 +229,7 @@ export class JobDetails implements OnInit {
     );
 
     console.log(
-      'Applying for job'
+      'APPLYING FOR JOB'
     );
 
     console.log(
@@ -223,9 +247,9 @@ export class JobDetails implements OnInit {
     );
 
 
-    // ======================================
-    // API CALL
-    // ======================================
+    // ---------------------------------------------------
+    // SEND APPLICATION
+    // ---------------------------------------------------
 
     this.applicationService
       .apply(
@@ -234,19 +258,27 @@ export class JobDetails implements OnInit {
       )
       .subscribe({
 
-        // ==================================
+        // ===============================================
         // SUCCESS
-        // ==================================
+        // ===============================================
 
         next: (response: any) => {
 
           console.log(
-            'Application successful:',
+            'APPLICATION SUCCESS:',
             response
           );
 
 
-          this.applying = false;
+          // Stop loading
+          this.applying =
+            false;
+
+
+          // Start animation
+          this.applicationAnimation =
+            true;
+
 
           this.message =
             'Application submitted successfully!';
@@ -254,54 +286,67 @@ export class JobDetails implements OnInit {
           this.messageType =
             'success';
 
+
+          console.log(
+            'ANIMATION STARTED:',
+            this.applicationAnimation
+          );
+
+
           this.cdr.detectChanges();
 
 
-          // Go to My Applications
+          // ------------------------------------------------
+          // WAIT FOR ANIMATION
+          // ------------------------------------------------
+
           setTimeout(() => {
+
+            console.log(
+              'Animation completed.'
+            );
+
+
+            this.applicationAnimation =
+              false;
+
+
+            this.cdr.detectChanges();
+
 
             this.router.navigate([
               '/applications'
             ]);
 
-          }, 1000);
+          }, 6000);
 
         },
 
 
-        // ==================================
+        // ===============================================
         // ERROR
-        // ==================================
+        // ===============================================
 
         error: (error: any) => {
 
           console.error(
-            'Application error:',
+            'APPLICATION ERROR:',
             error
           );
 
 
-          this.applying = false;
+          this.applying =
+            false;
 
-
-          // ----------------------------------
-          // Backend returned STRING
-          // ----------------------------------
 
           if (
-            typeof error?.error ===
-            'string'
+            typeof error?.error === 'string'
           ) {
 
             this.message =
               error.error;
 
           }
-
-
-          // ----------------------------------
-          // Backend returned JSON
-          // ----------------------------------
 
           else if (
             error?.error?.message
@@ -312,39 +357,38 @@ export class JobDetails implements OnInit {
 
           }
 
-
-          // ----------------------------------
-          // Unknown error
-          // ----------------------------------
-
           else {
 
             this.message =
               'Unable to submit application.';
+
           }
 
 
           this.messageType =
             'error';
 
-          this.cdr.detectChanges();
 
+          this.cdr.detectChanges();
         }
 
       });
   }
 
 
-  // ==========================================
+  // =====================================================
   // GET STUDENT ID FROM JWT
-  // ==========================================
+  // =====================================================
 
-  getStudentIdFromToken():
-    number | null {
+  getStudentIdFromToken(): number | null {
 
     const token =
       localStorage.getItem('token');
 
+
+    // ---------------------------------------------------
+    // TOKEN CHECK
+    // ---------------------------------------------------
 
     if (!token) {
 
@@ -362,6 +406,10 @@ export class JobDetails implements OnInit {
         token.split('.');
 
 
+      // -------------------------------------------------
+      // JWT FORMAT CHECK
+      // -------------------------------------------------
+
       if (
         parts.length !== 3
       ) {
@@ -374,13 +422,21 @@ export class JobDetails implements OnInit {
       }
 
 
+      // -------------------------------------------------
+      // DECODE PAYLOAD
+      // -------------------------------------------------
+
       const payload =
         parts[1];
 
 
       const decodedPayload =
         JSON.parse(
-          atob(payload)
+          atob(
+            payload
+              .replace(/-/g, '+')
+              .replace(/_/g, '/')
+          )
         );
 
 
@@ -390,8 +446,13 @@ export class JobDetails implements OnInit {
       );
 
 
+      // -------------------------------------------------
+      // USER ID
+      // -------------------------------------------------
+
       if (
-        decodedPayload.userId
+        decodedPayload.userId !== undefined &&
+        decodedPayload.userId !== null
       ) {
 
         return Number(
@@ -404,14 +465,18 @@ export class JobDetails implements OnInit {
         'userId not found in JWT.'
       );
 
+
       return null;
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
       console.error(
         'Unable to read JWT:',
         error
       );
+
 
       return null;
     }

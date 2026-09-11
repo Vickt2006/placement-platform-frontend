@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
+
 import {
   Router,
   RouterLink
@@ -11,8 +12,10 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-register',
+
   standalone: true,
 
   imports: [
@@ -21,38 +24,47 @@ import { HttpClient } from '@angular/common/http';
   ],
 
   templateUrl: './register.html',
+
   styleUrl: './register.css'
 })
 export class Register {
 
   name: string = '';
+
   email: string = '';
+
   password: string = '';
+
   confirmPassword: string = '';
 
   message: string = '';
+
   loading: boolean = false;
+
+  registrationSuccess: boolean = false;
 
 
   constructor(
     private http: HttpClient,
+
     private router: Router,
+
     private cdr: ChangeDetectorRef
   ) {}
 
 
-  register(): void {
+  // =====================================================
+  // REGISTER
+  // =====================================================
 
-    // ==========================================
-    // CLEAR OLD MESSAGE
-    // ==========================================
+  register(): void {
 
     this.message = '';
 
 
-    // ==========================================
+    // ===================================================
     // VALIDATION
-    // ==========================================
+    // ===================================================
 
     if (
       !this.name ||
@@ -70,9 +82,9 @@ export class Register {
     }
 
 
-    // ==========================================
+    // ===================================================
     // PASSWORD MATCH
-    // ==========================================
+    // ===================================================
 
     if (
       this.password !== this.confirmPassword
@@ -87,9 +99,9 @@ export class Register {
     }
 
 
-    // ==========================================
+    // ===================================================
     // PASSWORD LENGTH
-    // ==========================================
+    // ===================================================
 
     if (
       this.password.length < 6
@@ -104,28 +116,34 @@ export class Register {
     }
 
 
-    // ==========================================
-    // START REGISTRATION
-    // ==========================================
+    // ===================================================
+    // START
+    // ===================================================
 
     this.loading = true;
+
+    this.message = '';
 
     this.cdr.detectChanges();
 
 
-    // ==========================================
-    // USER DATA
-    // ==========================================
+    // ===================================================
+    // USER
+    // ===================================================
 
     const user = {
 
-      name: this.name.trim(),
+      name:
+        this.name.trim(),
 
-      email: this.email.trim(),
+      email:
+        this.email.trim(),
 
-      password: this.password,
+      password:
+        this.password,
 
-      role: 'STUDENT'
+      role:
+        'STUDENT'
 
     };
 
@@ -136,9 +154,9 @@ export class Register {
     );
 
 
-    // ==========================================
-    // CALL REGISTER API
-    // ==========================================
+    // ===================================================
+    // API
+    // ===================================================
 
     this.http
       .post<any>(
@@ -147,9 +165,9 @@ export class Register {
       )
       .subscribe({
 
-        // ======================================
-        // REGISTRATION SUCCESS
-        // ======================================
+        // ===============================================
+        // SUCCESS
+        // ===============================================
 
         next: (response: any) => {
 
@@ -158,32 +176,44 @@ export class Register {
             response
           );
 
+
           this.loading = false;
 
           this.message =
             'Account created successfully!';
 
+          this.registrationSuccess = true;
+
           this.cdr.detectChanges();
 
 
-          // ====================================
-          // GO TO LOGIN
-          // ====================================
+          console.log(
+            'REGISTRATION SUCCESS ANIMATION STARTED'
+          );
+
+
+          // =============================================
+          // REDIRECT
+          // =============================================
 
           setTimeout(() => {
+
+            this.registrationSuccess = false;
+
+            this.cdr.detectChanges();
 
             this.router.navigate([
               '/login'
             ]);
 
-          }, 1200);
+          }, 5000);
 
         },
 
 
-        // ======================================
-        // REGISTRATION ERROR
-        // ======================================
+        // ===============================================
+        // ERROR
+        // ===============================================
 
         error: (error: any) => {
 
@@ -192,24 +222,31 @@ export class Register {
             error
           );
 
+
           this.loading = false;
 
 
-          if (error.status === 409) {
+          if (
+            error.status === 409
+          ) {
 
             this.message =
               'Email already exists. Please use another email.';
 
           }
 
-          else if (error.status === 400) {
+          else if (
+            error.status === 400
+          ) {
 
             this.message =
               'Invalid registration details.';
 
           }
 
-          else if (error.status === 0) {
+          else if (
+            error.status === 0
+          ) {
 
             this.message =
               'Unable to connect to server.';

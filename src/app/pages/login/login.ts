@@ -12,6 +12,7 @@ import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
+
   standalone: true,
 
   imports: [
@@ -19,50 +20,62 @@ import { Auth } from '../../services/auth';
   ],
 
   templateUrl: './login.html',
+
   styleUrl: './login.css'
 })
 export class Login {
 
   email: string = '';
+
   password: string = '';
 
   message: string = '';
+
   loading: boolean = false;
 
 
   constructor(
     private auth: Auth,
+
     private cdr: ChangeDetectorRef,
+
     private router: Router
   ) {}
 
 
-  // ==========================================
-  // GO TO REGISTER PAGE
-  // ==========================================
+  // =====================================================
+  // GO TO REGISTER
+  // =====================================================
 
   goToRegister(event: Event): void {
 
     event.preventDefault();
 
-    console.log('Opening Register Page...');
+    console.log(
+      'Opening Register Page...'
+    );
 
-    this.router.navigate(['/register']);
+    this.router.navigate([
+      '/register'
+    ]);
 
   }
 
 
-  // ==========================================
+  // =====================================================
   // LOGIN
-  // ==========================================
+  // =====================================================
 
   login(): void {
 
-    // ==========================================
+    // ---------------------------------------------------
     // VALIDATION
-    // ==========================================
+    // ---------------------------------------------------
 
-    if (!this.email || !this.password) {
+    if (
+      !this.email ||
+      !this.password
+    ) {
 
       this.message =
         'Please enter email and password.';
@@ -73,215 +86,259 @@ export class Login {
     }
 
 
-    // ==========================================
-    // START LOGIN
-    // ==========================================
+    // ---------------------------------------------------
+    // START LOADING
+    // ---------------------------------------------------
 
     this.loading = true;
+
     this.message = '';
 
     this.cdr.detectChanges();
 
 
-    // ==========================================
-    // CALL LOGIN API
-    // ==========================================
-
-    this.auth.login(
-      this.email,
-      this.password
-    ).subscribe({
-
-      // ========================================
-      // SUCCESS
-      // ========================================
-
-      next: (response: any) => {
-
-        console.log(
-          'Login response:',
-          response
-        );
+    console.log(
+      'Starting login...'
+    );
 
 
-        // ======================================
-        // CHECK TOKEN
-        // ======================================
+    // ---------------------------------------------------
+    // LOGIN API
+    // ---------------------------------------------------
 
-        if (
-          !response ||
-          !response.token
-        ) {
+    this.auth
+      .login(
+        this.email,
+        this.password
+      )
+      .subscribe({
 
-          this.message =
-            'Login successful, but token was not received.';
+        // ===============================================
+        // SUCCESS
+        // ===============================================
 
-          this.loading = false;
+        next: (response: any) => {
 
-          this.cdr.detectChanges();
-
-          return;
-        }
-
-
-        // ======================================
-        // SAVE TOKEN
-        // ======================================
-
-        const token = response.token;
-
-        localStorage.setItem(
-          'token',
-          token
-        );
-
-        console.log(
-          'JWT Token saved'
-        );
+          console.log(
+            'Login response:',
+            response
+          );
 
 
-        // ======================================
-        // READ JWT
-        // ======================================
+          // ---------------------------------------------
+          // TOKEN CHECK
+          // ---------------------------------------------
 
-        try {
+          if (
+            !response ||
+            !response.token
+          ) {
 
-          const payload = JSON.parse(
-            atob(
-              token
-                .split('.')[1]
-                .replace(/-/g, '+')
-                .replace(/_/g, '/')
-            )
+            this.message =
+              'Login successful, but token was not received.';
+
+            this.loading = false;
+
+            this.cdr.detectChanges();
+
+            return;
+          }
+
+
+          // ---------------------------------------------
+          // SAVE TOKEN
+          // ---------------------------------------------
+
+          const token =
+            response.token;
+
+          localStorage.setItem(
+            'token',
+            token
           );
 
 
           console.log(
-            'JWT Payload:',
-            payload
+            'JWT Token saved'
           );
 
 
-          // ====================================
-          // NORMALIZE ROLE
-          // ====================================
+          // ---------------------------------------------
+          // DECODE JWT
+          // ---------------------------------------------
 
-          const role = String(
-            payload?.role || ''
-          )
-            .replace(/^ROLE_/i, '')
-            .toUpperCase();
+          try {
 
+            const payload =
+              JSON.parse(
+                atob(
+                  token
+                    .split('.')[1]
+                    .replace(/-/g, '+')
+                    .replace(/_/g, '/')
+                )
+              );
 
-          console.log(
-            'NORMALIZED LOGIN ROLE:',
-            role
-          );
-
-
-          // ====================================
-          // SUCCESS MESSAGE
-          // ====================================
-
-          this.message =
-            'Login successful!';
-
-          this.loading = false;
-
-          this.cdr.detectChanges();
-
-
-          // ====================================
-          // ADMIN
-          // ====================================
-
-          if (role === 'ADMIN') {
 
             console.log(
-              'Redirecting to ADMIN dashboard'
+              'JWT Payload:',
+              payload
             );
 
-            window.location.href =
-              '/admin-dashboard';
 
-            return;
+            // -------------------------------------------
+            // NORMALIZE ROLE
+            // -------------------------------------------
+
+            const role =
+              String(
+                payload?.role || ''
+              )
+                .replace(
+                  /^ROLE_/i,
+                  ''
+                )
+                .toUpperCase();
+
+
+            console.log(
+              'NORMALIZED LOGIN ROLE:',
+              role
+            );
+
+
+            // -------------------------------------------
+            // SUCCESS MESSAGE
+            // -------------------------------------------
+
+            this.message =
+              'Login successful!';
+
+            this.loading = false;
+
+            this.cdr.detectChanges();
+
+
+            // ===========================================
+            // ADMIN
+            // ===========================================
+
+            if (
+              role === 'ADMIN'
+            ) {
+
+              console.log(
+                'Redirecting to ADMIN dashboard'
+              );
+
+              window.location.href =
+                '/admin-dashboard';
+
+              return;
+            }
+
+
+            // ===========================================
+            // COMPANY
+            // ===========================================
+
+            if (
+              role === 'COMPANY'
+            ) {
+
+              console.log(
+                'Redirecting to COMPANY dashboard'
+              );
+
+              window.location.href =
+                '/company-dashboard';
+
+              return;
+            }
+
+
+            // ===========================================
+            // STUDENT
+            // ===========================================
+
+            if (
+              role === 'STUDENT'
+            ) {
+
+              console.log(
+                'Redirecting to STUDENT dashboard'
+              );
+
+              window.location.href =
+                '/dashboard';
+
+              return;
+            }
+
+
+            // ===========================================
+            // UNKNOWN ROLE
+            // ===========================================
+
+            console.error(
+              'Unknown user role:',
+              payload?.role
+            );
+
+            localStorage.removeItem(
+              'token'
+            );
+
+            this.message =
+              'Unable to identify user role.';
+
+            this.loading = false;
+
+            this.cdr.detectChanges();
+
           }
 
 
-          // ====================================
-          // COMPANY
-          // ====================================
+          // ---------------------------------------------
+          // JWT ERROR
+          // ---------------------------------------------
 
-          if (role === 'COMPANY') {
+          catch (error) {
 
-            console.log(
-              'Redirecting to COMPANY dashboard'
+            console.error(
+              'JWT decode error:',
+              error
             );
 
-            window.location.href =
-              '/company-dashboard';
-
-            return;
-          }
-
-
-          // ====================================
-          // STUDENT
-          // ====================================
-
-          if (role === 'STUDENT') {
-
-            console.log(
-              'Redirecting to STUDENT dashboard'
+            localStorage.removeItem(
+              'token'
             );
 
-            window.location.href =
-              '/dashboard';
+            this.message =
+              'Unable to read user role.';
 
-            return;
+            this.loading = false;
+
+            this.cdr.detectChanges();
+
           }
 
+        },
 
-          // ====================================
-          // UNKNOWN ROLE
-          // ====================================
+
+        // ===============================================
+        // ERROR
+        // ===============================================
+
+        error: (error: any) => {
 
           console.error(
-            'Unknown user role:',
-            payload?.role
-          );
-
-          localStorage.removeItem(
-            'token'
-          );
-
-          this.message =
-            'Unable to identify user role.';
-
-          this.loading = false;
-
-          this.cdr.detectChanges();
-
-        }
-
-
-        // ======================================
-        // JWT ERROR
-        // ======================================
-
-        catch (error) {
-
-          console.error(
-            'JWT decode error:',
+            'Login error:',
             error
           );
 
-          localStorage.removeItem(
-            'token'
-          );
-
           this.message =
-            'Unable to read user role.';
+            'Invalid email or password.';
 
           this.loading = false;
 
@@ -289,30 +346,7 @@ export class Login {
 
         }
 
-      },
-
-
-      // ========================================
-      // LOGIN ERROR
-      // ========================================
-
-      error: (error: any) => {
-
-        console.error(
-          'Login error:',
-          error
-        );
-
-        this.message =
-          'Invalid email or password.';
-
-        this.loading = false;
-
-        this.cdr.detectChanges();
-
-      }
-
-    });
+      });
 
   }
 

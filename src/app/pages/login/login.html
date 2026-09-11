@@ -1,139 +1,383 @@
 <div class="login-page">
+<div style="color:red;font-size:40px;text-align:center;">
+  NEW LOGIN LOADED
+</div>
+  <!-- =====================================================
+       ANIMATED BACKGROUND
+       ===================================================== -->
 
-  <div class="login-card">
+  <div class="background-grid"></div>
 
-    <!-- Logo -->
-    <div class="logo">
+  <div class="orb orb-one"></div>
+  <div class="orb orb-two"></div>
+  <div class="orb orb-three"></div>
 
-      <div class="logo-icon">
-        P
-      </div>
+  <div class="particles">
 
-      <h1>
-        Placement<span>Hub</span>
-      </h1>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
 
+  </div>
+
+
+  <!-- =====================================================
+       TOP BRAND
+       ===================================================== -->
+
+  <div class="top-brand">
+
+    <div class="brand-mark">
+      P
     </div>
 
+    <div class="brand-name">
+      Placement<span>Hub</span>
+    </div>
 
-    <!-- Heading -->
-    <h2>
-      Welcome Back 👋
-    </h2>
-
-    <p class="subtitle">
-      Login to continue to your placement dashboard
-    </p>
+  </div>
 
 
-    <!-- Login Form -->
-    <form (ngSubmit)="login()">
+  <!-- =====================================================
+       LOGIN CONTAINER
+       ===================================================== -->
 
-      <!-- Email -->
-      <div class="form-group">
+  <div class="login-container">
 
-        <label for="email">
-          Email Address
-        </label>
-
-        <input
-          id="email"
-          type="email"
-          name="email"
-          [(ngModel)]="email"
-          placeholder="Enter your email"
-          required
-        />
-
-      </div>
+    <!-- Decorative glow -->
+    <div class="card-glow"></div>
 
 
-      <!-- Password -->
-      <div class="form-group">
+    <!-- ===================================================
+         LOGIN CARD
+         =================================================== -->
 
-        <label for="password">
-          Password
-        </label>
+    <div class="login-card">
 
-        <input
-          id="password"
-          type="password"
-          name="password"
-          [(ngModel)]="password"
-          placeholder="Enter your password"
-          required
-        />
+
+      <!-- Animated top line -->
+      <div class="card-line"></div>
+
+
+      <!-- =================================================
+           LOGO
+           ================================================= -->
+
+      <div class="login-logo-wrapper">
+
+        <div class="logo-ring ring-one"></div>
+
+        <div class="logo-ring ring-two"></div>
+
+        <div class="logo-icon">
+          P
+        </div>
 
       </div>
 
 
-      <!-- Remember + Forgot -->
-      <div class="form-options">
+      <!-- =================================================
+           HEADING
+           ================================================= -->
 
-        <label class="remember">
+      <div class="heading-section">
 
-          <input
-            type="checkbox"
-          />
+        <div class="welcome-label">
+          <span></span>
+          STUDENT PORTAL
+          <span></span>
+        </div>
 
-          <span>
-            Remember me
+        <h1>
+          Welcome <span>Back</span>
+        </h1>
+
+        <p>
+          Continue your journey towards your dream career.
+        </p>
+
+      </div>
+
+
+      <!-- =================================================
+           LOGIN FORM
+           ================================================= -->
+
+      <form
+        class="login-form"
+        (ngSubmit)="login()"
+      >
+
+
+        <!-- =================================================
+             EMAIL
+             ================================================= -->
+
+        <div class="form-group">
+
+          <label for="email">
+            Email Address
+          </label>
+
+          <div class="input-wrapper">
+
+            <div class="input-icon">
+              @
+            </div>
+
+            <input
+              id="email"
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              placeholder="Enter your email"
+              autocomplete="email"
+              required
+            />
+
+            <div class="input-status"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PASSWORD
+             ================================================= -->
+
+        <div class="form-group">
+
+          <label for="password">
+            Password
+          </label>
+
+          <div class="input-wrapper">
+
+            <div class="input-icon">
+              •
+            </div>
+
+            <input
+              id="password"
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+
+            <div class="input-status"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             OPTIONS
+             ================================================= -->
+
+        <div class="form-options">
+
+          <label class="remember">
+
+            <input
+              type="checkbox"
+            />
+
+            <span class="custom-checkbox"></span>
+
+            <span>
+              Remember me
+            </span>
+
+          </label>
+
+          <a
+            href="#"
+            (click)="$event.preventDefault()"
+          >
+            Forgot Password?
+          </a>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGIN BUTTON
+             ================================================= -->
+
+        <button
+          type="submit"
+          class="login-button"
+          [disabled]="loading"
+        >
+
+          <span class="button-content">
+
+            @if (loading) {
+
+              <span class="loading-spinner"></span>
+
+              <span>
+                AUTHENTICATING...
+              </span>
+
+            } @else {
+
+              <span>
+                ENTER PLACEMENT HUB
+              </span>
+
+              <span class="button-arrow">
+                →
+              </span>
+
+            }
+
           </span>
 
-        </label>
+          <span class="button-shine"></span>
 
-        <a href="#">
-          Forgot Password?
+        </button>
+
+      </form>
+
+
+      <!-- =================================================
+           MESSAGE
+           ================================================= -->
+
+      @if (message) {
+
+        <div
+          class="login-message"
+          [class.success]="message.includes('successful')"
+          [class.error]="!message.includes('successful')"
+        >
+
+          <span class="message-icon">
+
+            @if (message.includes('successful')) {
+              ✓
+            } @else {
+              !
+            }
+
+          </span>
+
+          <span>
+            {{ message }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           DIVIDER
+           ================================================= -->
+
+      <div class="divider">
+
+        <span></span>
+
+        <div>
+          OR
+        </div>
+
+        <span></span>
+
+      </div>
+
+
+      <!-- =================================================
+           REGISTER
+           ================================================= -->
+
+      <div class="register-section">
+
+        <p>
+          New to PlacementHub?
+        </p>
+
+        <a
+          href="#"
+          (click)="goToRegister($event)"
+          class="register-button"
+        >
+
+          <span>
+            CREATE STUDENT ACCOUNT
+          </span>
+
+          <span>
+            ↗
+          </span>
+
         </a>
 
       </div>
 
 
-      <!-- Login Button -->
-      <button
-        type="submit"
-        [disabled]="loading"
-      >
+      <!-- =================================================
+           SECURITY
+           ================================================= -->
 
-        {{ loading ? 'Logging in...' : 'Login' }}
+      <div class="security-status">
 
-      </button>
+        <span class="security-dot"></span>
 
-    </form>
+        SECURE CONNECTION
 
+        <span class="security-line"></span>
 
-    <!-- Login Message -->
-    @if (message) {
+        JWT AUTHENTICATION
 
-      <p
-        [style.color]="message.includes('successful') ? 'green' : 'red'"
-        style="text-align: center; margin-top: 15px;"
-      >
-        {{ message }}
-      </p>
-
-    }
-
-
-    <!-- Divider -->
-    <div class="divider">
-
-      <span>
-        OR
-      </span>
+      </div>
 
     </div>
 
+  </div>
 
-    <!-- Register -->
-    <p class="register-text">
 
-      Don't have an account?
-<a href="#" (click)="goToRegister($event)">
-  Create Account
-</a>
+  <!-- =====================================================
+       BOTTOM TEXT
+       ===================================================== -->
 
-    </p>
+  <div class="bottom-text">
+
+    <span>
+      PLACEMENT ENGINE
+    </span>
+
+    <b>
+      •
+    </b>
+
+    <span>
+      BUILD YOUR FUTURE
+    </span>
 
   </div>
 

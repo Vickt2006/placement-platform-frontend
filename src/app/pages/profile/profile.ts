@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
+import {
+  RouterLink,
+  Router
+} from '@angular/router';
+
 import { FormsModule } from '@angular/forms';
+
 import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-profile',
   standalone: true,
+
   imports: [
     RouterLink,
     FormsModule
   ],
+
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -20,6 +32,7 @@ export class Profile implements OnInit {
   // ==================================================
 
   profile: any = {
+
     id: null,
 
     user: {
@@ -42,10 +55,12 @@ export class Profile implements OnInit {
   // STATUS
   // ==================================================
 
-  loading = false;
+  loading = true;
+
   saving = false;
 
   message = '';
+
   errorMessage = '';
 
 
@@ -65,7 +80,9 @@ export class Profile implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('PROFILE PAGE OPENED');
+    console.log(
+      'PROFILE PAGE OPENED'
+    );
 
     this.loadProfile();
   }
@@ -77,72 +94,90 @@ export class Profile implements OnInit {
 
   getStudentIdFromToken(): number | null {
 
-    const token = localStorage.getItem('token');
+    const token =
+      localStorage.getItem('token');
 
-    console.log('Token exists:', !!token);
 
     if (!token) {
+
+      console.error(
+        'JWT token not found.'
+      );
+
       return null;
     }
 
+
     try {
 
-      const parts = token.split('.');
+      const parts =
+        token.split('.');
+
 
       if (parts.length !== 3) {
 
-        console.error('Invalid JWT token');
+        console.error(
+          'Invalid JWT token.'
+        );
 
         return null;
       }
 
-      let payload = parts[1];
 
-      payload = payload
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+      let payload =
+        parts[1];
 
-      while (payload.length % 4 !== 0) {
+
+      payload =
+        payload
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
+
+
+      while (
+        payload.length % 4 !== 0
+      ) {
+
         payload += '=';
       }
 
-      const decodedPayload = JSON.parse(
-        atob(payload)
-      );
+
+      const decodedPayload =
+        JSON.parse(
+          atob(payload)
+        );
+
 
       console.log(
         'JWT Payload:',
         decodedPayload
       );
 
+
       const userId =
         decodedPayload.userId ??
         decodedPayload.id ??
         decodedPayload.sub;
+
 
       if (
         userId === undefined ||
         userId === null
       ) {
 
-        console.error(
-          'User ID not found in JWT'
-        );
-
         return null;
       }
 
-      const id = Number(userId);
+
+      const id =
+        Number(userId);
+
 
       if (Number.isNaN(id)) {
 
-        console.error(
-          'Invalid User ID:',
-          userId
-        );
-
         return null;
       }
+
 
       return id;
 
@@ -164,17 +199,16 @@ export class Profile implements OnInit {
 
   loadProfile(): void {
 
-    console.log(
-      'LOAD PROFILE STARTED'
-    );
+    this.loading = true;
+
+    this.message = '';
+
+    this.errorMessage = '';
+
 
     const studentId =
       this.getStudentIdFromToken();
 
-    console.log(
-      'Student ID:',
-      studentId
-    );
 
     if (!studentId) {
 
@@ -186,24 +220,14 @@ export class Profile implements OnInit {
       return;
     }
 
-    this.message = '';
-    this.errorMessage = '';
 
     const url =
       `https://placement-platform-backend-production.up.railway.app/api/student-profiles/user/${studentId}`;
 
-    console.log(
-      'Calling Profile API:',
-      url
-    );
 
     this.http
       .get<any>(url)
       .subscribe({
-
-        // ==========================================
-        // SUCCESS
-        // ==========================================
 
         next: (data: any) => {
 
@@ -211,6 +235,7 @@ export class Profile implements OnInit {
             'PROFILE API RESPONSE:',
             data
           );
+
 
           if (data && data.id) {
 
@@ -261,19 +286,11 @@ export class Profile implements OnInit {
               resumeUrl:
                 data.resumeUrl ??
                 ''
-
             };
 
-            console.log(
-              'PROFILE LOADED:',
-              this.profile
-            );
+          }
 
-          } else {
-
-            // ======================================
-            // PROFILE NOT FOUND
-            // ======================================
+          else {
 
             this.profile = {
 
@@ -296,25 +313,17 @@ export class Profile implements OnInit {
               graduationYear: null,
               cgpa: null,
               resumeUrl: ''
-
             };
 
+
             this.message =
-              'Profile not created yet. Please fill in your details.';
+              'Profile not created yet. Fill in your details.';
           }
 
-          this.loading = false;
 
-          console.log(
-            'LOADING:',
-            this.loading
-          );
+          this.loading = false;
         },
 
-
-        // ==========================================
-        // ERROR
-        // ==========================================
 
         error: (error: any) => {
 
@@ -323,32 +332,113 @@ export class Profile implements OnInit {
             error
           );
 
+
           this.loading = false;
+
 
           if (error.status === 401) {
 
             this.errorMessage =
               'Your login session has expired. Please login again.';
 
-          } else if (error.status === 403) {
+          }
+
+          else if (error.status === 403) {
 
             this.errorMessage =
               'You are not authorized to access this profile.';
 
-          } else if (error.status === 404) {
+          }
+
+          else if (error.status === 404) {
 
             this.errorMessage =
               'Profile API endpoint not found.';
 
-          } else {
+          }
+
+          else {
 
             this.errorMessage =
               'Unable to load profile.';
-
           }
         }
-
       });
+  }
+
+
+  // ==================================================
+  // PROFILE COMPLETION
+  // ==================================================
+
+  getProfileCompletion(): number {
+
+    const fields = [
+
+      this.profile.phone,
+
+      this.profile.college,
+
+      this.profile.degree,
+
+      this.profile.branch,
+
+      this.profile.graduationYear,
+
+      this.profile.cgpa,
+
+      this.profile.resumeUrl
+
+    ];
+
+
+    const completed =
+      fields.filter(
+        field =>
+          field !== null &&
+          field !== undefined &&
+          String(field).trim() !== ''
+      ).length;
+
+
+    return Math.round(
+      (completed / fields.length) * 100
+    );
+  }
+
+
+  // ==================================================
+  // COMPLETION MESSAGE
+  // ==================================================
+
+  getCompletionMessage(): string {
+
+    const percentage =
+      this.getProfileCompletion();
+
+
+    if (percentage === 100) {
+
+      return 'Profile complete — you are placement ready!';
+
+    }
+
+
+    if (percentage >= 70) {
+
+      return 'Almost there! Complete your profile.';
+
+    }
+
+
+    if (percentage >= 40) {
+
+      return 'Good start! Add more details.';
+
+    }
+
+
+    return 'Complete your profile to improve your opportunities.';
   }
 
 
@@ -361,10 +451,6 @@ export class Profile implements OnInit {
     const studentId =
       this.getStudentIdFromToken();
 
-    console.log(
-      'SAVE PROFILE - Student ID:',
-      studentId
-    );
 
     if (!studentId) {
 
@@ -374,15 +460,13 @@ export class Profile implements OnInit {
       return;
     }
 
+
     this.saving = true;
 
     this.message = '';
+
     this.errorMessage = '';
 
-
-    // ==============================================
-    // DATA TO SEND
-    // ==============================================
 
     const profileData = {
 
@@ -405,22 +489,17 @@ export class Profile implements OnInit {
       graduationYear:
         this.profile.graduationYear !== null &&
         this.profile.graduationYear !== ''
-          ? Number(
-              this.profile.graduationYear
-            )
+          ? Number(this.profile.graduationYear)
           : null,
 
       cgpa:
         this.profile.cgpa !== null &&
         this.profile.cgpa !== ''
-          ? Number(
-              this.profile.cgpa
-            )
+          ? Number(this.profile.cgpa)
           : null,
 
       resumeUrl:
         this.profile.resumeUrl || ''
-
     };
 
 
@@ -430,16 +509,11 @@ export class Profile implements OnInit {
     );
 
 
-    // ==============================================
-    // UPDATE EXISTING PROFILE
-    // ==============================================
+    // ==================================================
+    // UPDATE
+    // ==================================================
 
     if (this.profile.id) {
-
-      console.log(
-        'UPDATING PROFILE ID:',
-        this.profile.id
-      );
 
       this.http
         .put<any>(
@@ -449,11 +523,6 @@ export class Profile implements OnInit {
         .subscribe({
 
           next: (response: any) => {
-
-            console.log(
-              'PROFILE UPDATE SUCCESS:',
-              response
-            );
 
             if (response) {
 
@@ -468,19 +537,24 @@ export class Profile implements OnInit {
                   ...this.profile.user,
 
                   ...(response.user || {})
-
                 }
-
               };
-
             }
+
 
             this.saving = false;
 
             this.message =
               'Profile updated successfully!';
 
+
+            setTimeout(() => {
+
+              this.message = '';
+
+            }, 3500);
           },
+
 
           error: (error: any) => {
 
@@ -493,82 +567,71 @@ export class Profile implements OnInit {
 
             this.errorMessage =
               this.getErrorMessage(error);
-
           }
-
         });
 
+      return;
     }
 
 
-    // ==============================================
-    // CREATE NEW PROFILE
-    // ==============================================
+    // ==================================================
+    // CREATE
+    // ==================================================
 
-    else {
+    this.http
+      .post<any>(
+        'https://placement-platform-backend-production.up.railway.app/api/student-profiles',
+        profileData
+      )
+      .subscribe({
 
-      console.log(
-        'CREATING NEW PROFILE'
-      );
+        next: (response: any) => {
 
-      this.http
-        .post<any>(
-          'https://placement-platform-backend-production.up.railway.app/api/student-profiles',
-          profileData
-        )
-        .subscribe({
+          if (response) {
 
-          next: (response: any) => {
+            this.profile = {
 
-            console.log(
-              'PROFILE CREATE SUCCESS:',
-              response
-            );
+              ...this.profile,
 
-            if (response) {
+              ...response,
 
-              this.profile = {
+              user: {
 
-                ...this.profile,
+                ...this.profile.user,
 
-                ...response,
-
-                user: {
-
-                  ...this.profile.user,
-
-                  ...(response.user || {})
-
-                }
-
-              };
-
-            }
-
-            this.saving = false;
-
-            this.message =
-              'Profile created successfully!';
-
-          },
-
-          error: (error: any) => {
-
-            console.error(
-              'PROFILE CREATE ERROR:',
-              error
-            );
-
-            this.saving = false;
-
-            this.errorMessage =
-              this.getErrorMessage(error);
-
+                ...(response.user || {})
+              }
+            };
           }
 
-        });
 
-    }
+          this.saving = false;
+
+          this.message =
+            'Profile created successfully!';
+
+
+          setTimeout(() => {
+
+            this.message = '';
+
+          }, 3500);
+        },
+
+
+        error: (error: any) => {
+
+          console.error(
+            'PROFILE CREATE ERROR:',
+            error
+          );
+
+          this.saving = false;
+
+          this.errorMessage =
+            this.getErrorMessage(error);
+        }
+      });
   }
 
 
@@ -585,6 +648,7 @@ export class Profile implements OnInit {
       return error.error;
     }
 
+
     if (
       error?.error?.message
     ) {
@@ -592,20 +656,24 @@ export class Profile implements OnInit {
       return error.error.message;
     }
 
+
     if (error?.status === 401) {
 
       return 'Your login session has expired. Please login again.';
     }
+
 
     if (error?.status === 403) {
 
       return 'You are not authorized to perform this action.';
     }
 
+
     if (error?.status === 404) {
 
       return 'Requested API endpoint was not found.';
     }
+
 
     return 'Something went wrong. Please try again.';
   }

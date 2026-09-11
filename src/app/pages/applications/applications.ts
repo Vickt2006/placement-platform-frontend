@@ -24,7 +24,6 @@ import { Application } from '../../services/application';
 })
 export class Applications implements OnInit {
 
-
   // ==========================================
   // VARIABLES
   // ==========================================
@@ -57,7 +56,6 @@ export class Applications implements OnInit {
     );
 
     this.loadApplications();
-
   }
 
 
@@ -105,10 +103,6 @@ export class Applications implements OnInit {
       .getApplicationsByStudent(studentId)
       .subscribe({
 
-        // ======================================
-        // SUCCESS
-        // ======================================
-
         next: (response: any[]) => {
 
           console.log(
@@ -134,10 +128,6 @@ export class Applications implements OnInit {
 
         },
 
-
-        // ======================================
-        // ERROR
-        // ======================================
 
         error: (error: any) => {
 
@@ -201,12 +191,6 @@ export class Applications implements OnInit {
       localStorage.getItem('token');
 
 
-    console.log(
-      'Token exists:',
-      !!token
-    );
-
-
     if (!token) {
 
       console.error(
@@ -237,8 +221,6 @@ export class Applications implements OnInit {
         parts[1];
 
 
-      // JWT Base64URL → Base64
-
       payload =
         payload
           .replace(/-/g, '+')
@@ -265,10 +247,6 @@ export class Applications implements OnInit {
         decodedPayload
       );
 
-
-      // ======================================
-      // USER ID
-      // ======================================
 
       const userId =
         decodedPayload.userId ??
@@ -317,9 +295,7 @@ export class Applications implements OnInit {
 
 
       return null;
-
     }
-
   }
 
 
@@ -334,14 +310,12 @@ export class Applications implements OnInit {
     if (!status) {
 
       return 'applied';
-
     }
 
 
     return status
       .toLowerCase()
       .replace(/_/g, '-');
-
   }
 
 
@@ -356,7 +330,6 @@ export class Applications implements OnInit {
     if (!status) {
 
       return 'Applied';
-
     }
 
 
@@ -365,36 +338,78 @@ export class Applications implements OnInit {
     ) {
 
       case 'APPLIED':
-
         return 'Applied';
 
-
       case 'UNDER_REVIEW':
-
         return 'Under Review';
 
-
       case 'SHORTLISTED':
-
         return 'Shortlisted';
 
-
       case 'SELECTED':
-
         return 'Selected';
 
-
       case 'REJECTED':
-
         return 'Rejected';
 
-
       default:
-
         return status;
+    }
+  }
+
+
+  // ==========================================
+  // FORMAT APPLICATION DATE
+  // ==========================================
+
+  formatAppliedDate(
+    dateValue: any
+  ): string {
+
+    if (!dateValue) {
+
+      return 'Not available';
+    }
+
+
+    try {
+
+      const date =
+        new Date(dateValue);
+
+
+      if (Number.isNaN(
+        date.getTime()
+      )) {
+
+        return 'Not available';
+      }
+
+
+      return date.toLocaleDateString(
+        'en-IN',
+        {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }
+      ) +
+      ' • ' +
+      date.toLocaleTimeString(
+        'en-IN',
+        {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        }
+      );
 
     }
 
+    catch {
+
+      return 'Not available';
+    }
   }
 
 
@@ -406,6 +421,27 @@ export class Applications implements OnInit {
     currentStatus: string,
     step: string
   ): boolean {
+
+    const currentValue =
+      currentStatus?.toUpperCase();
+
+
+    const currentStep =
+      step.toUpperCase();
+
+
+    // ========================================
+    // REJECTED
+    // ========================================
+
+    if (
+      currentValue === 'REJECTED'
+    ) {
+
+      // Only submitted step is completed
+      return currentStep === 'APPLIED';
+    }
+
 
     const order = [
 
@@ -422,42 +458,26 @@ export class Applications implements OnInit {
 
     const current =
       order.indexOf(
-        currentStatus?.toUpperCase()
+        currentValue
       );
 
 
-    const currentStep =
+    const stepIndex =
       order.indexOf(
-        step.toUpperCase()
+        currentStep
       );
 
-
-    // ========================================
-    // REJECTED
-    // ========================================
 
     if (
-      currentStatus?.toUpperCase() ===
-      'REJECTED'
+      current === -1 ||
+      stepIndex === -1
     ) {
 
-      return (
-        step.toUpperCase() === 'APPLIED' ||
-        step.toUpperCase() === 'UNDER_REVIEW'
-      );
-
+      return false;
     }
 
 
-    // ========================================
-    // NORMAL STATUS
-    // ========================================
-
-    return (
-      current >= currentStep &&
-      currentStep !== -1
-    );
-
+    return current >= stepIndex;
   }
 
 
@@ -473,7 +493,6 @@ export class Applications implements OnInit {
       status?.toUpperCase() ===
       'REJECTED'
     );
-
   }
 
 
@@ -489,7 +508,6 @@ export class Applications implements OnInit {
       status?.toUpperCase() ===
       'SELECTED'
     );
-
   }
 
 }
