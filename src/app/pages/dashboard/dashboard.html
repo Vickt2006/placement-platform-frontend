@@ -1,9 +1,6 @@
 <div class="dashboard-page">
 
-  <!-- =====================================================
-       ANIMATED BACKGROUND
-       ===================================================== -->
-
+  <!-- BACKGROUND -->
   <div class="background-grid"></div>
 
   <div class="floating-orb orb-one"></div>
@@ -32,18 +29,14 @@
 
   <header class="dashboard-header">
 
-    <!-- BRAND -->
-
     <div class="brand">
 
       <div class="logo-wrapper">
-
         <div class="logo-ring"></div>
 
         <div class="logo-icon">
           P
         </div>
-
       </div>
 
       <div class="brand-text">
@@ -60,8 +53,6 @@
 
     </div>
 
-
-    <!-- NAVIGATION -->
 
     <nav class="nav-menu">
 
@@ -101,7 +92,6 @@
   </header>
 
 
-
   <!-- =====================================================
        MAIN
        ===================================================== -->
@@ -110,7 +100,7 @@
 
 
     <!-- =================================================
-         HERO / WELCOME
+         HERO
          ================================================= -->
 
     <section class="hero-section">
@@ -118,30 +108,23 @@
       <div class="hero-content">
 
         <div class="system-status">
-
           <span class="status-pulse"></span>
-
           PLACEMENT SYSTEM ONLINE
-
         </div>
-
 
         <p class="welcome-label">
           STUDENT DASHBOARD
         </p>
-
 
         <h2>
           Welcome Back,
           <span>Future Professional.</span>
         </h2>
 
-
         <p class="hero-description">
           Discover opportunities, apply for your dream roles,
           and take the next step toward your career.
         </p>
-
 
         <div class="hero-actions">
 
@@ -152,7 +135,6 @@
             <span>EXPLORE JOBS</span>
             <b>→</b>
           </a>
-
 
           <a
             routerLink="/applications"
@@ -167,14 +149,12 @@
       </div>
 
 
-      <!-- HERO CORE -->
+      <!-- CAREER CORE -->
 
       <div class="hero-core">
 
         <div class="core-orbit orbit-one"></div>
-
         <div class="core-orbit orbit-two"></div>
-
         <div class="core-orbit orbit-three"></div>
 
         <div class="core-circle">
@@ -188,13 +168,11 @@
         <div class="core-label">
           <span>CAREER</span>
           ENGINE
-
         </div>
 
       </div>
 
     </section>
-
 
 
     <!-- =================================================
@@ -228,9 +206,7 @@
 
         <div class="search-input-wrapper">
 
-          <span>
-            ⌕
-          </span>
+          <span>⌕</span>
 
           <input
             type="text"
@@ -275,9 +251,8 @@
     </section>
 
 
-
     <!-- =================================================
-         JOBS SECTION
+         JOBS
          ================================================= -->
 
     <section class="jobs-section">
@@ -329,7 +304,6 @@
       </div>
 
 
-
       <!-- =================================================
            LOADING
            ================================================= -->
@@ -367,15 +341,11 @@
       }
 
 
-
       <!-- =================================================
            ERROR
            ================================================= -->
 
-      @if (
-        !loading &&
-        message
-      ) {
+      @if (!loading && message) {
 
         <div class="error-panel">
 
@@ -400,7 +370,6 @@
       }
 
 
-
       <!-- =================================================
            JOB GRID
            ================================================= -->
@@ -420,13 +389,8 @@
 
             <article class="job-card">
 
-
-              <!-- CARD TOP SCAN -->
-
               <div class="card-scan-line"></div>
 
-
-              <!-- CARD NUMBER -->
 
               <div class="card-number">
                 JOB #{{ job.id }}
@@ -437,15 +401,12 @@
 
               <div class="job-card-header">
 
-
                 <div class="company-icon-wrapper">
 
                   <div class="company-icon">
-
                     {{
                       job.title?.charAt(0) || 'J'
                     }}
-
                   </div>
 
                   <span class="company-pulse"></span>
@@ -456,27 +417,22 @@
                 <div class="job-title-area">
 
                   <h3>
-
                     {{
                       job.title ||
                       'Untitled Job'
                     }}
-
                   </h3>
 
                   <p>
-
                     {{
                       job.companyName ||
                       'Placement Company'
                     }}
-
                   </p>
 
                 </div>
 
               </div>
-
 
 
               <!-- JOB INFO -->
@@ -511,7 +467,6 @@
               </div>
 
 
-
               <!-- SKILLS -->
 
               <div class="skills-section">
@@ -536,7 +491,6 @@
                 </p>
 
               </div>
-
 
 
               <!-- DESCRIPTION -->
@@ -565,11 +519,9 @@
               </div>
 
 
-
-              <!-- CARD FOOTER -->
+              <!-- ACTIONS -->
 
               <div class="job-actions">
-
 
                 <a
                   class="view-button"
@@ -578,7 +530,6 @@
                     job.id
                   ]"
                 >
-
                   <span>
                     VIEW DETAILS
                   </span>
@@ -609,7 +560,7 @@
               </div>
 
 
-              <!-- CARD CORNERS -->
+              <!-- CORNERS -->
 
               <span class="corner corner-top-left"></span>
               <span class="corner corner-top-right"></span>
@@ -623,7 +574,6 @@
         </div>
 
       }
-
 
 
       <!-- =================================================
@@ -683,17 +633,13 @@
       PLACEMENT ENGINE v1.0
     </span>
 
-    <b>
-      •
-    </b>
+    <b>•</b>
 
     <span>
       BUILD YOUR FUTURE
     </span>
 
-    <b>
-      •
-    </b>
+    <b>•</b>
 
     <span class="footer-online">
       SYSTEM ONLINE
