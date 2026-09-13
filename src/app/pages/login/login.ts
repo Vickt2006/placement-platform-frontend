@@ -4,228 +4,142 @@ import {
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-
 import { Router } from '@angular/router';
-
 import { Auth } from '../../services/auth';
-
 
 @Component({
   selector: 'app-login',
-
   standalone: true,
-
   imports: [
     FormsModule
   ],
-
   templateUrl: './login.html',
-
   styleUrl: './login.css'
 })
 export class Login {
 
   email: string = '';
-
   password: string = '';
-
   message: string = '';
-
   loading: boolean = false;
-
+  loginSuccess: boolean = false;
 
   constructor(
     private auth: Auth,
-
     private cdr: ChangeDetectorRef,
-
     private router: Router
   ) {}
 
-
-  // =====================================================
-  // GO TO REGISTER
-  // =====================================================
-
   goToRegister(event: Event): void {
-
     event.preventDefault();
 
-    console.log(
-      'Opening Register Page...'
-    );
+    console.log('Opening Register Page...');
 
-    this.router.navigate([
-      '/register'
-    ]);
-
+    this.router.navigate(['/register']);
   }
-
-
-  // =====================================================
-  // LOGIN
-  // =====================================================
 
   login(): void {
 
-    // ---------------------------------------------------
-    // VALIDATION
-    // ---------------------------------------------------
-
-    if (
-      !this.email ||
-      !this.password
-    ) {
-
-      this.message =
-        'Please enter email and password.';
-
+    if (!this.email || !this.password) {
+      this.message = 'Please enter email and password.';
       this.cdr.detectChanges();
-
       return;
     }
 
-
-    // ---------------------------------------------------
-    // START LOADING
-    // ---------------------------------------------------
-
     this.loading = true;
-
     this.message = '';
+    this.loginSuccess = false;
 
     this.cdr.detectChanges();
 
+    console.log('Starting login...');
 
-    console.log(
-      'Starting login...'
-    );
+    this.auth.login(this.email, this.password).subscribe({
 
+      next: (response: any) => {
 
-    // ---------------------------------------------------
-    // LOGIN API
-    // ---------------------------------------------------
+        console.log('Login response:', response);
 
-    this.auth
-      .login(
-        this.email,
-        this.password
-      )
-      .subscribe({
+        if (!response || !response.token) {
 
-        // ===============================================
-        // SUCCESS
-        // ===============================================
+          this.message =
+            'Login successful, but token was not received.';
 
-        next: (response: any) => {
+          this.loading = false;
 
-          console.log(
-            'Login response:',
-            response
+          this.cdr.detectChanges();
+
+          return;
+        }
+
+        const token = response.token;
+
+        localStorage.setItem('token', token);
+
+        console.log('JWT Token saved');
+
+        try {
+
+          const payload = JSON.parse(
+            atob(
+              token
+                .split('.')[1]
+                .replace(/-/g, '+')
+                .replace(/_/g, '/')
+            )
           );
 
+          console.log('JWT Payload:', payload);
 
-          // ---------------------------------------------
-          // TOKEN CHECK
-          // ---------------------------------------------
+          const role = String(
+            payload?.role || ''
+          )
+            .replace(/^ROLE_/i, '')
+            .toUpperCase();
+
+          console.log(
+            'NORMALIZED LOGIN ROLE:',
+            role
+          );
 
           if (
-            !response ||
-            !response.token
+            role !== 'ADMIN' &&
+            role !== 'COMPANY' &&
+            role !== 'STUDENT'
           ) {
 
+            console.error(
+              'Unknown user role:',
+              payload?.role
+            );
+
+            localStorage.removeItem('token');
+
             this.message =
-              'Login successful, but token was not received.';
+              'Unable to identify user role.';
 
             this.loading = false;
+            this.loginSuccess = false;
 
             this.cdr.detectChanges();
 
             return;
           }
 
+          this.message = 'Login successful!';
 
-          // ---------------------------------------------
-          // SAVE TOKEN
-          // ---------------------------------------------
+          this.loading = false;
+          this.loginSuccess = true;
 
-          const token =
-            response.token;
-
-          localStorage.setItem(
-            'token',
-            token
-          );
-
+          this.cdr.detectChanges();
 
           console.log(
-            'JWT Token saved'
+            'LOGIN MISSION AUTHORIZED'
           );
 
+          setTimeout(() => {
 
-          // ---------------------------------------------
-          // DECODE JWT
-          // ---------------------------------------------
-
-          try {
-
-            const payload =
-              JSON.parse(
-                atob(
-                  token
-                    .split('.')[1]
-                    .replace(/-/g, '+')
-                    .replace(/_/g, '/')
-                )
-              );
-
-
-            console.log(
-              'JWT Payload:',
-              payload
-            );
-
-
-            // -------------------------------------------
-            // NORMALIZE ROLE
-            // -------------------------------------------
-
-            const role =
-              String(
-                payload?.role || ''
-              )
-                .replace(
-                  /^ROLE_/i,
-                  ''
-                )
-                .toUpperCase();
-
-
-            console.log(
-              'NORMALIZED LOGIN ROLE:',
-              role
-            );
-
-
-            // -------------------------------------------
-            // SUCCESS MESSAGE
-            // -------------------------------------------
-
-            this.message =
-              'Login successful!';
-
-            this.loading = false;
-
-            this.cdr.detectChanges();
-
-
-            // ===========================================
-            // ADMIN
-            // ===========================================
-
-            if (
-              role === 'ADMIN'
-            ) {
+            if (role === 'ADMIN') {
 
               console.log(
                 'Redirecting to ADMIN dashboard'
@@ -237,14 +151,7 @@ export class Login {
               return;
             }
 
-
-            // ===========================================
-            // COMPANY
-            // ===========================================
-
-            if (
-              role === 'COMPANY'
-            ) {
+            if (role === 'COMPANY') {
 
               console.log(
                 'Redirecting to COMPANY dashboard'
@@ -256,14 +163,7 @@ export class Login {
               return;
             }
 
-
-            // ===========================================
-            // STUDENT
-            // ===========================================
-
-            if (
-              role === 'STUDENT'
-            ) {
+            if (role === 'STUDENT') {
 
               console.log(
                 'Redirecting to STUDENT dashboard'
@@ -275,79 +175,43 @@ export class Login {
               return;
             }
 
+          }, 2200);
 
-            // ===========================================
-            // UNKNOWN ROLE
-            // ===========================================
-
-            console.error(
-              'Unknown user role:',
-              payload?.role
-            );
-
-            localStorage.removeItem(
-              'token'
-            );
-
-            this.message =
-              'Unable to identify user role.';
-
-            this.loading = false;
-
-            this.cdr.detectChanges();
-
-          }
-
-
-          // ---------------------------------------------
-          // JWT ERROR
-          // ---------------------------------------------
-
-          catch (error) {
-
-            console.error(
-              'JWT decode error:',
-              error
-            );
-
-            localStorage.removeItem(
-              'token'
-            );
-
-            this.message =
-              'Unable to read user role.';
-
-            this.loading = false;
-
-            this.cdr.detectChanges();
-
-          }
-
-        },
-
-
-        // ===============================================
-        // ERROR
-        // ===============================================
-
-        error: (error: any) => {
+        } catch (error) {
 
           console.error(
-            'Login error:',
+            'JWT decode error:',
             error
           );
 
+          localStorage.removeItem('token');
+
           this.message =
-            'Invalid email or password.';
+            'Unable to read user role.';
 
           this.loading = false;
+          this.loginSuccess = false;
 
           this.cdr.detectChanges();
-
         }
+      },
 
-      });
+      error: (error: any) => {
 
+        console.error(
+          'Login error:',
+          error
+        );
+
+        this.message =
+          'Invalid email or password.';
+
+        this.loading = false;
+        this.loginSuccess = false;
+
+        this.cdr.detectChanges();
+      }
+
+    });
   }
-
 }
