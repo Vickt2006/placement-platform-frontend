@@ -1,107 +1,51 @@
 <div class="login-page">
-<div style="color:red;font-size:40px;text-align:center;">
-  NEW LOGIN LOADED
-</div>
-  <!-- =====================================================
-       ANIMATED BACKGROUND
-       ===================================================== -->
 
+  <!-- BACKGROUND -->
   <div class="background-grid"></div>
 
-  <div class="orb orb-one"></div>
-  <div class="orb orb-two"></div>
-  <div class="orb orb-three"></div>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
 
   <div class="particles">
-
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 
-
-  <!-- =====================================================
-       TOP BRAND
-       ===================================================== -->
-
+  <!-- BRAND -->
   <div class="top-brand">
-
-    <div class="brand-mark">
-      P
-    </div>
-
-    <div class="brand-name">
-      Placement<span>Hub</span>
-    </div>
-
+    <div class="brand-mark">P</div>
+    <div class="brand-name">Placement<span>Hub</span></div>
   </div>
 
-
-  <!-- =====================================================
-       LOGIN CONTAINER
-       ===================================================== -->
-
-  <div class="login-container">
-
-    <!-- Decorative glow -->
-    <div class="card-glow"></div>
-
-
-    <!-- ===================================================
-         LOGIN CARD
-         =================================================== -->
+  <!-- LOGIN -->
+  <main class="login-container">
 
     <div class="login-card">
 
+      <div class="card-top-line"></div>
 
-      <!-- Animated top line -->
-      <div class="card-line"></div>
-
-
-      <!-- =================================================
-           LOGO
-           ================================================= -->
-
+      <!-- LOGO -->
       <div class="login-logo-wrapper">
 
-        <div class="logo-ring ring-one"></div>
+        <div class="logo-halo"></div>
 
+        <div class="logo-ring ring-one"></div>
         <div class="logo-ring ring-two"></div>
 
-        <div class="logo-icon">
-          P
+        <div class="logo-orbit">
+          <span></span>
         </div>
+
+        <div class="logo-icon">P</div>
 
       </div>
 
-
-      <!-- =================================================
-           HEADING
-           ================================================= -->
-
+      <!-- HEADING -->
       <div class="heading-section">
 
         <div class="welcome-label">
           <span></span>
-          STUDENT PORTAL
+          STUDENT ACCESS
           <span></span>
         </div>
 
@@ -110,37 +54,24 @@
         </h1>
 
         <p>
-          Continue your journey towards your dream career.
+          Sign in to continue your placement journey.
         </p>
 
       </div>
 
+      <!-- FORM -->
+      <form class="login-form" (ngSubmit)="login()">
 
-      <!-- =================================================
-           LOGIN FORM
-           ================================================= -->
-
-      <form
-        class="login-form"
-        (ngSubmit)="login()"
-      >
-
-
-        <!-- =================================================
-             EMAIL
-             ================================================= -->
-
+        <!-- EMAIL -->
         <div class="form-group">
 
           <label for="email">
-            Email Address
+            EMAIL ADDRESS
           </label>
 
           <div class="input-wrapper">
 
-            <div class="input-icon">
-              @
-            </div>
+            <span class="input-icon">@</span>
 
             <input
               id="email"
@@ -152,28 +83,22 @@
               required
             />
 
-            <div class="input-status"></div>
+            <span class="input-focus"></span>
 
           </div>
 
         </div>
 
-
-        <!-- =================================================
-             PASSWORD
-             ================================================= -->
-
+        <!-- PASSWORD -->
         <div class="form-group">
 
           <label for="password">
-            Password
+            PASSWORD
           </label>
 
           <div class="input-wrapper">
 
-            <div class="input-icon">
-              •
-            </div>
+            <span class="input-icon">●</span>
 
             <input
               id="password"
@@ -185,35 +110,28 @@
               required
             />
 
-            <div class="input-status"></div>
+            <span class="input-focus"></span>
 
           </div>
 
         </div>
 
-
-        <!-- =================================================
-             OPTIONS
-             ================================================= -->
-
+        <!-- OPTIONS -->
         <div class="form-options">
 
           <label class="remember">
 
-            <input
-              type="checkbox"
-            />
+            <input type="checkbox" />
 
             <span class="custom-checkbox"></span>
 
-            <span>
-              Remember me
-            </span>
+            <span>Remember me</span>
 
           </label>
 
           <a
             href="#"
+            class="forgot-link"
             (click)="$event.preventDefault()"
           >
             Forgot Password?
@@ -221,16 +139,14 @@
 
         </div>
 
-
-        <!-- =================================================
-             LOGIN BUTTON
-             ================================================= -->
-
+        <!-- LOGIN BUTTON -->
         <button
           type="submit"
           class="login-button"
           [disabled]="loading"
         >
+
+          <span class="button-glow"></span>
 
           <span class="button-content">
 
@@ -238,19 +154,13 @@
 
               <span class="loading-spinner"></span>
 
-              <span>
-                AUTHENTICATING...
-              </span>
+              <span>VERIFYING ACCESS...</span>
 
             } @else {
 
-              <span>
-                ENTER PLACEMENT HUB
-              </span>
+              <span>LOGIN TO PLACEMENTHUB</span>
 
-              <span class="button-arrow">
-                →
-              </span>
+              <span class="button-arrow">→</span>
 
             }
 
@@ -262,12 +172,8 @@
 
       </form>
 
-
-      <!-- =================================================
-           MESSAGE
-           ================================================= -->
-
-      @if (message) {
+      <!-- MESSAGE -->
+      @if (message && !loginSuccess) {
 
         <div
           class="login-message"
@@ -285,65 +191,40 @@
 
           </span>
 
-          <span>
-            {{ message }}
-          </span>
+          <span>{{ message }}</span>
 
         </div>
 
       }
 
-
-      <!-- =================================================
-           DIVIDER
-           ================================================= -->
-
+      <!-- DIVIDER -->
       <div class="divider">
 
         <span></span>
 
-        <div>
-          OR
-        </div>
+        <div>OR</div>
 
         <span></span>
 
       </div>
 
-
-      <!-- =================================================
-           REGISTER
-           ================================================= -->
-
+      <!-- REGISTER -->
       <div class="register-section">
 
-        <p>
-          New to PlacementHub?
-        </p>
+        <p>New to PlacementHub?</p>
 
         <a
           href="#"
-          (click)="goToRegister($event)"
           class="register-button"
+          (click)="goToRegister($event)"
         >
-
-          <span>
-            CREATE STUDENT ACCOUNT
-          </span>
-
-          <span>
-            ↗
-          </span>
-
+          CREATE STUDENT ACCOUNT
+          <span>↗</span>
         </a>
 
       </div>
 
-
-      <!-- =================================================
-           SECURITY
-           ================================================= -->
-
+      <!-- SECURITY -->
       <div class="security-status">
 
         <span class="security-dot"></span>
@@ -358,27 +239,67 @@
 
     </div>
 
-  </div>
+  </main>
 
-
-  <!-- =====================================================
-       BOTTOM TEXT
-       ===================================================== -->
-
+  <!-- FOOTER -->
   <div class="bottom-text">
-
-    <span>
-      PLACEMENT ENGINE
-    </span>
-
-    <b>
-      •
-    </b>
-
-    <span>
-      BUILD YOUR FUTURE
-    </span>
-
+    <span>PLACEMENT ENGINE</span>
+    <b>•</b>
+    <span>BUILD YOUR FUTURE</span>
   </div>
+
+  <!-- LOGIN SUCCESS -->
+  @if (loginSuccess) {
+
+    <div class="login-success-overlay">
+
+      <div class="success-grid"></div>
+
+      <div class="success-particles">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="authorization">
+
+        <div class="authorization-ring ring-a"></div>
+        <div class="authorization-ring ring-b"></div>
+        <div class="authorization-ring ring-c"></div>
+
+        <div class="authorization-core">
+          <div class="core-inner">✓</div>
+        </div>
+
+      </div>
+
+      <div class="success-text">
+
+        <div class="success-label">
+          ACCESS GRANTED
+        </div>
+
+        <h2>
+          MISSION <span>AUTHORIZED</span>
+        </h2>
+
+        <p>
+          Welcome back to PlacementHub.
+        </p>
+
+        <div class="launch-status">
+          <span></span>
+          INITIALIZING YOUR CAREER DASHBOARD
+          <span></span>
+        </div>
+
+      </div>
+
+      <div class="success-progress">
+        <div></div>
+      </div>
+
+    </div>
+
+  }
 
 </div>
