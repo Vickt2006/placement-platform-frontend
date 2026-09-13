@@ -21,23 +21,19 @@
 
     <div class="nav-links">
 
-      <a
-        routerLink="/admin-dashboard">
+      <a routerLink="/admin-dashboard">
         Dashboard
       </a>
 
-      <a
-        routerLink="/admin-students">
+      <a routerLink="/admin-students">
         Students
       </a>
 
-      <a
-        routerLink="/admin-companies">
+      <a routerLink="/admin-companies">
         Companies
       </a>
 
-      <a
-        routerLink="/admin-jobs">
+      <a routerLink="/admin-jobs">
         Jobs
       </a>
 
@@ -57,7 +53,6 @@
     </div>
 
   </nav>
-
 
 
   <!-- ==========================================
@@ -86,8 +81,9 @@
     </section>
 
 
-
-    <!-- TOOLBAR -->
+    <!-- ==========================================
+         TOOLBAR
+         ========================================== -->
 
     <section class="toolbar">
 
@@ -120,8 +116,9 @@
     </section>
 
 
-
-    <!-- LOADING -->
+    <!-- ==========================================
+         LOADING
+         ========================================== -->
 
     @if (loading) {
 
@@ -144,8 +141,9 @@
     }
 
 
-
-    <!-- ERROR -->
+    <!-- ==========================================
+         ERROR
+         ========================================== -->
 
     @if (!loading && message) {
 
@@ -177,8 +175,9 @@
     }
 
 
-
-    <!-- APPLICATIONS TABLE -->
+    <!-- ==========================================
+         APPLICATION TABLE
+         ========================================== -->
 
     @if (
       !loading &&
@@ -216,8 +215,9 @@
         </div>
 
 
-
-        <!-- TABLE -->
+        <!-- ======================================
+             TABLE
+             ====================================== -->
 
         <div class="table-wrapper">
 
@@ -251,6 +251,10 @@
                   Applied At
                 </th>
 
+                <th>
+                  Action
+                </th>
+
               </tr>
 
             </thead>
@@ -266,7 +270,9 @@
                 <tr>
 
 
-                  <!-- ID -->
+                  <!-- =================================
+                       APPLICATION ID
+                       ================================= -->
 
                   <td>
 
@@ -277,8 +283,9 @@
                   </td>
 
 
-
-                  <!-- STUDENT -->
+                  <!-- =================================
+                       STUDENT
+                       ================================= -->
 
                   <td>
 
@@ -297,20 +304,24 @@
                       </div>
 
 
-                      <div>
+                      <div class="student-details">
 
                         <strong>
+
                           {{
                             application.studentName
                               || 'Unknown Student'
                           }}
+
                         </strong>
 
                         <span>
+
                           {{
                             application.studentEmail
                               || 'N/A'
                           }}
+
                         </span>
 
                       </div>
@@ -320,8 +331,9 @@
                   </td>
 
 
-
-                  <!-- JOB -->
+                  <!-- =================================
+                       JOB
+                       ================================= -->
 
                   <td>
 
@@ -332,18 +344,24 @@
                       </div>
 
 
-                      <div>
+                      <div class="job-details">
 
                         <strong>
+
                           {{
                             application.jobTitle
+                              || application.job?.title
                               || 'Unknown Job'
                           }}
+
                         </strong>
 
+
                         <span>
+
                           Job ID:
                           #{{ application.jobId }}
+
                         </span>
 
                       </div>
@@ -353,8 +371,9 @@
                   </td>
 
 
-
-                  <!-- COMPANY -->
+                  <!-- =================================
+                       COMPANY
+                       ================================= -->
 
                   <td>
 
@@ -373,22 +392,28 @@
                       </div>
 
 
-                      <span>
+                      <div class="company-details">
 
-                        {{
-                          application.companyName
-                            || 'Unknown Company'
-                        }}
+                        <strong>
 
-                      </span>
+                          {{
+                            application.companyName
+                              || application.job?.companyName
+                              || 'Unknown Company'
+                          }}
+
+                        </strong>
+
+                      </div>
 
                     </div>
 
                   </td>
 
 
-
-                  <!-- STATUS -->
+                  <!-- =================================
+                       STATUS
+                       ================================= -->
 
                   <td>
 
@@ -399,7 +424,9 @@
                           application.status
                         )
                       "
-                      [value]="application.status"
+                      [value]="
+                        application.status || 'APPLIED'
+                      "
                       (change)="
                         updateStatus(
                           application,
@@ -436,19 +463,58 @@
                   </td>
 
 
-
-                  <!-- APPLIED AT -->
+                  <!-- =================================
+                       APPLIED DATE
+                       ================================= -->
 
                   <td>
 
                     <span class="applied-at">
 
                       {{
-                        application.appliedAt
-                          || 'N/A'
+                        formatAppliedDate(
+                          application.appliedAt
+                        )
                       }}
 
                     </span>
+
+                  </td>
+
+
+                  <!-- =================================
+                       DELETE
+                       ================================= -->
+
+                  <td>
+
+                    <button
+                      type="button"
+                      class="delete-btn"
+                      (click)="
+                        deleteApplication(
+                          application
+                        )
+                      "
+                      [disabled]="
+                        deletingApplicationId ===
+                        application.id
+                      ">
+
+                      @if (
+                        deletingApplicationId ===
+                        application.id
+                      ) {
+
+                        Deleting...
+
+                      } @else {
+
+                        🗑 Delete
+
+                      }
+
+                    </button>
 
                   </td>
 
@@ -468,8 +534,9 @@
     }
 
 
-
-    <!-- NO APPLICATIONS -->
+    <!-- ==========================================
+         NO APPLICATIONS
+         ========================================== -->
 
     @if (
       !loading &&

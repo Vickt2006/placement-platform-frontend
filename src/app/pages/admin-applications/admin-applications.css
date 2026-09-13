@@ -1676,3 +1676,112 @@ tbody tr:last-child td {
       0.01ms !important;
   }
 }
+/* ==========================================
+   DELETE APPLICATION BUTTON
+   ========================================== */
+
+.delete-btn {
+  border: 1px solid rgba(255, 90, 90, 0.35);
+  background: rgba(255, 60, 60, 0.10);
+  color: #ff7b7b;
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 60, 60, 0.20);
+  border-color: rgba(255, 90, 90, 0.65);
+  transform: translateY(-1px);
+}
+
+.delete-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+/* ==========================================
+   STICKY ACTION COLUMN
+   ========================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+  position: relative;
+}
+
+table {
+  min-width: 1250px;
+}
+
+/* Action header */
+table th:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 10;
+  min-width: 130px;
+  text-align: center;
+  background: #0b1024;
+}
+
+/* Action cells */
+table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 9;
+  min-width: 130px;
+  text-align: center;
+  background: #080d1a;
+}
+
+/* Delete button */
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  min-width: 105px;
+  padding: 9px 14px;
+
+  border: 1px solid rgba(255, 80, 80, 0.45);
+  border-radius: 9px;
+
+  background: rgba(255, 60, 60, 0.12);
+  color: #ff7777;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 60, 60, 0.22);
+  border-color: rgba(255, 100, 100, 0.75);
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 18px rgba(255, 50, 50, 0.18);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+}
+
+.delete-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
